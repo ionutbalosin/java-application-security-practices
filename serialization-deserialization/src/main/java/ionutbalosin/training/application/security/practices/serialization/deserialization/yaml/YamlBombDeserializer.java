@@ -65,6 +65,7 @@ public class YamlBombDeserializer {
       final Yaml yaml = new Yaml();
       final Map<String, Object> data = yaml.load(inputStream);
       final List<User> users = (List<User>) data.get("user");
+      System.out.printf("Successfully deserialized from [%s]%n", CLASS_FILENAME);
     }
   }
 }

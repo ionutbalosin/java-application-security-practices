@@ -52,7 +52,7 @@ public class MaliciousClazzDeserializer {
 
   private static final String CURRENT_DIR = System.getProperty("user.dir", ".");
   private static final String CLASS_FILENAME =
-      CURRENT_DIR + "/serialization/target/malicious_class.ser";
+      CURRENT_DIR + "/serialization-deserialization/target/malicious_class.ser";
 
   public static void main(String[] args) {
     // Serialize the malicious class (typically this is done by the attacker)
@@ -74,7 +74,7 @@ public class MaliciousClazzDeserializer {
       oos.writeObject(maliciousClazz);
       System.out.printf("Successfully serialized to [%s]%n", filename);
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 
@@ -87,7 +87,7 @@ public class MaliciousClazzDeserializer {
       final TrustedClazz trustedClazz = (TrustedClazz) ois.readObject();
       System.out.printf("Successfully deserialized from [%s]%n", filename);
     } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 
@@ -101,7 +101,7 @@ public class MaliciousClazzDeserializer {
       final TrustedClazz trustedClazz = (TrustedClazz) vois.readObject();
       System.out.printf("Successfully deserialized from [%s]%n", filename);
     } catch (IOException | ClassNotFoundException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
   }
 }

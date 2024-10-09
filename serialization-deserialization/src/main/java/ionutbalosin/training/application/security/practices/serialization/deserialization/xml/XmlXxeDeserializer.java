@@ -57,10 +57,12 @@ public class XmlXxeDeserializer {
     System.out.printf("*** Deserialization ***%n");
     final XMLReader defaultReader = createXmlReader();
     deserialize(CLASS_FILENAME, defaultReader);
+    System.out.printf("Successfully deserialized from [%s]%n", CLASS_FILENAME);
 
     System.out.printf("*** Deserialization with XXE protection ***%n");
     final XMLReader readerWithXseProtection = createXmlReaderWithXseProtection();
     deserialize(CLASS_FILENAME, readerWithXseProtection);
+    System.out.printf("Successfully deserialized from [%s]%n", CLASS_FILENAME);
   }
 
   private static XMLReader createXmlReader() throws ParserConfigurationException, SAXException {
