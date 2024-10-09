@@ -5,10 +5,12 @@
 **/build/*
 **/dependency-reduced-pom.xml
 
+# macOS files
 **/.DS_Store
 
 # Generated files
 **/profiling/*
+**/zap/reports/*
 
 # Log files
 *.log
@@ -21,16 +23,13 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Package Files
 *.war
 *.nar
 *.ear
 *.zip
 *.tar.gz
 *.rar
-
-# Solution files
-**/99-PRACTICE-Solutions-final.md
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
