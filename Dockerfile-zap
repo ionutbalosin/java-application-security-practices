@@ -1,0 +1,23 @@
+FROM ghcr.io/zaproxy/zaproxy:stable
+
+USER root
+
+# Install necessary packages: ca-certificates-java (for Java app integration)
+# Force an update of the CA certificates to handle HTTPS connections properly
+RUN apt-get update && apt-get install -y ca-certificates-java && \
+    update-ca-certificates -f
+
+# Create a working directory within the ZAP container for scan results or other files
+RUN mkdir /zap/wrk && chmod 755 /zap/wrk
+
+# Copy custom ZAP API scan rules configuration
+# For a full list of supported scanning categories, visit: https://www.zaproxy.org/docs/docker
+# The current ZAP API scan rules are defined at: https://www.zaproxy.org/docs/docker/api-scan/#configuration-file
+COPY zap/zap-api-scan-rules.conf /zap/wrk/
+
+# Copy the custom entrypoint script, which contains the logic to start the ZAP API scan
+COPY zap-entrypoint.sh /usr/local/bin/zap-entrypoint.sh
+RUN chmod +x /usr/local/bin/zap-entrypoint.sh
+
+# Set the entrypoint to the custom script so it runs when the container starts
+ENTRYPOINT ["/usr/local/bin/zap-entrypoint.sh"]

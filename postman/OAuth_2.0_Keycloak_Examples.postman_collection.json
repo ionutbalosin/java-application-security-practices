@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "b1a3a562-1ff6-4224-bfa6-c913a088944f",
+		"name": "OAuth 2.0 Keycloak Examples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7839613",
+		"_collection_link": "https://grey-zodiac-239486.postman.co/workspace/RBI~3cac4cc5-5523-404d-a1a3-b3cc080cec94/collection/7839613-b1a3a562-1ff6-4224-bfa6-c913a088944f?action=share&source=collection_link&creator=7839613"
+	},
+	"item": [
+		{
+			"name": "get openid-configuration",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/realms/master/.well-known/openid-configuration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"realms",
+						"master",
+						".well-known",
+						"openid-configuration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post password flow",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "demo_public_client",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "demo_user",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Test1234!",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9090/realms/master/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post client-credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "demo_private_client",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "6EuUNXQzFmxu6xwPHDvvoh56z1uzrBMw",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9090/realms/master/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post authorization-code",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientId",
+							"value": "demo_public_client",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:9090/realms/master/protocol/openid-connect/auth",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:9090/realms/master/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "6EuUNXQzFmxu6xwPHDvvoh56z1uzrBMw",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code_with_pkce",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "string"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "code_verifier",
+							"value": "123456789101112131415161718192021222324252627282930",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "aaaaaaaa",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-url-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:9090/realms/master/protocol/openid-connect/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post pizza order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  {\n    \"name\": \"Margherita Pizza\",\n    \"quantity\": 1\n  },\n  {\n    \"name\": \"Pepperoni Pizza\",\n    \"quantity\": 2\n  },\n  {\n    \"name\": \"Pizza Quattro Pizza\",\n    \"quantity\": 3\n  }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/pizza/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"pizza",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post pizza cooking order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"orders\": [\n    {\n        \"name\": \"Margherita Pizza\",\n        \"quantity\": 1\n    },\n    {\n        \"name\": \"Pepperoni Pizza\",\n        \"quantity\": 2\n    },\n    {\n        \"name\": \"Pizza Quattro Pizza\",\n        \"quantity\": 3\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:28080/pizza/cooking/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "28080",
+					"path": [
+						"pizza",
+						"cooking",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post pizza delivery order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orderId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"orders\": [\n    {\n        \"name\": \"Margherita Pizza\",\n        \"quantity\": 1\n    },\n    {\n        \"name\": \"Pepperoni Pizza\",\n        \"quantity\": 2\n    },\n    {\n        \"name\": \"Pizza Quattro Pizza\",\n        \"quantity\": 3\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:38080/pizza/delivery/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "38080",
+					"path": [
+						"pizza",
+						"delivery",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "keycloak_port",
+			"value": "9090"
+		}
+	]
+}

@@ -1,0 +1,25 @@
+services:
+  keycloak:
+    container_name: keycloak.local
+    image: quay.io/keycloak/keycloak:25.0.5
+    command: ["start-dev", "--import-realm"]
+    ports:
+      - 9090:9090
+    networks:
+      - security-practices-network
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_METRICS_ENABLED=true
+      - KC_LOG_LEVEL=DEBUG
+      - KC_HTTP_PORT=9090
+      # To ensure Keycloak in the Docker container works correctly with JWT tokens retrieved by Postman,
+      # the following two properties must be enabled:
+      # 1. `KC_HOSTNAME`: This sets the hostname for Keycloak, which should match the `iss` (issuer) claim in the JWT tokens.
+      # 2. `KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true`: This allows dynamic back channel URL resolution, ensuring Keycloak handles internal and external requests properly.
+      # See: https://stackoverflow.com/questions/72854439/iss-claim-not-valid-keycloak
+      - KC_HOSTNAME=http://localhost:9090
+      - KC_HOSTNAME_BACKCHANNEL_DYNAMIC=true
+networks:
+  security-practices-network:
+    name: security-practices

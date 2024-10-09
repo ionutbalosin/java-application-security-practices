@@ -1,0 +1,47 @@
+version: '3.5'
+services:
+  #---------------------#
+  # Pizza Order Service #
+  #---------------------#
+  pizza-order-service:
+    container_name: pizza-order-service.local
+    image: pizza-order-service:local
+    ports:
+      - 18080:8080
+      - 18000:8000
+    networks:
+      - security-practices-network
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+      - SPRING_PROFILES_ACTIVE=dockerlocal
+  #-----------------------#
+  # Pizza Cooking Service #
+  #-----------------------#
+  pizza-cooking-service:
+    container_name: pizza-cooking-service.local
+    image: pizza-cooking-service:local
+    ports:
+      - 28080:8080
+      - 28000:8000
+    networks:
+      - security-practices-network
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+      - SPRING_PROFILES_ACTIVE=dockerlocal
+  #------------------------#
+  # Pizza Delivery Service #
+  #------------------------#
+  pizza-delivery-service:
+    container_name: pizza-delivery-service.local
+    image: pizza-delivery-service:local
+    ports:
+      - 38080:8080
+      - 38000:8000
+    networks:
+      - security-practices-network
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+      - SPRING_PROFILES_ACTIVE=dockerlocal
+networks:
+  security-practices-network:
+    name: security-practices

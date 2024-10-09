@@ -1,0 +1,63 @@
+---
+openapi: 3.0.3
+info:
+  title: Pizza Delivery Api
+  version: "1.0"
+paths:
+  /pizza/delivery/orders:
+    post:
+      tags:
+        - "Pizza Delivery Api"
+      summary: Deliver a new order
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      requestBody:
+        description: Partial update content
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PizzaDeliveryOrderDto'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal server error
+components:
+  schemas:
+    PizzaDeliveryOrderDto:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Order unique id
+          format: uuid
+        orders:
+          type: array
+          description: Pizza order content
+          items:
+            $ref: '#/components/schemas/PizzaOrderDto'
+    PizzaOrderDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the pizza being ordered.
+          example: "Margherita Pizza"
+        quantity:
+          type: integer
+          description: Number of pizza being ordered.
+          example: 3
+          minimum: 1
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      required: true
+      schema:
+        type: string
+      description: JWT Authorizing token to allow access to endpoint

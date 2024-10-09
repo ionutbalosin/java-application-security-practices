@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>Java Application Security Practices</name>
+    <groupId>ionutbalosin.training.application.security.practices</groupId>
+    <artifactId>application-security-practices</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <jdk.version>21</jdk.version>
+        <openapi.maven.plugin.version>7.3.0</openapi.maven.plugin.version>
+        <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
+        <spotless.maven.plugin.version>2.43.0</spotless.maven.plugin.version>
+        <spring.cloud.dependencies.version>2023.0.3</spring.cloud.dependencies.version>
+        <springdoc.openapi.version>2.6.0</springdoc.openapi.version>
+        <org.openapitools.jackson.version>0.2.6</org.openapitools.jackson.version>
+        <io.swagger.version>2.2.20</io.swagger.version>
+        <google.java.format>1.20.0</google.java.format>
+        <okhttp3.version>4.10.0</okhttp3.version>
+        <commons.io.version>2.17.0</commons.io.version>
+        <owasp.dependency.check.version>10.0.4</owasp.dependency.check.version>
+        <spotbugs.plugin.version>4.8.6.3</spotbugs.plugin.version>
+        <spotbugs.annotations.version>4.8.6</spotbugs.annotations.version>
+        <findsecbugs.version>1.13.0</findsecbugs.version>
+        <snakeyaml.version>1.25</snakeyaml.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.3</version>
+    </parent>
+
+    <modules>
+        <module>pizza-order-api</module>
+        <module>pizza-cooking-api</module>
+        <module>pizza-delivery-api</module>
+        <module>pizza-order-service</module>
+        <module>pizza-cooking-service</module>
+        <module>pizza-delivery-service</module>
+        <module>security-slf4j-logger-enricher</module>
+        <module>security-feign-logger-enricher</module>
+        <module>security-token-client-credentials-fetcher</module>
+        <module>security-token-introspection</module>
+        <module>security-token-jwks</module>
+        <module>serialization-deserialization</module>
+    </modules>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <jdkToolchain>
+                        <version>${jdk.version}</version>
+                    </jdkToolchain>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <jdkToolchain>
+                                <version>${jdk.version}</version>
+                            </jdkToolchain>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${owasp.dependency.check.version}</version>
+                <configuration>
+                    <!-->Fail the build for CVSS greater than or equal to 8</!-->
+                    <failBuildOnCVSS>8</failBuildOnCVSS>
+                    <suppressionFiles>
+                        <suppressionFile>${maven.multiModuleProjectDirectory}/owasp/project-suppressions.xml</suppressionFile>
+                    </suppressionFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.plugin.version}</version>
+                <configuration>
+                    <includeFilterFile>${maven.multiModuleProjectDirectory}/spotbugs/spotbugs-security-include.xml</includeFilterFile>
+                    <excludeFilterFile>${maven.multiModuleProjectDirectory}/spotbugs/spotbugs-security-exclude.xml</excludeFilterFile>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>${findsecbugs.version}</version>
+                        </plugin>
+                    </plugins>
+                    <xmlOutput>true</xmlOutput>
+                    <htmlOutput>true</htmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.maven.plugin.version}</version>
+                <configuration>
+                    <java>
+                        <googleJavaFormat>
+                            <version>${google.java.format}</version>
+                            <style>GOOGLE</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
+                        </googleJavaFormat>
+                        <removeUnusedImports/>
+                        <licenseHeader>
+                            <file>${maven.multiModuleProjectDirectory}/license/LICENSE-HEADER-JAVA</file>
+                        </licenseHeader>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.openapi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${io.swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${io.swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${org.openapitools.jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-annotations</artifactId>
+                <version>${spotbugs.annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
