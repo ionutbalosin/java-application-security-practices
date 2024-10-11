@@ -38,6 +38,7 @@ components:
           format: uuid
         orders:
           type: array
+          maxItems: 32
           description: Pizza order content
           items:
             $ref: '#/components/schemas/PizzaOrderDto'
@@ -47,12 +48,14 @@ components:
         name:
           type: string
           description: Name of the pizza being ordered.
+          maxLength: 128
           example: "Margherita Pizza"
         quantity:
           type: integer
           description: Number of pizza being ordered.
           example: 3
           minimum: 1
+          maximum: 12
   parameters:
     Authorization:
       name: Authorization

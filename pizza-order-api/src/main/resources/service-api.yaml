@@ -18,7 +18,7 @@ paths:
           application/json:
             schema:
               type: array
-              maxItems: 16
+              maxItems: 32
               items:
                 $ref: '#/components/schemas/PizzaOrderDto'
       responses:
@@ -42,12 +42,14 @@ components:
         name:
           type: string
           description: Name of the pizza being ordered.
+          maxLength: 128
           example: "Margherita Pizza"
         quantity:
           type: integer
           description: Number of pizza being ordered.
           example: 3
           minimum: 1
+          maximum: 12
     PizzaOrderCreatedDto:
       type: object
       properties:
