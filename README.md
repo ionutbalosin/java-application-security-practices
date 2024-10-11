@@ -184,6 +184,8 @@ This setup utilizes [Keycloak's REST API](https://www.keycloak.org/docs-api/late
 
 Open a browser and navigate to http://localhost:9090 to access the **Keycloak UI** (using the credentials `admin:admin`).
 
+Open a browser and navigate to http://localhost:9090/realms/master/.well-known/openid-configuration to access the **Keycloak OpenID Connect configuration**.
+
 Open a browser and navigate to http://localhost:18080/public/swagger-ui/index.html to access the **Pizza Order OpenAPI definition**.
 
 Open a browser and navigate to http://localhost:28080/public/swagger-ui/index.html to access the **Pizza Cooking OpenAPI definition**.
