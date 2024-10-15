@@ -70,12 +70,14 @@ retrieve_admin_token() {
 
 modify_token_lifespan() {
   echo ""
-  echo "Modifying the access token lifespan for realm [$REALM] ..."
+  echo "Modifying the access and refresh tokens lifespan for realm [$REALM] ..."
   RESPONSE=$(curl -s -X PUT "http://localhost:$PORT/admin/realms/$REALM" \
       -H "Authorization: Bearer $ACCESS_TOKEN" \
       -H "Content-Type: application/json" \
       -d "{
-        \"accessTokenLifespan\": 3600
+        \"accessTokenLifespan\": 900,
+        \"ssoSessionIdleTimeout\": 3600,
+        \"ssoSessionMaxLifespan\": 28800
       }")
   echo "Response: ${RESPONSE:-👍}"
 }
@@ -101,7 +103,8 @@ create_client() {
        	    \"protocol\": \"openid-connect\",
    		      \"consentRequired\": false,
             \"redirectUris\": [\"https://oauth.pstmn.io/v1/callback\"],
-            \"serviceAccountsEnabled\": $IS_ACCOUNT_ENABLED
+            \"serviceAccountsEnabled\": $IS_ACCOUNT_ENABLED,
+            \"implicitFlowEnabled\": true
           }")
   echo "Response: ${RESPONSE:-👍}"
 }

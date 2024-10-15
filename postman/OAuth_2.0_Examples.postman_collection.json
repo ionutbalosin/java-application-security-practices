@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "b1a3a562-1ff6-4224-bfa6-c913a088944f",
-		"name": "OAuth 2.0 Keycloak Examples",
+		"_postman_id": "65b510bc-7b1f-4d87-a445-8b2b2930b104",
+		"name": "OAuth 2.0 Examples",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "7839613",
-		"_collection_link": "https://grey-zodiac-239486.postman.co/workspace/RBI~3cac4cc5-5523-404d-a1a3-b3cc080cec94/collection/7839613-b1a3a562-1ff6-4224-bfa6-c913a088944f?action=share&source=collection_link&creator=7839613"
+		"_collection_link": "https://grey-zodiac-239486.postman.co/workspace/RBI~3cac4cc5-5523-404d-a1a3-b3cc080cec94/collection/7839613-65b510bc-7b1f-4d87-a445-8b2b2930b104?action=share&source=collection_link&creator=7839613"
 	},
 	"item": [
 		{
@@ -24,6 +24,61 @@
 						"master",
 						".well-known",
 						"openid-configuration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post client-credentials",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "demo_private_client",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "6EuUNXQzFmxu6xwPHDvvoh56z1uzrBMw",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9090/realms/master/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
 					]
 				}
 			},
@@ -90,7 +145,7 @@
 			"response": []
 		},
 		{
-			"name": "post client-credentials",
+			"name": "post implicit",
 			"event": [
 				{
 					"listen": "test",
@@ -104,30 +159,79 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "client_authentication",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://oauth.pstmn.io/v1/callback",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "http://localhost:9090/realms/master/protocol/openid-connect/auth",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "implicit",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "demo_public_client",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://localhost:9090/realms/master/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "6EuUNXQzFmxu6xwPHDvvoh56z1uzrBMw",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "string"
+						},
+						{
+							"key": "code_verifier",
+							"value": "123456789101112131415161718192021222324252627282930",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "aaaaaaaa",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "grant_type",
-							"value": "client_credentials",
-							"type": "text"
-						},
-						{
-							"key": "client_id",
-							"value": "demo_private_client",
-							"type": "text"
-						},
-						{
-							"key": "client_secret",
-							"value": "6EuUNXQzFmxu6xwPHDvvoh56z1uzrBMw",
-							"type": "text"
-						}
-					]
+					"urlencoded": []
 				},
 				"url": {
-					"raw": "http://localhost:9090/realms/master/protocol/openid-connect/token",
+					"raw": "http://localhost:9090/realms/master/protocol/openid-connect/auth",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -138,7 +242,7 @@
 						"master",
 						"protocol",
 						"openid-connect",
-						"token"
+						"auth"
 					]
 				}
 			},
@@ -146,6 +250,18 @@
 		},
 		{
 			"name": "post authorization-code",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\", data.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "oauth2",
@@ -362,10 +478,35 @@
 			"response": []
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "keycloak_port",
 			"value": "9090"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPcy1DUDFJXy1KMS1VbFVpUndvMFVpbkdmR2V1RENEOTluMW9sOGt6Y1RFIn0.eyJleHAiOjE3MjgyOTE4MzAsImlhdCI6MTcyODI4ODIzMCwianRpIjoiODUzNTA2M2YtN2UzYS00MTA4LWI3NjQtNGU4MTIyM2YwYmM0IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MDkwL3JlYWxtcy9tYXN0ZXIiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiMDljMjI1MmItMmRlZS00YmI3LTg4NjQtNjYwNmVkYjYzYmNjIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZGVtb19wdWJsaWNfY2xpZW50Iiwic2lkIjoiOTFmZWQ0YzEtM2VjNS00ODYzLWJkN2QtZTZlMGQ2MWIwODJiIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwczovL29hdXRoLnBzdG1uLmlvIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZW1vX3VzZXJfcm9sZSIsImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiZGVtb191c2VyIGZpcnN0TmFtZSBkZW1vX3VzZXIgbGFzdE5hbWUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJkZW1vX3VzZXIiLCJnaXZlbl9uYW1lIjoiZGVtb191c2VyIGZpcnN0TmFtZSIsImZhbWlseV9uYW1lIjoiZGVtb191c2VyIGxhc3ROYW1lIiwiZW1haWwiOiJkZW1vX3VzZXJAa2V5Y2xvYWsuY29tIn0.o70VjUQuLqNLBINEIGImn_9fwwMdeARMTSVtkdNHXEtwwusf_kul_rgp9uo4Bn6yr5SyguKuq6hDEpQ49cJ-GD227SRseKlVR1r0UmksAVEudG-roGXBJgwOy1ylxzPyomZc7d3yps1rGvh9Yy0C1WPDe0vPVXhcITE8QsTwg-3WI5p0wwVGQ1golOp-d1mmEknqqQyFWXCgJYYOZnMpcBvyQf6dkob1ILe7q4mXReFDBNkvd2sqRwFI4GrauvHCBfBkNEZ84tN4V60vzw5Cp5QIVeKEUh6F0A5l6LGduawdk50ZtFiPxeygyKlfJ6GrwyDf5cfY-kk6CWotoksa6g",
+			"type": "string"
 		}
 	]
 }
