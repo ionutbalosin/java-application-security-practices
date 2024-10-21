@@ -73,10 +73,7 @@ public class XmlXxeDeserializer {
   private static XMLReader createXmlReaderWithXseProtection()
       throws ParserConfigurationException, SAXException {
     final SAXParserFactory factory = SAXParserFactory.newInstance();
-    // Disable DTDs and external entities for XXE protection
-    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-    factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+    // The safest way to prevent XXE is always to disable DTDs (External Entities) completely.
     factory.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
     return factory.newSAXParser().getXMLReader();
   }
