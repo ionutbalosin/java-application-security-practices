@@ -24,8 +24,6 @@
  */
 package ionutbalosin.training.application.security.practices.pizza.cooking.service.controller;
 
-import static java.util.Collections.emptyList;
-import static java.util.Optional.ofNullable;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -59,17 +57,17 @@ public class CookingController implements PizzaApi {
       @RequestBody PizzaCookingOrderDto pizzaCookingOrderDto) {
     LOGGER.info(
         "pizzaCookingOrdersPost(pizzaCookingOrder = '{}')",
-        getPizzaCookingOrderAsString(pizzaCookingOrderDto));
+        formatPizzaCookingOrderDto(pizzaCookingOrderDto));
 
     cookingService.pizzaCookingOrdersPost(pizzaCookingOrderDto);
     return new ResponseEntity<>(CREATED);
   }
 
-  private String getPizzaCookingOrderAsString(PizzaCookingOrderDto pizzaCookingOrderDto) {
-    return ofNullable(pizzaCookingOrderDto.getOrders()).orElse(emptyList()).stream()
+  private String formatPizzaCookingOrderDto(PizzaCookingOrderDto pizzaCookingOrderDto) {
+    return pizzaCookingOrderDto.getOrders().stream()
         .map(
             cookingOrderDto ->
-                String.format("%s:%s", cookingOrderDto.getName(), cookingOrderDto.getQuantity()))
+                String.format("%s: %d", cookingOrderDto.getName(), cookingOrderDto.getQuantity()))
         .collect(Collectors.joining(", "));
   }
 }

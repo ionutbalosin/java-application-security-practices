@@ -24,7 +24,7 @@
  */
 package ionutbalosin.training.application.security.practices.pizza.order.service.controller;
 
-import static java.util.Collections.emptyList;
+import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -32,10 +32,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderDto;
 import ionutbalosin.training.application.security.practices.pizza.order.api.PizzaApi;
 import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderCreatedDto;
+import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderCustomerDto;
 import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderDto;
 import ionutbalosin.training.application.security.practices.pizza.order.service.mapper.PizzaCookingOrderDtoMapper;
+import ionutbalosin.training.application.security.practices.pizza.order.service.sanitizer.OrderSanitizer;
 import ionutbalosin.training.application.security.practices.pizza.order.service.service.OrderService;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,10 +52,15 @@ public class OrderController implements PizzaApi {
   private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
   private final OrderService orderService;
+  private final OrderSanitizer orderSanitizer;
   private final PizzaCookingOrderDtoMapper dtoMapper;
 
-  public OrderController(OrderService orderService, PizzaCookingOrderDtoMapper dtoMapper) {
+  public OrderController(
+      OrderService orderService,
+      OrderSanitizer orderSanitizer,
+      PizzaCookingOrderDtoMapper dtoMapper) {
     this.orderService = orderService;
+    this.orderSanitizer = orderSanitizer;
     this.dtoMapper = dtoMapper;
   }
 
@@ -62,18 +68,32 @@ public class OrderController implements PizzaApi {
   @PreAuthorize("hasAuthority('demo_user_role')")
   public ResponseEntity<PizzaOrderCreatedDto> pizzaOrdersPost(
       @Parameter(name = "Authorization") @RequestHeader String authorization,
-      @RequestBody List<PizzaOrderDto> pizzaOrderDto) {
-    LOGGER.info("pizzaOrdersPost(pizzaOrder = '{}')", getPizzaOrdersAsString(pizzaOrderDto));
+      @RequestBody PizzaOrderDto pizzaOrderDto) {
+    LOGGER.info("pizzaOrdersPost(pizzaOrder = '{}')", formatPizzaOrderDto(pizzaOrderDto));
 
+    orderSanitizer.sanitizeSpecialRequest(pizzaOrderDto);
     final PizzaCookingOrderDto pizzaCookingOrderDto = dtoMapper.map(pizzaOrderDto);
     orderService.pizzaOrdersPost(authorization, pizzaCookingOrderDto);
     return new ResponseEntity<>(
         new PizzaOrderCreatedDto().orderId(pizzaCookingOrderDto.getOrderId()), CREATED);
   }
 
-  private String getPizzaOrdersAsString(List<PizzaOrderDto> pizzaOrderDto) {
-    return ofNullable(pizzaOrderDto).orElse(emptyList()).stream()
-        .map(orderDto -> String.format("%s:%s", orderDto.getName(), orderDto.getQuantity()))
-        .collect(Collectors.joining(", "));
+  private String formatPizzaOrderDto(PizzaOrderDto pizzaOrderDto) {
+    // Format the list of pizza orders
+    final String orders =
+        pizzaOrderDto.getOrders().stream()
+            .map(orderDto -> format("%s: %d", orderDto.getName(), orderDto.getQuantity()))
+            .collect(Collectors.joining(", "));
+
+    // Format customer details
+    final PizzaOrderCustomerDto customerDto = pizzaOrderDto.getCustomer();
+    final String customer =
+        format("Customer: %s (Phone: %s)", customerDto.getName(), customerDto.getPhoneNumber());
+
+    // Handle special request
+    final String specialRequest = ofNullable(customerDto.getSpecialRequest()).orElse("none");
+
+    // Return the formatted string
+    return format("%s | Orders: [%s] | Special Request: %s", customer, orders, specialRequest);
   }
 }

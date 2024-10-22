@@ -22,27 +22,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.pizza.order.service.mapper;
+package ionutbalosin.training.application.security.practices.pizza.order.service.sanitizer;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Optional.ofNullable;
 
-import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderDto;
-import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderItemDto;
+import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderCustomerDto;
 import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderDto;
-import java.util.UUID;
+import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
-public class PizzaCookingOrderDtoMapper {
+@Service
+public class OrderSanitizer {
 
-  public PizzaCookingOrderDto map(PizzaOrderDto pizzaOrderDto) {
-    return new PizzaCookingOrderDto()
-        .orderId(UUID.randomUUID())
-        .orders(
-            pizzaOrderDto.getOrders().stream()
-                .map(
-                    orderDto ->
-                        new PizzaCookingOrderItemDto()
-                            .name(orderDto.getName())
-                            .quantity(orderDto.getQuantity()))
-                .collect(toList()));
+  public void sanitizeSpecialRequest(PizzaOrderDto pizzaOrderDto) {
+    // Sanitize the special request field to prevent XSS, if present
+    ofNullable(pizzaOrderDto.getCustomer())
+        .map(PizzaOrderCustomerDto::getSpecialRequest)
+        .map(HtmlUtils::htmlEscape)
+        .ifPresent(
+            sanitizedSpecialRequest ->
+                pizzaOrderDto.getCustomer().setSpecialRequest(sanitizedSpecialRequest));
   }
 }

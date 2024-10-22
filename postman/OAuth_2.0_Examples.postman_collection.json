@@ -375,7 +375,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n  {\n    \"name\": \"Margherita Pizza\",\n    \"quantity\": 1\n  },\n  {\n    \"name\": \"Pepperoni Pizza\",\n    \"quantity\": 2\n  },\n  {\n    \"name\": \"Pizza Quattro Pizza\",\n    \"quantity\": 3\n  }\n]",
+					"raw": "{\n  \"orders\": [\n    {\n      \"name\": \"Margherita Pizza\",\n      \"quantity\": 1\n    },\n    {\n      \"name\": \"Pepperoni Pizza\",\n      \"quantity\": 2\n    },\n    {\n      \"name\": \"Pizza Quattro Pizza\",\n      \"quantity\": 3\n    }\n  ],\n  \"customer\": {\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@customer.com\",\n    \"phoneNumber\": \"+4366488888888\",\n    \"specialRequest\": \"I would like extra cheese and a thinner crust. I'm quite hungry, so please deliver it as soon as possible. I usually give extra tips.\"\n  }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
