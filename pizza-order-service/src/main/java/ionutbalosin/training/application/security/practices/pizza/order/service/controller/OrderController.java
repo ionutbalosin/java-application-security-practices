@@ -37,6 +37,7 @@ import ionutbalosin.training.application.security.practices.pizza.order.api.mode
 import ionutbalosin.training.application.security.practices.pizza.order.service.mapper.PizzaCookingOrderDtoMapper;
 import ionutbalosin.training.application.security.practices.pizza.order.service.sanitizer.OrderSanitizer;
 import ionutbalosin.training.application.security.practices.pizza.order.service.service.OrderService;
+import ionutbalosin.training.application.security.practices.pizza.order.service.validator.UploadFileValidator;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class OrderController implements PizzaApi {
@@ -53,14 +58,17 @@ public class OrderController implements PizzaApi {
 
   private final OrderService orderService;
   private final OrderSanitizer orderSanitizer;
+  private final UploadFileValidator uploadFileValidator;
   private final PizzaCookingOrderDtoMapper dtoMapper;
 
   public OrderController(
       OrderService orderService,
       OrderSanitizer orderSanitizer,
+      UploadFileValidator uploadFileValidator,
       PizzaCookingOrderDtoMapper dtoMapper) {
     this.orderService = orderService;
     this.orderSanitizer = orderSanitizer;
+    this.uploadFileValidator = uploadFileValidator;
     this.dtoMapper = dtoMapper;
   }
 
@@ -76,6 +84,22 @@ public class OrderController implements PizzaApi {
     orderService.pizzaOrdersPost(authorization, pizzaCookingOrderDto);
     return new ResponseEntity<>(
         new PizzaOrderCreatedDto().orderId(pizzaCookingOrderDto.getOrderId()), CREATED);
+  }
+
+  @Override
+  @PreAuthorize("hasAuthority('demo_user_role')")
+  @RequestMapping(
+      method = RequestMethod.POST,
+      value = "/pizza/upload/menu",
+      consumes = {"multipart/form-data"})
+  public ResponseEntity<Void> pizzaUploadMenuPost(
+      @Parameter(name = "upload", required = true) @RequestPart(value = "upload")
+          MultipartFile upload) {
+    LOGGER.info("pizzaUploadMenuPost()");
+
+    uploadFileValidator.validate(upload);
+    // TODO: implement file upload processing (e.g., save the file or parse contents)
+    return new ResponseEntity<>(CREATED);
   }
 
   private String formatPizzaOrderDto(PizzaOrderDto pizzaOrderDto) {

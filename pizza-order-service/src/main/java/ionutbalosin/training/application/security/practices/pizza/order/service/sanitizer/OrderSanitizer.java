@@ -34,8 +34,12 @@ import org.springframework.web.util.HtmlUtils;
 @Service
 public class OrderSanitizer {
 
+  /**
+   * This method sanitizes the special request free text field to prevent cross-site scripting (XSS)
+   * attacks. It uses HTML escaping to ensure that any potentially malicious content in the free
+   * text field is neutralized before processing.
+   */
   public void sanitizeSpecialRequest(PizzaOrderDto pizzaOrderDto) {
-    // Sanitize the special request field to prevent XSS, if present
     ofNullable(pizzaOrderDto.getCustomer())
         .map(PizzaOrderCustomerDto::getSpecialRequest)
         .map(HtmlUtils::htmlEscape)

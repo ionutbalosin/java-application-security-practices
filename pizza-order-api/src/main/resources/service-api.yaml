@@ -31,6 +31,34 @@ paths:
           description: Forbidden
         "500":
           description: Internal server error
+  /pizza/upload/menu:
+    post:
+      tags:
+        - "Pizza Menu Api"
+      summary: Upload pizza menu as a JSON file
+      description: Upload pizza menu as a JSON file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                upload:
+                  type: string
+                  format: binary
+                  description: The JSON file to upload
+              required:
+                - upload
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad request
+        "403":
+          description: Forbidden
+        "500":
+          description: Internal server error
 components:
   schemas:
     PizzaOrderDto:
