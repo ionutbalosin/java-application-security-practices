@@ -68,6 +68,6 @@ components:
       name: Authorization
       in: header
       required: true
+      description: JWT Authorizing token to allow access to the endpoint
       schema:
         type: string
-      description: JWT Authorizing token to allow access to endpoint

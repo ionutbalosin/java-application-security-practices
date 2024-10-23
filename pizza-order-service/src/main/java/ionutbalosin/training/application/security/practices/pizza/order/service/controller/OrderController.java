@@ -93,6 +93,7 @@ public class OrderController implements PizzaApi {
       value = "/pizza/upload/menu",
       consumes = {"multipart/form-data"})
   public ResponseEntity<Void> pizzaUploadMenuPost(
+      @Parameter(name = "Authorization") @RequestHeader String authorization,
       @Parameter(name = "upload", required = true) @RequestPart(value = "upload")
           MultipartFile upload) {
     LOGGER.info("pizzaUploadMenuPost()");

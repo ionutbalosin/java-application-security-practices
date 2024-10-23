@@ -1,10 +1,18 @@
----
 openapi: 3.0.3
 info:
   title: Pizza Order Api
   version: "1.0"
 paths:
   /pizza/orders:
+    options:
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      tags:
+        - CORS
+      responses:
+        '200':
+          $ref: '#/components/responses/CorsResponse'
     post:
       tags:
         - "Pizza Order Api"
@@ -32,11 +40,22 @@ paths:
         "500":
           description: Internal server error
   /pizza/upload/menu:
+    options:
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      tags:
+        - CORS
+      responses:
+        '200':
+          $ref: '#/components/responses/CorsResponse'
     post:
       tags:
         - "Pizza Menu Api"
       summary: Upload pizza menu as a JSON file
       description: Upload pizza menu as a JSON file
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
       requestBody:
         required: true
         content:
@@ -132,6 +151,9 @@ components:
       name: Authorization
       in: header
       required: true
+      description: JWT Authorizing token to allow access to the endpoint
       schema:
         type: string
-      description: JWT Authorizing token to allow access to endpoint
+  responses:
+    CorsResponse:
+      description: Successful response for CORS method
