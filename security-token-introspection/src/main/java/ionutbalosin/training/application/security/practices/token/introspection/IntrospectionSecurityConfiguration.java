@@ -45,6 +45,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/**
+ * References:
+ *
+ * <ul>
+ *   <li><a
+ *       href="https://docs.spring.io/spring-security/reference/servlet/exploits/headers.html">Security
+ *       HTTP Response Headers</a>
+ * </ul>
+ */
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
@@ -65,7 +74,7 @@ public class IntrospectionSecurityConfiguration {
   @Value("${spring.security.oauth2.resourceserver.opaque.introspection-client-secret}")
   private String clientSecret;
 
-  @Value("${cors.allowedOrigins:}")
+  @Value("${cors.allowed-origins:}")
   private String[] allowedOrigins;
 
   @Bean
@@ -85,6 +94,8 @@ public class IntrospectionSecurityConfiguration {
                         opaque.introspector(
                             new OpaqueJwtIntrospector(introspectionUri, clientId, clientSecret))));
     configureCors(http);
+    configureCsp(http);
+    configureSecurityHeaders(http);
 
     return http.build();
   }
@@ -97,21 +108,7 @@ public class IntrospectionSecurityConfiguration {
       return;
     }
 
-    http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .headers(
-            headers ->
-                headers
-                    .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                    .referrerPolicy(
-                        referrer ->
-                            referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
-                    .xssProtection(
-                        xss ->
-                            xss.headerValue(
-                                XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
-                    .addHeaderWriter(
-                        new StaticHeadersWriter(
-                            "Strict-Transport-Security", "max-age=63072000; includeSubDomains")));
+    http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
   }
 
   private CorsConfigurationSource corsConfigurationSource() {
@@ -130,5 +127,44 @@ public class IntrospectionSecurityConfiguration {
     source.registerCorsConfiguration("/**", configuration);
 
     return source;
+  }
+
+  private void configureCsp(HttpSecurity http) throws Exception {
+    http.headers(
+        headers ->
+            headers
+                // Cross-Origin Resource Sharing
+                .contentSecurityPolicy(
+                csp ->
+                    csp.policyDirectives(
+                        "default-src 'none'; "
+                            + "img-src 'self' *.ionutbalosin.com; "
+                            + "script-src 'self' *.ionutbalosin.com; "
+                            + "style-src 'self'; "
+                            + "connect-src 'self' *.ionutbalosin.com; "
+                            + "form-action 'self'; "
+                            + "base-uri 'self'; "
+                            + "frame-src 'self';")));
+  }
+
+  private void configureSecurityHeaders(HttpSecurity http) throws Exception {
+    http.headers(
+        headers ->
+            headers
+                // Strict-Transport-Security: max-age=63072000; includeSubdomains; preload
+                .httpStrictTransportSecurity(
+                    hsts -> hsts.includeSubDomains(true).maxAgeInSeconds(63072000).preload(true))
+                // X-XSS-Protection: 1; mode=block
+                .xssProtection(
+                    xss ->
+                        xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+                // X-Frame-Options: DENY
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny)
+                // X-Content-Type-Options: nosniff
+                .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff"))
+                // Referrer-Policy: same-origin
+                .referrerPolicy(
+                    referrer ->
+                        referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)));
   }
 }
