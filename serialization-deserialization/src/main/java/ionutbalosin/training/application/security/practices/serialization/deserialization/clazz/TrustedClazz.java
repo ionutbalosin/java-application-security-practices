@@ -31,6 +31,6 @@ public class TrustedClazz implements Serializable {
   private static final long serialVersionUID = 2L;
 
   public TrustedClazz() {
-    System.out.printf("A trusted class constructor%n");
+    System.out.printf("A trusted class constructor has been invoked.%n");
   }
 }

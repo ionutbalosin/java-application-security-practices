@@ -27,6 +27,7 @@ package ionutbalosin.training.application.security.practices.serialization.deser
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputFilter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import org.apache.commons.io.serialization.ValidatingObjectInputStream;
@@ -55,53 +56,76 @@ public class MaliciousClazzDeserializer {
       CURRENT_DIR + "/serialization-deserialization/target/malicious_class.ser";
 
   public static void main(String[] args) {
-    // Serialize the malicious class (typically this is done by the attacker)
+    // Serialize the malicious class.
+    // Typically, this is performed by an attacker.
     serialize(CLASS_FILENAME);
 
-    // Deserialize the malicious class (this will trigger the calculator application to open).
+    // Perform default Java deserialization, which triggers the calculator application
+    // defined in the malicious class.
     // Typically, this is done on the vulnerable client's side.
-    deserialize(CLASS_FILENAME);
+    defaultDeserialize(CLASS_FILENAME);
 
-    // Deserialize using a validation list to prevent deserialization of the malicious class.
-    // Typically, this is done on the secure client's side to avoid deserialization attacks.
-    deserializeWithValidation(CLASS_FILENAME);
+    // Deserialize using the Java input filter to restrict deserialization
+    // and prevent the malicious class from being processed.
+    // Typically, this is done on the vulnerable client's side.
+    deserializeWithJavaObjectInputFilter(CLASS_FILENAME);
+
+    // Deserialize using Apache Commons validation to prevent deserialization
+    // of the malicious class by enforcing validation rules.
+    // Typically, this is done on the vulnerable client's side.
+    deserializeWithApacheCommonsValidatingObjectInputStream(CLASS_FILENAME);
   }
 
   private static void serialize(String filename) {
-    System.out.printf("*** Serialization ***%n");
+    System.out.printf("%n*** Serialization ***%n");
     try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
       MaliciousClazz maliciousClazz = new MaliciousClazz();
       oos.writeObject(maliciousClazz);
       System.out.printf("Successfully serialized to [%s]%n", filename);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      System.out.printf("Exception encountered: %s%n", e.getMessage());
     }
   }
 
-  private static void deserialize(String filename) {
-    System.out.printf("*** Deserialization ***%n");
+  private static void defaultDeserialize(String filename) {
+    System.out.printf("%n*** Default deserialization ***%n");
     try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-      // Note: While casting is not essential in this example, the key point is the invocation of
-      // the readObject() method, which triggers the custom deserialization logic and can lead to
-      // vulnerabilities.
+      // Deserialize the object, expecting it to be of type TrustedClazz
       final TrustedClazz trustedClazz = (TrustedClazz) ois.readObject();
       System.out.printf("Successfully deserialized from [%s]%n", filename);
     } catch (IOException | ClassNotFoundException e) {
-      throw new RuntimeException(e);
+      System.out.printf("Exception encountered: %s%n", e.getMessage());
     }
   }
 
-  private static void deserializeWithValidation(String filename) {
-    System.out.printf("*** Deserialization with validation ***%n");
+  private static void deserializeWithJavaObjectInputFilter(String filename) {
+    System.out.printf("%n*** Deserialization with Java ObjectInputFilter ***%n");
+    try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+      // Create a filter that allows deserialization of TrustedClazz class and rejects all others.
+      // The filter string format: <class name>;!* (allow TrustedClazz, reject all other classes).
+      final ObjectInputFilter filesOnlyFilter =
+          ObjectInputFilter.Config.createFilter(TrustedClazz.class.getName() + ";!*");
+      ois.setObjectInputFilter(filesOnlyFilter);
+      // Deserialize the object, expecting it to be of type TrustedClazz
+      final TrustedClazz trustedClazz = (TrustedClazz) ois.readObject();
+      System.out.printf("Successfully deserialized from [%s]%n", filename);
+    } catch (IOException | ClassNotFoundException e) {
+      System.out.printf("Exception encountered: %s%n", e.getMessage());
+    }
+  }
+
+  private static void deserializeWithApacheCommonsValidatingObjectInputStream(String filename) {
+    System.out.printf(
+        "%n*** Deserialization with Apache Commons ValidatingObjectInputStream ***%n");
     try (final FileInputStream fis = new FileInputStream(filename);
         final ValidatingObjectInputStream vois = new ValidatingObjectInputStream(fis)) {
-      // Only allow specific trusted classes (e.g., TrustedClass) to be deserialized
+      // Only allow specific trusted classes (e.g., TrustedClazz) to be deserialized
       vois.accept(TrustedClazz.class);
       // Deserialize the object (only allowed classes can be deserialized)
       final TrustedClazz trustedClazz = (TrustedClazz) vois.readObject();
       System.out.printf("Successfully deserialized from [%s]%n", filename);
     } catch (IOException | ClassNotFoundException e) {
-      throw new RuntimeException(e);
+      System.out.printf("Exception encountered: %s%n", e.getMessage());
     }
   }
 }

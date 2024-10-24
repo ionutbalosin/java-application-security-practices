@@ -33,13 +33,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -161,7 +161,8 @@ public class IntrospectionSecurityConfiguration {
                 // X-Frame-Options: DENY
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny)
                 // X-Content-Type-Options: nosniff
-                .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff"))
+                .contentTypeOptions(Customizer.withDefaults())
+                // .addHeaderWriter(new StaticHeadersWriter("X-Content-Type-Options", "nosniff"))
                 // Referrer-Policy: same-origin
                 .referrerPolicy(
                     referrer ->

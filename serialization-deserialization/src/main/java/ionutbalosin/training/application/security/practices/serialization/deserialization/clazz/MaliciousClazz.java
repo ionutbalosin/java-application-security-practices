@@ -55,7 +55,7 @@ public class MaliciousClazz extends TrustedClazz {
   private static final long serialVersionUID = 1L;
 
   public MaliciousClazz() {
-    System.out.printf("A malicious class constructor%n");
+    System.out.printf("A malicious class constructor has been invoked.%n");
   }
 
   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
