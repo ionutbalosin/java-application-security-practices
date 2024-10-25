@@ -51,10 +51,13 @@ Among the **security concepts** demonstrated in this project:
   - JSON Web Key Set (JWKS)
   - Roles-based access control
 - Java Process Security
+  - Input data validation and sanitization
+  - Handling input files from external sources
   - Security logging best practices
   - Content Security Policy (CSP)
   - Cross-Origin Resource Sharing (CORS)
-  - Serialization/Deserialization
+  - HTTP security headers (e.g., Strict-Transport-Security, X-XSS-Protection, X-Frame-Options)
+  - Java deserialization
 - Security Testing
   - Software Composition Analysis (SCA)
   - Static Application Security Testing (SAST)
@@ -64,15 +67,15 @@ Among the **security concepts** demonstrated in this project:
 
 Below is a breakdown and description of each module in the current project.
 
-Module                                                  | Description                                                                                                                                                                                                                                                                                |
-------------------------------------------------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-`pizza-order-*`, `pizza-cooking-*`, `pizza-delivery-*`  | These modules represent 3 microservices and their APIs (Pizza Cooking, Delivery, and Order) that demonstrate various OAuth 2.0 flows (e.g., token introspection, JWKS, client credentials), roles-based access control and security logging concepts.                                      |
-`security-feign-logger-enricher`                        | Enriches and enables standard Feign client logging with additional custom Mapped Diagnostic Context (MDC) attributes (e.g., correlation ID) using SLF4J's MDC.                                                                                                                             |
-`security-slf4j-logger-enricher`                        | Enriches SLF4J-based logging with security-specific attributes (e.g., remote host, remote port, user agent, request URI, request method, correlation ID) using SLF4J's MDC.                                                                                                                |
-`security-token-client-credentials-fetcher`             | Fetches tokens from the Identity Provider (IdP) using the client credentials flow.                                                                                                                                                                                                         |
-`security-token-introspection`                          | Introspects and validates access tokens using the IdP's token introspection endpoint. Additionally, it disables security for specific `/public` endpoints (e.g., OpenAPI definition endpoint), configures CORS, and parses JWT claim roles, adding them as granted authorities.            |
-`security-token-jwks`                                   | Handles JSON Web Key Set (JWKS) validation and signature verification of JWT tokens using the IdP's JWKS endpoint. Additionally, it disables security for specific `/public` endpoints (e.g., OpenAPI definition endpoint) and parses JWT claim roles, adding them as granted authorities. |
-`serialization-deserialization`                         | Demonstrates security risks in serialization and deserialization, including exploits like Java class deserialization attacks, XML external entities, YAML bombs, and ZIP bombs.                                                                                                            |
+Module                                                  | Description                                                                                                                                                                                                                                                                                                                                   |
+------------------------------------------------------- |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+`pizza-order-*`, `pizza-cooking-*`, `pizza-delivery-*`  | These modules represent 3 microservices and their APIs (Pizza Cooking, Delivery, and Order) that demonstrate various OAuth 2.0 flows (e.g., token introspection, JWKS, client credentials), roles-based access control and security logging concepts.                                                                                         |
+`security-feign-logger-enricher`                        | Enriches and enables standard Feign client logging with additional custom Mapped Diagnostic Context (MDC) attributes (e.g., correlation ID) using SLF4J's MDC.                                                                                                                                                                                |
+`security-slf4j-logger-enricher`                        | Enriches SLF4J-based logging with security-specific attributes (e.g., remote host, remote port, user agent, request URI, request method, correlation ID) using SLF4J's MDC.                                                                                                                                                                   |
+`security-token-client-credentials-fetcher`             | Fetches tokens from the Identity Provider (IdP) using the client credentials flow.                                                                                                                                                                                                                                                            |
+`security-token-introspection`                          | Introspects and validates access tokens using the IdP's token introspection endpoint. Additionally, it disables security for specific `/public` endpoints (e.g., OpenAPI definition endpoint), configures CORS and Content Security Policy (CSP), adds HTTP security headers, and parses JWT claim roles, adding them as granted authorities. |
+`security-token-jwks`                                   | Handles JSON Web Key Set (JWKS) validation and signature verification of JWT tokens using the IdP's JWKS endpoint. Additionally, it disables security for specific `/public` endpoints (e.g., OpenAPI definition endpoint) and parses JWT claim roles, adding them as granted authorities.                                                    |
+`serialization-deserialization`                         | Demonstrates security risks in serialization and deserialization, including exploits like Java class deserialization attacks, XML external entities, YAML bombs, and ZIP bombs.                                                                                                                                                               |
 
 ## Architectural Diagrams
 
