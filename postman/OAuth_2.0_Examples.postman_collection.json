@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "get openid-configuration",
+			"name": "openid configuration",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -30,7 +30,7 @@
 			"response": []
 		},
 		{
-			"name": "post client-credentials",
+			"name": "client credentials flow",
 			"event": [
 				{
 					"listen": "test",
@@ -85,7 +85,7 @@
 			"response": []
 		},
 		{
-			"name": "post password flow",
+			"name": "password flow",
 			"event": [
 				{
 					"listen": "test",
@@ -145,7 +145,7 @@
 			"response": []
 		},
 		{
-			"name": "post implicit",
+			"name": "implicit flow",
 			"event": [
 				{
 					"listen": "test",
@@ -249,7 +249,7 @@
 			"response": []
 		},
 		{
-			"name": "post authorization-code",
+			"name": "authorization code flow with PKCE",
 			"event": [
 				{
 					"listen": "test",

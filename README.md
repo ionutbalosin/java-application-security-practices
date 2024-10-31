@@ -146,7 +146,7 @@ The course is developed to work best on **GNU/Linux**. However, if you prefer to
 To compile the project, run tests, and package it, use the following command:
 
 ```bash
-./mvnw clean package
+mvnw clean package
 ```
 
 ### Bootstrap All Services and Dependencies with Docker
@@ -156,7 +156,7 @@ To compile the project, run tests, and package it, use the following command:
 To bootstrap all services and their dependencies, execute:
 
 ```bash
-./bootstrap.sh
+bootstrap.sh
 ```
 
 To verify that all Docker containers are up and running, execute the following command:
@@ -170,7 +170,7 @@ docker ps -a
 To set up a basic Keycloak configuration, run the following script:
 
 ```bash
-./keycloak-init.sh
+keycloak-init.sh
 ```
 
 The script creates OAuth 2.0 clients, users, and roles under the `master` realm and assigns the roles to the users:
@@ -223,7 +223,7 @@ Open a browser and navigate to http://localhost:38080/public/swagger-ui/index.ht
 To check for potential dependency vulnerabilities, execute the following command:
 
 ```bash
-./mvnw clean compile org.owasp:dependency-check-maven:check
+mvnw clean compile org.owasp:dependency-check-maven:check
 ```
 
 >Note: The first run of this command might take a significant amount of time (e.g., a couple of minutes) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
@@ -236,7 +236,7 @@ With the help of the [FindSecBugs plugin](https://find-sec-bugs.github.io/) plug
 To check for potential code vulnerabilities, execute the following command:
 
 ```bash
-./mvnw clean compile spotbugs:check
+mvnw clean compile spotbugs:check
 ```
 
 ### Zed Attack Proxy (ZAP)
@@ -247,7 +247,7 @@ As a **Dynamic Application Security Testing (DAST)** tool, ZAP analyzes running 
 To check for API security vulnerabilities, execute the following command:
 
 ```bash
-./zap-scan.sh
+zap-scan.sh
 ```
 
 The command starts ZAP in Docker, launches an API scan using the [zap-api-scan rules](./zap/zap-api-scan-rules.conf) against one of the services, and saves the scan report in the [./zap/reports](./zap/reports) folder.
