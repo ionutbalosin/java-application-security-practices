@@ -3,7 +3,7 @@
 Copyright (C) 2024 Ionut Balosin
 
 This project is licensed under the Apache License, Version 2.0.
-Please see the [LICENSE](../license/LICENSE) file for full license.
+Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
@@ -16,7 +16,7 @@ Please see the [LICENSE](../license/LICENSE) file for full license.
 Consider the software architecture template diagram below, explicitly designed to be agnostic to any specific business application domain. However, since security is mission-critical, each component must be protected, and all communication between components must be both authenticated and authorized.
 
 <p align="center">
-  <img alt="eCommerce" title="eCommerce" src="../assets/diagrams/software-architecture-diagram-authn-authz.svg">
+  <img alt="eCommerce" title="eCommerce" src="assets/diagrams/software-architecture-diagram-authn-authz.svg">
 </p>
 
 The system is accessed by different types of clients or systems:
@@ -65,7 +65,7 @@ From another terminal, trigger the `Keycloak` initialization setup using the fol
 
 Once everything has been started and properly initialized, you can open a browser and navigate to http://localhost:9090 to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
 
-As the next and final step, import the [Postman collection](../postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
+As the next and final step, import the [Postman collection](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
 - OpenID Connect configuration
 - `Client Credentials Flow`
 - `Password Flow`

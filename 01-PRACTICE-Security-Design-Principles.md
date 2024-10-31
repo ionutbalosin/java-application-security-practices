@@ -3,7 +3,7 @@
 Copyright (C) 2024 Ionut Balosin
 
 This project is licensed under the Apache License, Version 2.0.
-Please see the [LICENSE](../license/LICENSE) file for full license.
+Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 

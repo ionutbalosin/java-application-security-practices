@@ -3,7 +3,7 @@
 Copyright (C) 2024 Ionut Balosin
 
 This project is licensed under the Apache License, Version 2.0.
-Please see the [LICENSE](../license/LICENSE) file for full license.
+Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
@@ -15,7 +15,7 @@ Please see the [LICENSE](../license/LICENSE) file for full license.
 
 This software architecture diagram for the `Pizza` distributed application highlights key security aspects, including OAuth 2.0 flows (e.g., JWT introspection, JWKS) and endpoint roles checks.
 
-<img src="../assets/diagrams/software-architecture-diagram.svg">
+<img src="assets/diagrams/software-architecture-diagram.svg">
 
 ### 👨‍💼 Trainer: Hands-On Demo
 
@@ -25,7 +25,7 @@ Open a terminal and start the `Pizza` application, which includes multiple micro
 ./bootstrap-spring-boot.sh
 ```
 
-Open the [Postman collection](../postman) and choose one of the following OAuth 2.0 flows to obtain a proper JWT token:
+Open the [Postman collection](postman) and choose one of the following OAuth 2.0 flows to obtain a proper JWT token:
 - `Password Flow`
 - `Client Credentials Flow`
 - `Authorization Code Flow with PKCE`
@@ -45,6 +45,6 @@ docker ps -a
 ```
 
 Additionally, to better understand the `Token Introspection`, `JSON Web Key Set`, and `roles-based access control` implementations, please check out the following modules:
-- [security-token-introspection](../security-token-introspection)
-- [security-token-jwks](../security-token-jwks)
-- [security-token-client-credentials-fetcher](../security-token-client-credentials-fetcher)
+- [security-token-introspection](security-token-introspection)
+- [security-token-jwks](security-token-jwks)
+- [security-token-client-credentials-fetcher](security-token-client-credentials-fetcher)
