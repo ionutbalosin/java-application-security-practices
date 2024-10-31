@@ -47,25 +47,25 @@ Options may include, but are not limited to:
 - `JSON Web Key Set`
 - etc.
 
-**Notes:**
-- In case 
 ---
 
 ### 👨‍💼 Trainer: Hands-On Demo
 
-Open a terminal and start the `Pizza` distributed application, which includes multiple microservices running in Docker and uses OAuth 2.0 flows to handle authentication and authorization, by using the following command:
+Open a terminal and run the following command to bootstrap the `Keycloak` service:
 
 ```bash
-bootstrap.sh
+./bootstrap-keycloak.sh
 ```
 
 From another terminal, trigger the `Keycloak` initialization setup using the following command:
 
 ```bash
-keycloak-init.sh
+./keycloak-init.sh
 ```
 
-Once everything has been started and properly initialized, import the [Postman collection](../postman) and trigger the following IdP endpoints, and OAuth 2.0 flows:
+Once everything has been started and properly initialized, you can open a browser and navigate to http://localhost:9090 to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
+
+As the next and final step, import the [Postman collection](../postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
 - OpenID Connect configuration
 - `Client Credentials Flow`
 - `Password Flow`

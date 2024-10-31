@@ -149,17 +149,23 @@ To compile the project, run tests, and package it, use the following command:
 mvnw clean package
 ```
 
-### Bootstrap All Services and Dependencies with Docker
+### Bootstrap Services with Docker
 
-**Note:** Please ensure that the Docker daemon is running beforehand; otherwise, the commands will fail.
+**Note:** Ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
 
-To bootstrap all services and their dependencies, execute:
+Run the following command to bootstrap the `Keycloak` service:
 
 ```bash
-bootstrap.sh
+bootstrap-keycloak.sh
 ```
 
-To verify that all Docker containers are up and running, execute the following command:
+To start all Spring Boot services, run:
+
+```bash
+bootstrap-spring-boot.sh
+```
+
+Check that all Docker containers are up and running by executing:
 
 ```bash
 docker ps -a
@@ -201,14 +207,18 @@ Open a browser and navigate to http://localhost:38080/public/swagger-ui/index.ht
 2. Import the provided [Postman collection](./postman).
 3. To simulate a basic test scenario, follow these steps in the given sequence:
   - 3.1 Fetch the JWT token using either:
-    - The **password flow**:
+    - The **Password Flow**:
        ```
        POST http://localhost:9090/realms/master/protocol/openid-connect/token
        ```
-    - Or the **authorization code flow**:
+    - Or the **Client Credentials Flow**:
+       ```
+       POST http://localhost:9090/realms/master/protocol/openid-connect/token
+       ```      
+    - Or the **Authorization Code Flow with PKCE**:
        ```
        POST http://localhost:9090/realms/master/protocol/openid-connect/auth
-       ```
+       ```   
   - 3.2 Initiate an order request to the `pizza-order-service`:
        ```
        POST http://localhost:18080/pizza/orders

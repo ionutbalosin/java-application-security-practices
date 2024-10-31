@@ -25,45 +25,12 @@
 #
 
 echo ""
-echo "******************************************"
-echo "* [1/3] Compile and package all services *"
-echo "******************************************"
-echo ""
-
-BASE_DIR="${PWD}"
-
-if ! ./mvnw package -DskipTests; then
-    echo ""
-    echo "ERROR: Maven encountered errors and cannot continue."
-    exit 1
-fi
-
-echo ""
-echo "**********************************************"
-echo "* [2/3] Build Docker images for all services *"
-echo "**********************************************"
-echo ""
-
-cd ./pizza-order-service
-./build-docker.sh || exit 1
-cd "${BASE_DIR}"
-
-cd ./pizza-cooking-service
-./build-docker.sh || exit 1
-cd "${BASE_DIR}"
-
-cd ./pizza-delivery-service
-./build-docker.sh || exit 1
-cd "${BASE_DIR}"
-
-echo ""
-echo "*****************************************************************"
-echo "* [3/3] Start all services (and their dependencies) with Docker *"
-echo "*****************************************************************"
+echo "************************************"
+echo "* [1/1] Start Keycloak with Docker *"
+echo "************************************"
 echo ""
 
 docker compose -f ./docker-compose-keycloak.yml \
-               -f ./docker-compose-spring-boot.yml \
                up -d --remove-orphans
 if [ $? -ne 0 ]; then
     echo "Error: Docker services failed to start."
