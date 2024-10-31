@@ -153,19 +153,19 @@ To compile the project, run tests, and package it, use the following command:
 
 **Note:** Ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
 
-Run the following command to bootstrap the `Keycloak` service:
+Run the following command to bootstrap the `Keycloak` service in Docker
 
 ```bash
 ./bootstrap-keycloak.sh
 ```
 
-To start all Spring Boot services, run:
+Next, to start all Spring Boot services for the `Pizza` application in Docker, execute:
 
 ```bash
 ./bootstrap-spring-boot.sh
 ```
 
-Check that all Docker containers are up and running by executing:
+Finally, check that all Docker containers are up and running by executing:
 
 ```bash
 docker ps -a
