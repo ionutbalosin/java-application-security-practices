@@ -41,15 +41,19 @@ Options may include, but are not limited to:
 - `OpenID Connect`
 - `Authorization Code Flow with PKCE`
 - `Client Credentials Flow`
+- `Password Flow`
+- `Implicit Flow`
 - `Token Introspection`
 - `JSON Web Key Set`
 - etc.
 
+**Notes:**
+- In case 
 ---
 
 ### 👨‍💼 Trainer: Hands-On Demo
 
-Open a terminal and start the `Pizza` distributed application, which includes multiple microservices running in Docker, using the following command:
+Open a terminal and start the `Pizza` distributed application, which includes multiple microservices running in Docker and uses OAuth 2.0 flows to handle authentication and authorization, by using the following command:
 
 ```bash
 bootstrap.sh
@@ -61,7 +65,7 @@ From another terminal, trigger the `Keycloak` initialization setup using the fol
 keycloak-init.sh
 ```
 
-Once everything has been started and properly initialized, open `Postman` and trigger the following IdP endpoints/flows
+Once everything has been started and properly initialized, import the [Postman collection](../postman) and trigger the following IdP endpoints, and OAuth 2.0 flows:
 - OpenID Connect configuration
 - `Client Credentials Flow`
 - `Password Flow`
