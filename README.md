@@ -251,9 +251,7 @@ To check for potential code vulnerabilities, execute the following command:
 
 ### Zed Attack Proxy (ZAP)
 
-[The Zed Attack Proxy (ZAP)](https://github.com/zaproxy/zaproxy) is an open-source dynamic analysis tool specifically designed for identifying vulnerabilities in applications during runtime. 
-
-As a **Dynamic Application Security Testing (DAST)** tool, ZAP analyzes running applications to detect potential security issues without requiring access to the source code. It is particularly effective for uncovering vulnerabilities in web applications and APIs in real-time.
+[The Zed Attack Proxy (ZAP)](https://github.com/zaproxy/zaproxy) is an open-source **Dynamic Application Security Testing (DAST)** tool specifically designed for identifying vulnerabilities in applications during runtime.
 
 To check for API security vulnerabilities, execute the following command:
 

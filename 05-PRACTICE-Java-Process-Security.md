@@ -7,13 +7,13 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
-> ⏰: 80 minutes
-
 ## Best Practices to Mitigate Java Process Security Attacks
 
-### 👨‍💼 Trainer: Hands-On Demo
+> ⏰ 80 minutes
 
-#### 🕵️‍♂️ Input Data Validation and Sanitization
+> 👨‍💼 Conducted By Trainer
+
+### 🕵️‍♂️ Input Data Validation and Sanitization
 
 The application source code includes several validation and sanitization techniques, such as:
 - Whitelisting
@@ -37,7 +37,7 @@ Try intentionally malforming the request using:
 
 ---
 
-#### 🕵️‍♂️ Handling Input Files from External Sources
+### 🕵️‍♂️ Handling Input Files from External Sources
 
 The application source code includes several mitigation strategies for handling input files from external sources, including:
 - Filename length check
@@ -56,7 +56,7 @@ Try intentionally malforming the request by:
 
 ---
 
-#### 🕵️‍♂️ Security Logging
+### 🕵️‍♂️ Security Logging
 
 The application source code adds the following fields to each logged line corresponding to every incoming request:
 - Remote host
@@ -79,7 +79,7 @@ docker logs -f <CONTAINER_ID>
 
 ---
 
-#### 🕵️‍♂️ Content Security Policy
+### 🕵️‍♂️ Content Security Policy
 
 The application source code implements several Content Security Policy directives, including:
 - `img-src`
@@ -98,7 +98,7 @@ Then, check the HTTP response headers for the `Content-Security-Policy` header.
 
 ---
 
-#### 🕵️‍♂️ Cross-Origin Resource Sharing
+### 🕵️‍♂️ Cross-Origin Resource Sharing
 
 The application source code implements several Cross-Origin Resource Sharing directives, including:
 - `Access-Control-Allow-Origin`
@@ -122,7 +122,7 @@ Then, check the HTTP response headers for CORS-related headers, including:
 
 ---
 
-#### 🕵️‍♂️ HTTP Security Headers
+### 🕵️‍♂️ HTTP Security Headers
 
 The application source code implements several HTTP Security Headers, including:
 - `Strict-Transport-Security`
@@ -139,7 +139,7 @@ Then, check the HTTP response headers for the implemented security headers.
 
 ---
 
-#### 🕵️‍♂️ Java Deserialization
+### 🕵️‍♂️ Java Deserialization
 
 The application source code demonstrates several potential Java deserialization exploits and strategies to mitigate them, including:
 - Java Deserialization Attack

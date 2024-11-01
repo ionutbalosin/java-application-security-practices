@@ -7,15 +7,15 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
-> ⏰: 20 minutes
-
 ## Security Design Principles
 
-### 👨‍🎓 Attendees: Identify the Right Design Principle
+> ⏰ 20 minutes
+
+> 👨‍🎓 Attendees' Exercise
 
 A company, `SecureBank`, recently launched an online banking platform. However, users have reported various security issues. Here’s what happened in some key events.
 
-### 🕵️‍♂️ User Accounts Compromised
+### 1. User Accounts Compromised
 
 `SecureBank`’s employees use shared administrator accounts to access customer data. Due to this, one employee accidentally deleted critical customer information.
 
@@ -28,7 +28,7 @@ A company, `SecureBank`, recently launched an online banking platform. However, 
 
 ---
 
-### 🕵️‍♂️ System Breach Through a Single Firewall
+### 2. System Breach Through a Single Firewall
 
 Hackers breached `SecureBank`'s platform by exploiting a vulnerability in its single-layer firewall. With no additional protective layers, attackers gained direct access to sensitive data.
 
@@ -41,7 +41,7 @@ Hackers breached `SecureBank`'s platform by exploiting a vulnerability in its si
 
 ---
 
-### 🕵️‍♂️ Sensitive Data Exposure During System Error
+### 3. Sensitive Data Exposure During System Error
 
 During a system crash, users noticed that sensitive data, such as account balances, were briefly exposed on error pages.
 
@@ -54,7 +54,7 @@ During a system crash, users noticed that sensitive data, such as account balanc
 
 ---
 
-### 🕵️‍♂️ Cross-System Data Leakage
+### 4. Cross-System Data Leakage
 
 The `SecureBank` platform stores credit card information alongside other non-sensitive data in the same database. When an unrelated feature failed, developers inadvertently accessed credit card data during troubleshooting.
 

@@ -7,9 +7,11 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
-> ⏰: 40 minutes
-
 ## API and Microservices Security
+
+> ⏰ 40 minutes
+
+> 👨‍💼 Conducted By Trainer
 
 ### 📖 Informational: Software Architecture Diagram
 
@@ -17,7 +19,7 @@ This software architecture diagram for the `Pizza` distributed application highl
 
 <img src="assets/diagrams/software-architecture-diagram.svg">
 
-### 👨‍💼 Trainer: Hands-On Demo
+### Hands-On Demo
 
 1. Open a terminal and start the `Pizza` application, which includes multiple microservices running in Docker, by using the following command:
 

@@ -11,9 +11,11 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ## Security Testing
 
-### 👨‍💼 Trainer: Hands-On Demo
+> ⏰ 80 minutes
 
-#### 🕵️‍♂️ Software Composition Analysis
+> 👨‍💼 Conducted By Trainer
+
+### 🕵️‍♂️ Software Composition Analysis
 
 A **Software Composition Analysis (SCA)** tool identifies vulnerabilities in project dependencies by using [Common Platform Enumeration (CPE)](https://nvd.nist.gov/products/cpe) identifiers—a structured naming scheme—and linking them to [Common Vulnerability and Exposure (CVE)](https://cve.mitre.org/) entries.
 
@@ -33,7 +35,7 @@ The detailed report containing all libraries and their vulnerabilities, includin
 
 ---
 
-#### 🕵️‍♂️ Static Application Security Testing
+### 🕵️‍♂️ Static Application Security Testing
 
 **Static Application Security Testing (SAST)** is used to secure software by reviewing its source code to identify potential sources of vulnerabilities. It runs at compile time and requires access to the source code to determine if any possible security vulnerabilities might occur based on specific patterns.
 
@@ -53,7 +55,7 @@ To check for potential code vulnerabilities, execute the following command:
 
 ---
 
-#### 🕵️‍♂️ Dynamic Application Security Testing
+### 🕵️‍♂️ Dynamic Application Security Testing
 
 A **Dynamic Application Security Testing (DAST)** tool analyzes running applications to detect potential security issues without requiring access to the source code. It is particularly effective for uncovering vulnerabilities in web applications and APIs in real time.
 

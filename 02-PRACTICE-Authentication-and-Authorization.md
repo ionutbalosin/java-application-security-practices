@@ -7,11 +7,13 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
-> ⏰: 120 minutes
-
 ## Authentication and Authorization
 
-### 👨‍🎓 Attendees: Identify the Appropriate Flows
+### Identify the Appropriate Flows
+
+> ⏰ 60 minutes
+
+> 👨‍🎓 Attendees' Exercise
 
 Consider the software architecture template diagram below, explicitly designed to be agnostic to any specific business application domain. However, since security is mission-critical, each component must be protected, and all communication between components must be both authenticated and authorized.
 
@@ -49,7 +51,11 @@ Options may include, but are not limited to:
 
 ---
 
-### 👨‍💼 Trainer: Hands-On Demo
+### Hands-On Demo
+
+> ⏰ 60 minutes
+
+> 👨‍💼 Conducted By Trainer
 
 1. Open a terminal and run the following command to bootstrap the `Keycloak` service:
 
