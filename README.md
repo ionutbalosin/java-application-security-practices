@@ -240,6 +240,7 @@ To check for potential dependency vulnerabilities, execute the following command
 ### SpotBugs with FindSecBugs Plugin
 
 [Spotbugs](https://spotbugs.github.io/) is an open-source static analysis tool that detects bugs in Java programs by analyzing bytecode. 
+
 With the help of the [FindSecBugs plugin](https://find-sec-bugs.github.io/) plugin, it can be used as a **Static Application Security Testing (SAST)** tool to identify security vulnerabilities in Java applications.
 
 To check for potential code vulnerabilities, execute the following command:
@@ -251,6 +252,7 @@ To check for potential code vulnerabilities, execute the following command:
 ### Zed Attack Proxy (ZAP)
 
 [The Zed Attack Proxy (ZAP)](https://github.com/zaproxy/zaproxy) is an open-source dynamic analysis tool specifically designed for identifying vulnerabilities in applications during runtime. 
+
 As a **Dynamic Application Security Testing (DAST)** tool, ZAP analyzes running applications to detect potential security issues without requiring access to the source code. It is particularly effective for uncovering vulnerabilities in web applications and APIs in real-time.
 
 To check for API security vulnerabilities, execute the following command:
