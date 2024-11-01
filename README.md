@@ -159,10 +159,10 @@ Run the following command to bootstrap the `Keycloak` service in Docker
 ./bootstrap-keycloak.sh
 ```
 
-Next, to start all Spring Boot services for the `Pizza` application in Docker, execute:
+Next, to start the `Pizza` application, which includes multiple microservices running in Docker, execute:
 
 ```bash
-./bootstrap-spring-boot.sh
+./bootstrap-pizza-application.sh
 ```
 
 Finally, check that all Docker containers are up and running by executing:

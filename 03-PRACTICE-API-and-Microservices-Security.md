@@ -7,7 +7,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
-> ⏰: 30 minutes
+> ⏰: 40 minutes
 
 ## API and Microservices Security
 
@@ -22,7 +22,7 @@ This software architecture diagram for the `Pizza` distributed application highl
 Open a terminal and start the `Pizza` application, which includes multiple microservices running in Docker, by using the following command:
 
 ```bash
-./bootstrap-spring-boot.sh
+./bootstrap-pizza-application.sh
 ```
 
 Open the [Postman collection](postman) and choose one of the following OAuth 2.0 flows to obtain a proper JWT token:

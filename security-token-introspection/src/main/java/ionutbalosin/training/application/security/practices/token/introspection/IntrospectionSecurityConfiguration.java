@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -83,8 +84,13 @@ public class IntrospectionSecurityConfiguration {
     http.authorizeHttpRequests(
             authorize ->
                 authorize
+                    // Allow preflight requests (OPTIONS) without authentication
+                    .requestMatchers(HttpMethod.OPTIONS)
+                    .permitAll()
+                    // Allow public endpoints without being authorized
                     .requestMatchers(PERMIT_PUBLIC_URL_PATTERN)
                     .permitAll()
+                    // Require authentication for all other requests
                     .anyRequest()
                     .authenticated())
         .oauth2ResourceServer(
@@ -116,6 +122,7 @@ public class IntrospectionSecurityConfiguration {
         "Configuring CORS with the following allowed origins: '{}'.",
         Arrays.toString(allowedOrigins));
 
+    // Cross-Origin Resource Sharing
     final CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(asList(allowedOrigins));
     configuration.setAllowedHeaders(List.of("*"));
@@ -133,7 +140,7 @@ public class IntrospectionSecurityConfiguration {
     http.headers(
         headers ->
             headers
-                // Cross-Origin Resource Sharing
+                // Content Security Policy
                 .contentSecurityPolicy(
                 csp ->
                     csp.policyDirectives(

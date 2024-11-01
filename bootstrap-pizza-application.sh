@@ -62,9 +62,8 @@ echo "* [3/3] Start all Spring Boot services with Docker *"
 echo "***************************************************"
 echo ""
 
-docker compose -f ./docker-compose-keycloak.yml \
-               -f ./docker-compose-spring-boot.yml \
-               up -d --remove-orphans
+docker compose -f ./docker-compose-pizza-application.yml \
+               up -d
 if [ $? -ne 0 ]; then
     echo "Error: Docker services failed to start."
     exit 1

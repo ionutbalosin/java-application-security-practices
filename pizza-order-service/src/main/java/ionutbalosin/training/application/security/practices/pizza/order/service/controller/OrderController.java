@@ -73,6 +73,12 @@ public class OrderController implements PizzaApi {
   }
 
   @Override
+  public ResponseEntity<Void> pizzaOrdersOptions() {
+    LOGGER.info("pizzaOrdersOptions()");
+    return new ResponseEntity<>(CREATED);
+  }
+
+  @Override
   @PreAuthorize("hasAuthority('demo_user_role')")
   public ResponseEntity<PizzaOrderCreatedDto> pizzaOrdersPost(
       @Parameter(name = "Authorization") @RequestHeader String authorization,

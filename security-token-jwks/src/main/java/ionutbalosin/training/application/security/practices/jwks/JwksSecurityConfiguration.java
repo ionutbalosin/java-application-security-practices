@@ -26,6 +26,7 @@ package ionutbalosin.training.application.security.practices.jwks;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,8 +47,13 @@ public class JwksSecurityConfiguration {
     http.authorizeHttpRequests(
             authorize ->
                 authorize
+                    // Allow preflight requests (OPTIONS) without authentication
+                    .requestMatchers(HttpMethod.OPTIONS)
+                    .permitAll()
+                    // Allow public endpoints without being authorized
                     .requestMatchers(PERMIT_PUBLIC_URL_PATTERN)
                     .permitAll()
+                    // Require authentication for all other requests
                     .anyRequest()
                     .authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));

@@ -31,7 +31,7 @@ echo "************************************"
 echo ""
 
 docker compose -f ./docker-compose-keycloak.yml \
-               up -d --remove-orphans
+               up -d
 if [ $? -ne 0 ]; then
     echo "Error: Docker services failed to start."
     exit 1
