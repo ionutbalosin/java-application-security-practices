@@ -51,27 +51,27 @@ Options may include, but are not limited to:
 
 ### 👨‍💼 Trainer: Hands-On Demo
 
-Open a terminal and run the following command to bootstrap the `Keycloak` service:
+1. Open a terminal and run the following command to bootstrap the `Keycloak` service:
 
-```bash
-./bootstrap-keycloak.sh
-```
+    ```bash
+    ./bootstrap-keycloak.sh
+    ```
 
-From another terminal, trigger the `Keycloak` initialization setup using the following command:
+2. From another terminal, trigger the `Keycloak` initialization setup using the following command:
 
-```bash
-./keycloak-init.sh
-```
+    ```bash
+    ./keycloak-init.sh
+    ```
 
-Once everything has been started and properly initialized, you can open a browser and navigate to http://localhost:9090 to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
+3. Once everything has been started and properly initialized, you can open a browser and navigate to [http://localhost:9090](http://localhost:9090) to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
 
-As the next and final step, import the [Postman collection](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
-- OpenID Connect configuration
-- `Client Credentials Flow`
-- `Password Flow`
-- `Implicit Flow`
-- `Authorization Code Flow with PKCE`
+4. As the next and final step, open `Postman` and import the [Postman collection](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
+    - OpenID Connect configuration
+    - `Client Credentials Flow`
+    - `Password Flow`
+    - `Implicit Flow`
+    - `Authorization Code Flow with PKCE`
 
 **Notes:**
 - Depending on the flow, not all types of tokens (e.g., identity, access, and refresh tokens) are returned.
-- To understand the structure of a KWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, and specific claims like `roles`, `iss`, `aud`, `exp`, etc.). 
+- To understand the structure of a KWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, and specific claims like `roles`, `iss`, `aud`, `exp`, etc.).
