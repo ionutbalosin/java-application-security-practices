@@ -7,13 +7,11 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ---
 
-> ⏰: 30 minutes
-
 ## Security Testing
 
-> ⏰ 80 minutes
+> ⏰ 30 minutes
 
-> 👨‍💼 Conducted By Trainer
+> 👨‍🎓 Attendees' Exercise
 
 ### 🕵️‍♂️ Software Composition Analysis
 
