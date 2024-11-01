@@ -151,25 +151,25 @@ To compile the project, run tests, and package it, use the following command:
 
 ### Bootstrap Services with Docker
 
-**Note:** Ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
+Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
 
-Run the following command to bootstrap the `Keycloak` service in Docker
+1. Run the following command to bootstrap the `Keycloak` service in Docker:
 
-```bash
-./bootstrap-keycloak.sh
-```
+    ```bash
+    ./bootstrap-keycloak.sh
+    ```
 
-Next, to start the `Pizza` application, which includes multiple microservices running in Docker, execute:
+2. Next, to start the `Pizza` application, which includes multiple microservices running in Docker, execute:
 
-```bash
-./bootstrap-pizza-application.sh
-```
+    ```bash
+    ./bootstrap-pizza-application.sh
+    ```
 
-Finally, check that all Docker containers are up and running by executing:
+3. Finally, check that all Docker containers are up and running by executing:
 
-```bash
-docker ps -a
-```
+    ```bash
+    docker ps -a
+    ```
 
 ### Keycloak Configuration
 
@@ -203,10 +203,9 @@ Open a browser and navigate to http://localhost:38080/public/swagger-ui/index.ht
 
 ### Local Tests with Postman
 
-1. Open Postman.
-2. Import the provided [Postman collection](postman).
-3. To simulate a basic test scenario, follow these steps in the given sequence:
-  - 3.1 Fetch the JWT token using either:
+1. Open `Postman` and import the [Postman collection](postman).
+2. To simulate a basic test scenario, follow these steps in the given sequence:
+  - a) Fetch the JWT token using either:
     - The **Password Flow**:
        ```
        POST http://localhost:9090/realms/master/protocol/openid-connect/token
@@ -219,7 +218,7 @@ Open a browser and navigate to http://localhost:38080/public/swagger-ui/index.ht
        ```
        POST http://localhost:9090/realms/master/protocol/openid-connect/auth
        ```   
-  - 3.2 Initiate an order request to the `pizza-order-service`:
+  - b) Initiate an order request to the `pizza-order-service`:
        ```
        POST http://localhost:18080/pizza/orders
        ```
@@ -236,7 +235,7 @@ To check for potential dependency vulnerabilities, execute the following command
 ./mvnw clean compile org.owasp:dependency-check-maven:check
 ```
 
->Note: The first run of this command might take a significant amount of time (e.g., a couple of minutes) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
+**Note:** The first run of this command might take a significant amount of time (e.g., a couple of minutes) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
 
 ### SpotBugs with FindSecBugs Plugin
 
