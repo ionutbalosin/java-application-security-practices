@@ -120,6 +120,7 @@ This project includes the following **technologies, frameworks, and libraries**:
 - [OWASP Dependency-Check](https://owasp.org/www-project-dependency-check) as a Software Composition Analysis (SCA) tool
 - [Spotbugs](https://spotbugs.github.io/) with [FindSecBugs plugin](https://find-sec-bugs.github.io/) as a Static Application Security Testing (SAST) tool
 - [The Zed Attack Proxy (ZAP)](https://github.com/zaproxy/zaproxy) as a Dynamic Application Security Testing (DAST) tool
+- [OWASP WebGoat](https://owasp.org/www-project-webgoat) a deliberately insecure application
 
 ## SetUp
 
@@ -153,19 +154,25 @@ To compile the project, run tests, and package it, use the following command:
 
 Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
 
-1. Run the following command to bootstrap the `Keycloak` service in Docker:
+1. Run the following command to start the `Keycloak` service in Docker:
 
     ```bash
     ./bootstrap-keycloak.sh
     ```
 
-2. Next, to start the `Pizza` application, which includes multiple microservices running in Docker, execute:
-
+2. To start the `Pizza` application, which includes multiple microservices running in Docker, execute:
+   
     ```bash
     ./bootstrap-pizza-application.sh
     ```
 
-3. Finally, check that all Docker containers are up and running by executing:
+3. Next, run the following command to start the `OWASP WebGoat` application in Docker:
+   
+    ```bash
+    ./bootstrap-webgoat.sh
+    ```
+
+4. Finally, check that all Docker containers are up and running by executing:
 
     ```bash
     docker ps -a
@@ -200,6 +207,8 @@ Open a browser and navigate to http://localhost:18080/public/swagger-ui/index.ht
 Open a browser and navigate to http://localhost:28080/public/swagger-ui/index.html to access the **Pizza Cooking OpenAPI definition**.
 
 Open a browser and navigate to http://localhost:38080/public/swagger-ui/index.html to access the **Pizza Delivery OpenAPI definition**.
+
+Open a browser and navigate to http://localhost:48080/WebGoat/login to access the **OWASP WebGoat UI**.
 
 ### Local Tests with Postman
 

@@ -13,7 +13,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 > 👨‍💼 Conducted By Trainer
 
-### 📖 Software Architecture Diagram
+### 📖 Informational: Software Architecture Diagram
 
 This software architecture diagram for the `Pizza` distributed application highlights key security aspects, including OAuth 2.0 flows (e.g., JWT introspection, JWKS) and endpoint roles checks.
 

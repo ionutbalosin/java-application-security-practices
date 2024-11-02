@@ -1,0 +1,12 @@
+services:
+  webgoat:
+    container_name: webgoat.local
+    image: webgoat/webgoat
+    ports:
+      - 48080:8080
+      - 49090:9090
+    networks:
+      - security-practices-network
+networks:
+  security-practices-network:
+    name: security-practices

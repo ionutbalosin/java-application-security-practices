@@ -13,7 +13,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 > 👨‍🎓 Attendees' Exercise
 
-### 📖 SCA, SAST and DAST
+### 📖 Informational: SCA, SAST and DAST
 
 **Software Composition Analysis (SCA)** identifies vulnerabilities in project dependencies by using [Common Platform Enumeration (CPE)](https://nvd.nist.gov/products/cpe) identifiers, a standardized naming scheme that maps software components to known vulnerabilities documented as [Common Vulnerability and Exposure (CVE)](https://cve.mitre.org/) entries.
 

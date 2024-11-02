@@ -25,12 +25,12 @@
 #
 
 echo ""
-echo "******************************"
-echo "* Start Keycloak with Docker *"
-echo "******************************"
+echo "***********************************"
+echo "* Start OWASP WebGoat with Docker *"
+echo "***********************************"
 echo ""
 
-docker compose -f ./docker-compose-keycloak.yml \
+docker compose -f ./docker-compose-webgoat.yml \
                up -d
 if [ $? -ne 0 ]; then
     echo "Error: Docker services failed to start."
