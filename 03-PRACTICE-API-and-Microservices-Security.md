@@ -19,6 +19,8 @@ This software architecture diagram for the `Pizza` distributed application highl
 
 <img src="assets/diagrams/software-architecture-diagram.svg">
 
+---
+
 ### 🏋️ Hands-On Demo
 
 1. Open a terminal and start the `Pizza` application, which includes multiple microservices running in Docker, by using the following command:
