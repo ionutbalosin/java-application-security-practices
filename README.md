@@ -227,7 +227,7 @@ Open a browser and navigate to http://localhost:38080/public/swagger-ui/index.ht
 
 ### OWASP Dependency-Check
 
-[OWASP Dependency-Check](https://owasp.org/www-project-dependency-check) is a **Software Composition Analysis (SCA)** tool that attempts to detect publicly disclosed vulnerabilities in a project's dependencies.
+[OWASP Dependency-Check](https://owasp.org/www-project-dependency-check) is an open-source **Software Composition Analysis (SCA)** tool that identifies vulnerabilities in project dependencies, helping reveal and address known security risks.
 
 To check for potential dependency vulnerabilities, execute the following command:
 
@@ -239,7 +239,7 @@ To check for potential dependency vulnerabilities, execute the following command
 
 ### SpotBugs with FindSecBugs Plugin
 
-[Spotbugs](https://spotbugs.github.io/) is an open-source static analysis tool that detects bugs in Java programs by analyzing bytecode. 
+[Spotbugs](https://spotbugs.github.io/) is an open-source static analysis tool that detects bugs in Java programs by analyzing bytecode.
 
 With the help of the [FindSecBugs plugin](https://find-sec-bugs.github.io/) plugin, it can be used as a **Static Application Security Testing (SAST)** tool to identify security vulnerabilities in Java applications.
 
