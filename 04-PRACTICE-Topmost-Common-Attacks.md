@@ -21,11 +21,11 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 - `Reflected XSS`: This type involves malicious scripts that are immediately executed in a user's browser when they click a crafted link or submit a form. It typically targets the same user and is not stored on the server.
 - `Stored XSS`: The malicious scripts are stored on the server (e.g., in a database) and executed whenever the affected content is accessed by any user, allowing the attacker to target multiple victims over time.
 
-**Cross-Site Request Forgery (CSRF)** is a security vulnerability that tricks users into unknowingly submitting unauthorized requests to a web application in which they are authenticated, potentially allowing attackers to perform actions on behalf of the user without their consent.
+**Cross-Site Request Forgery (CSRF)** is a security vulnerability that tricks users into unconsciously submitting unauthorized requests to a web application in which they are authenticated, potentially allowing attackers to perform actions on behalf of the user without their consent.
 
 **XSS** vs **CSRF**:
-- **XSS** involves injecting malicious scripts into web pages that are executed in the user's browser, while **CSRF** involves tricking the user into submitting unauthorized requests (often using an image, link, or email received from the attacker) to a server while the user is authenticated.
-- **XSS** targets the client (the user's browser) by executing scripts directly in it, while **CSRF** targets the server by sending forged requests that the server processes as legitimate actions from the authenticated user.
+- **XSS** involves injecting malicious scripts into web pages that are executed in the user's browser, while **CSRF** involves tricking the user into submitting unauthorized requests (often through an external image, link, or email received from the attacker) to a server while the user is authenticated.
+- **XSS** targets the client (the user's browser) by executing scripts directly in it, while **CSRF** targets the server by sending forged requests that the server processes as legitimate actions while the user remains authenticated.
 
 [OWASP WebGoat](https://owasp.org/www-project-webgoat) is a deliberately insecure application that contains lessons for almost all [OWASP Top 10](https://owasp.org/www-project-top-ten/) vulnerabilities (including **XSS**, **CSRF**, etc.). It allows developers to test vulnerabilities commonly found in Java-based applications that use popular open-source components.
 
@@ -43,7 +43,7 @@ Some solutions to the challenges in the `OWASP WebGoat` application can be found
 
 2. Next, open a browser and navigate to http://localhost:48080/WebGoat/login to access the **OWASP WebGoat UI**.
 
-3. Create a user account to log in
+3. Create a user account to log in:
     - Username: `administrator`
     - Password: `Test1234!`
 
@@ -72,3 +72,4 @@ You can find the solution to this exercise in the `OWASP WebGoat` [Solutions - L
    </html>
    ```
 
+**Note:** The CSRF attack will not work if the user is not logged into the application when opening this `html` file.
