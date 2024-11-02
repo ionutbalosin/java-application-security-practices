@@ -13,13 +13,13 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 > 👨‍💼 Conducted By Trainer
 
-### 📖 Informational: Software Architecture Diagram
+### 📖 Software Architecture Diagram
 
 This software architecture diagram for the `Pizza` distributed application highlights key security aspects, including OAuth 2.0 flows (e.g., JWT introspection, JWKS) and endpoint roles checks.
 
 <img src="assets/diagrams/software-architecture-diagram.svg">
 
-### Hands-On Demo
+### 🏋️ Hands-On Demo
 
 1. Open a terminal and start the `Pizza` application, which includes multiple microservices running in Docker, by using the following command:
 

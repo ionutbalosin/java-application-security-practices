@@ -9,7 +9,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ## Authentication and Authorization
 
-### Identify the Appropriate Flows
+### 🕵️‍♂️ Identify the Appropriate Flows
 
 > ⏰ 60 minutes
 
@@ -36,7 +36,7 @@ The system is divided into three distinct layers:
 
 Communication between clients and services is primarily based on synchronous HTTP RESTful API calls; however, in some cases, asynchronous communication is used, with events placed into queues.
 
-🏋️ **Task:** Each red arrow, labeled with an index from `1` to `12`, links a specific client or service to the IdP. 
+**Task:** Each red arrow, labeled with an index from `1` to `12`, links a specific client or service to the IdP. 
 For each of these arrows, identify the most suitable OAuth 2.0 or OpenID Connect (OIDC) flow based on the interaction type and the client or service  involved. 
 Options may include, but are not limited to:
 
@@ -51,7 +51,7 @@ Options may include, but are not limited to:
 
 ---
 
-### Hands-On Demo
+### 🏋️ Hands-On Demo
 
 > ⏰ 60 minutes
 
