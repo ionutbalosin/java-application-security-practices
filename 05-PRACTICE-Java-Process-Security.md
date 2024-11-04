@@ -117,8 +117,7 @@ Then, check the HTTP response headers for CORS-related headers, including:
 - `Vary: Access-Control-Request-Method`
 - `Vary: Access-Control-Request-Headers`
 
-**Notes:**
-- The primary purpose of the `Vary` header is to inform browser caches that they may need to store different versions of a response based on certain request headers, allowing for more accurate caching behavior.
+**Note:** The primary purpose of the `Vary` header is to inform browser caches that they may need to store different versions of a response based on certain request headers, allowing for more accurate caching behavior.
 
 ---
 

@@ -23,6 +23,8 @@ This software architecture diagram for the `Pizza` distributed application highl
 
 ### 🏋️ Hands-On Demo
 
+**Note:** Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
+
 1. Open a terminal and start the `Pizza` application, which includes multiple microservices running in Docker, by using the following command:
 
     ```bash

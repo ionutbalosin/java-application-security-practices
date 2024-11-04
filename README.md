@@ -152,7 +152,7 @@ To compile the project, run tests, and package it, use the following command:
 
 ### Bootstrap Services with Docker
 
-Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
+**Note:** Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
 
 1. Run the following command to start the `Keycloak` service in Docker:
 

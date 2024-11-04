@@ -57,6 +57,8 @@ Options may include, but are not limited to:
 
 > 👨‍💼 Conducted By Trainer
 
+**Note:** Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
+
 1. Open a terminal and run the following command to bootstrap the `Keycloak` service:
 
     ```bash

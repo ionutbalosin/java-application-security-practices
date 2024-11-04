@@ -35,6 +35,8 @@ Some solutions to the challenges in the `OWASP WebGoat` application can be found
 
 ### 🏋️ Hands-On Demo
 
+**Note:** Please ensure that the Docker daemon is running; otherwise, the commands will not execute successfully.
+
 1. Open a terminal and start the `OWASP WebGoat` application in Docker using the following command:
 
    ```bash
