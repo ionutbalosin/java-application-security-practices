@@ -36,7 +36,7 @@ This software architecture diagram for the `Pizza` distributed application highl
 3. From the provided `Postman` collections, choose one of the following OAuth 2.0 flows to obtain a proper JWT token:
     - `Password Flow`
     - `Client Credentials Flow`
-    - `Authorization Code Flow with PKCE` *(recommended)*
+    - `Authorization Code Flow with PKCE` (using the credentials `demo_user:Test1234!`) *(recommended)*
 
 4. Finally, initiate a pizza order request using the endpoint `POST /pizza/orders`. If the command succeeds, the response should be `201 Created`.
 

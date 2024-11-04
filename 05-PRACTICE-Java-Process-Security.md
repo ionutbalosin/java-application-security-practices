@@ -124,7 +124,6 @@ Then, check the HTTP response headers for CORS-related headers, including:
 ### 🕵️‍♂️ HTTP Security Headers
 
 The application source code implements several HTTP Security Headers, including:
-- `Strict-Transport-Security`
 - `X-XSS-Protection`
 - `X-Frame-Options`
 - `X-Content-Type-Options`

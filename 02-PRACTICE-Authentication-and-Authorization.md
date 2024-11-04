@@ -82,4 +82,4 @@ Options may include, but are not limited to:
 
 **Notes:**
 - Depending on the flow, not all types of tokens (e.g., identity, access, and refresh tokens) are returned.
-- To understand the structure of a JWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, signature) and the specific claims like `roles`, `iss`, `aud`, `exp`, etc.
+- To understand the structure of a JWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, signature) and the specific claims like `exp`, `iat`, `iss`, `sub`, `typ`, `azp`, `roles`, `client_id`, etc.
