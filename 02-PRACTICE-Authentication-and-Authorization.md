@@ -15,7 +15,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 > 👨‍🎓 Attendees' Exercise
 
-Consider the software architecture template diagram below, explicitly designed to be agnostic to any specific business application domain. However, since security is mission-critical, each component must be protected, and all communication between components must be both authenticated and authorized.
+Consider the software architecture diagram below, explicitly designed to be agnostic to any specific business application domain. However, since security is mission-critical, each component must be protected, and all communication between components must be both authenticated and authorized.
 
 <p align="center">
   <img alt="eCommerce" title="eCommerce" src="assets/diagrams/software-architecture-diagram-authn-authz.svg">
@@ -26,13 +26,13 @@ The system is accessed by different types of clients or systems:
 - `External OIDC Users`: Public users authenticated through an external OIDC provider, such as Google or Facebook.
 - `Internal OIDC Users`: Public users authenticated via the organization’s internal Identity Provider (IdP).
 - `Employees`: Internal company users authenticated via the organization’s internal IdP.
-- `Public/Internal Services`: Public external systems and internal services from other departments, authenticated via the organization’s internal IdP.
+- `External/Internal Services`: Public external systems and internal services from other departments, authenticated via the organization’s internal IdP.
 
 The system is divided into three distinct layers:
 
-- `Public Clients`: Publicly exposed APIs accessed by users or external systems, involving both the internal IdP and an external (i.e., third-party) IdP for authentication.
-- `Internal Core Services`: Internal organizational services usually within the same company department, requiring secure service-to-service authentication and authorization.
-- `Internal Non-core Services`: Auxiliary, non-core systems usually belonging to other departments within the organization, also requiring service-to-service authentication and authorization.
+- `Public Clients Layer`: Publicly exposed APIs accessed by users or external systems, involving both the internal IdP and an external (i.e., third-party) IdP for authentication.
+- `Internal Core Services Layer`: Internal organizational services usually within the same company department, requiring secure service-to-service authentication and authorization.
+- `Internal Non-core Services Layer`: Auxiliary, non-core systems usually belonging to other departments within the organization, also requiring service-to-service authentication and authorization.
 
 Communication between clients and services is primarily based on synchronous HTTP RESTful API calls; however, in some cases, asynchronous communication is used, with events placed into queues.
 
@@ -69,9 +69,9 @@ Options may include, but are not limited to:
     ./keycloak-init.sh
     ```
 
-3. Once everything has been started and properly initialized, you can open a browser and navigate to [http://localhost:9090](http://localhost:9090) to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
+3. Once everything has been started and properly initialized, open a browser and navigate to [http://localhost:9090](http://localhost:9090) to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
 
-4. As the next and final step, open `Postman` and import the [Postman collection](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
+4. As the next and final step, open `Postman`, import the [Postman collection](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
     - OpenID Connect configuration
     - `Client Credentials Flow`
     - `Password Flow`
@@ -80,4 +80,4 @@ Options may include, but are not limited to:
 
 **Notes:**
 - Depending on the flow, not all types of tokens (e.g., identity, access, and refresh tokens) are returned.
-- To understand the structure of a KWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, and specific claims like `roles`, `iss`, `aud`, `exp`, etc.).
+- To understand the structure of a JWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, signature) and the specific claims like `roles`, `iss`, `aud`, `exp`, etc.
