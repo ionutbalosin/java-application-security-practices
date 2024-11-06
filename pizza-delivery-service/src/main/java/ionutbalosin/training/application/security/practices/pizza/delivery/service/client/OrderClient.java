@@ -27,40 +27,49 @@ package ionutbalosin.training.application.security.practices.pizza.delivery.serv
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import ionutbalosin.training.application.security.practices.feign.logger.enricher.FeignConfiguration;
-import ionutbalosin.training.application.security.practices.pizza.delivery.api.model.PizzaDeliveryOrderDto;
+import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderUpdatedStatusDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(
-    name = "${pizza-delivery-service.name}",
-    url = "${pizza-delivery-service-endpoint.url}",
+    name = "${pizza-order-service.name}",
+    url = "${pizza-order-service-endpoint.url}",
     configuration = FeignConfiguration.class)
-public interface DeliveryClient {
+public interface OrderClient {
 
   @RequestMapping(
-      method = RequestMethod.POST,
-      value = "/pizza/delivery/orders",
+      method = RequestMethod.PUT,
+      value = "/pizza/orders/{orderId}",
       consumes = {"application/json"})
-  ResponseEntity<Void> pizzaDeliveryOrdersPost(
+  ResponseEntity<Void> pizzaOrdersOrderIdPut(
       @NotNull
           @Parameter(
               name = "Authorization",
-              description = "JWT Authorizing token to allow access to endpoint",
+              description = "JWT Authorizing token to allow access to the endpoint",
               required = true,
               in = ParameterIn.HEADER)
           @RequestHeader(value = "Authorization", required = true)
           String authorization,
       @Parameter(
-              name = "PizzaDeliveryOrderDto",
-              description = "Partial update content",
+              name = "orderId",
+              description = "The order identifier",
+              required = true,
+              in = ParameterIn.PATH)
+          @PathVariable("orderId")
+          UUID orderId,
+      @Parameter(
+              name = "PizzaOrderUpdatedStatusDto",
+              description = "Pizza order processing status",
               required = true)
           @Valid
           @RequestBody
-          PizzaDeliveryOrderDto pizzaDeliveryOrderDto);
+          PizzaOrderUpdatedStatusDto pizzaOrderUpdatedStatusDto);
 }

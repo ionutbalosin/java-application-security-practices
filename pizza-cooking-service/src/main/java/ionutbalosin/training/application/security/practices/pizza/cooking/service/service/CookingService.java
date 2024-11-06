@@ -73,8 +73,8 @@ public class CookingService {
 
   private void schedulePizzaCooking(PizzaCookingOrderDto pizzaCookingOrderDto) {
     try {
-      // Simulate some cooking activity
-      Thread.sleep(Duration.ofSeconds(RANDOM.nextInt(10)).toMillis());
+      // Simulate some cooking activity between 5 and 15 seconds
+      Thread.sleep(Duration.ofSeconds(5 + RANDOM.nextInt(11)).toMillis());
     } catch (InterruptedException e) {
       // Swallow exception
     }

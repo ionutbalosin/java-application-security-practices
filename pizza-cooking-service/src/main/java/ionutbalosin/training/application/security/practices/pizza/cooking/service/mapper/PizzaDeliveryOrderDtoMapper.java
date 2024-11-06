@@ -29,13 +29,12 @@ import static java.util.stream.Collectors.toList;
 import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderDto;
 import ionutbalosin.training.application.security.practices.pizza.delivery.api.model.PizzaDeliveryOrderDto;
 import ionutbalosin.training.application.security.practices.pizza.delivery.api.model.PizzaDeliveryOrderItemDto;
-import java.util.UUID;
 
 public class PizzaDeliveryOrderDtoMapper {
 
   public PizzaDeliveryOrderDto map(PizzaCookingOrderDto pizzaCookingOrderDto) {
     return new PizzaDeliveryOrderDto()
-        .orderId(UUID.randomUUID())
+        .orderId(pizzaCookingOrderDto.getOrderId())
         .orders(
             pizzaCookingOrderDto.getOrders().stream()
                 .map(

@@ -20,6 +20,7 @@
         <io.swagger.version>2.2.20</io.swagger.version>
         <google.java.format>1.20.0</google.java.format>
         <okhttp3.version>4.10.0</okhttp3.version>
+        <caffeine.version>3.1.8</caffeine.version>
         <tika.version>3.0.0</tika.version>
         <commons.io.version>2.17.0</commons.io.version>
         <owasp.dependency.check.version>10.0.4</owasp.dependency.check.version>
@@ -193,6 +194,11 @@
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.tika</groupId>

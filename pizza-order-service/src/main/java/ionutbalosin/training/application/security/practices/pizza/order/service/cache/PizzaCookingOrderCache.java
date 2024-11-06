@@ -24,30 +24,27 @@
  */
 package ionutbalosin.training.application.security.practices.pizza.order.service.cache;
 
-import static java.util.Optional.ofNullable;
-
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderDto;
-import java.util.Optional;
+import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderStatusDto;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public enum ProductCache {
+public enum PizzaCookingOrderCache {
   CACHE_INSTANCE;
 
-  private Cache<UUID, PizzaCookingOrderDto> pizzaCookingOrderCache;
+  private Cache<UUID, PizzaOrderStatusDto> pizzaCookingOrderCache;
 
-  ProductCache() {
+  PizzaCookingOrderCache() {
     this.pizzaCookingOrderCache =
-        Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(4, TimeUnit.HOURS).build();
+        Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(3, TimeUnit.HOURS).build();
   }
 
-  public Optional<PizzaCookingOrderDto> getProduct(UUID pizzaCookingOrderId) {
-    return ofNullable(pizzaCookingOrderCache.getIfPresent(pizzaCookingOrderId));
+  public PizzaOrderStatusDto getProduct(UUID pizzaOrderId) {
+    return pizzaCookingOrderCache.getIfPresent(pizzaOrderId);
   }
 
-  public void addProduct(PizzaCookingOrderDto pizzaCookingOrderDto) {
-    pizzaCookingOrderCache.put(pizzaCookingOrderDto.getOrderId(), pizzaCookingOrderDto);
+  public void addProduct(UUID pizzaOrderId, PizzaOrderStatusDto pizzaOrderStatusDto) {
+    pizzaCookingOrderCache.put(pizzaOrderId, pizzaOrderStatusDto);
   }
 }

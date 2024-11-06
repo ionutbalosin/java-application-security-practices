@@ -20,7 +20,17 @@
         </dependency>
         <dependency>
             <groupId>ionutbalosin.training.application.security.practices</groupId>
+            <artifactId>pizza-order-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ionutbalosin.training.application.security.practices</groupId>
             <artifactId>security-slf4j-logger-enricher</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ionutbalosin.training.application.security.practices</groupId>
+            <artifactId>security-feign-logger-enricher</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

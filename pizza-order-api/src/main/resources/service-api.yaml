@@ -39,6 +39,65 @@ paths:
           description: Forbidden
         "500":
           description: Internal server error
+  /pizza/orders/{orderId}:
+    options:
+      summary: CORS support
+      description: |
+        Enable CORS by returning correct headers
+      tags:
+        - CORS
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        200:
+          $ref: '#/components/responses/CorsResponse'
+    get:
+      tags:
+        - "Pizza Order Api"
+      summary: Retrieve an order
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        200:
+          description: Successful retrieval of order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PizzaOrderStatusDto'
+        400:
+          description: Bad request
+        403:
+          description: Forbidden
+        404:
+          description: Order not found
+        500:
+          description: Internal server error
+    put:
+      tags:
+        - "Pizza Order Api"
+      summary: Update an order processing status
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/OrderId'
+      requestBody:
+        description: Pizza order processing status
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PizzaOrderUpdatedStatusDto'
+      responses:
+        200:
+          description: Successful retrieval of order
+        400:
+          description: Bad request
+        403:
+          description: Forbidden
+        404:
+          description: Order not found
+        500:
+          description: Internal server error
   /pizza/upload/menu:
     options:
       summary: CORS support
@@ -51,7 +110,7 @@ paths:
           $ref: '#/components/responses/CorsResponse'
     post:
       tags:
-        - "Pizza Menu Api"
+        - "Pizza Order Api"
       summary: Upload pizza menu as a JSON file
       description: Upload pizza menu as a JSON file
       parameters:
@@ -80,6 +139,23 @@ paths:
           description: Internal server error
 components:
   schemas:
+    PizzaOrderStatusDto:
+      type: object
+      properties:
+        pizzaOrder:
+          $ref: '#/components/schemas/PizzaOrderDto'
+        orderStatus:
+          $ref: '#/components/schemas/PizzaOrderProcessingStatusDto'
+    PizzaOrderUpdatedStatusDto:
+      type: object
+      properties:
+        orderStatus:
+          $ref: '#/components/schemas/PizzaOrderProcessingStatusDto'
+    PizzaOrderProcessingStatusDto:
+      type: string
+      enum:
+        - in_process
+        - delivered
     PizzaOrderDto:
       type: object
       properties:
@@ -154,6 +230,14 @@ components:
       description: JWT Authorizing token to allow access to the endpoint
       schema:
         type: string
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      description: The order identifier
+      schema:
+        type: string
+        format: uuid
   responses:
     CorsResponse:
       description: Successful response for CORS method

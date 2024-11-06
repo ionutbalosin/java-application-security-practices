@@ -57,7 +57,7 @@ public class DeliveryController implements PizzaApi {
     LOGGER.info(
         "pizzaDeliveryOrdersPost(pizzaDeliveryOrder = '{}')", pizzaDeliveryOrderDto.getOrderId());
 
-    deliveryService.pizzaDeliveryOrdersPost(pizzaDeliveryOrderDto);
+    deliveryService.pizzaDeliveryOrdersPost(authorization, pizzaDeliveryOrderDto);
     return new ResponseEntity<>(CREATED);
   }
 }

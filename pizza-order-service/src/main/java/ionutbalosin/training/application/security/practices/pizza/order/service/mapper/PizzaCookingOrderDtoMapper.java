@@ -29,6 +29,8 @@ import static java.util.stream.Collectors.toList;
 import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderDto;
 import ionutbalosin.training.application.security.practices.pizza.cooking.api.model.PizzaCookingOrderItemDto;
 import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderDto;
+import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderProcessingStatusDto;
+import ionutbalosin.training.application.security.practices.pizza.order.api.model.PizzaOrderStatusDto;
 import java.util.UUID;
 
 public class PizzaCookingOrderDtoMapper {
@@ -44,5 +46,10 @@ public class PizzaCookingOrderDtoMapper {
                             .name(orderDto.getName())
                             .quantity(orderDto.getQuantity()))
                 .collect(toList()));
+  }
+
+  public PizzaOrderStatusDto map(
+      PizzaOrderDto pizzaOrderDto, PizzaOrderProcessingStatusDto orderStatus) {
+    return new PizzaOrderStatusDto().pizzaOrder(pizzaOrderDto).orderStatus(orderStatus);
   }
 }
