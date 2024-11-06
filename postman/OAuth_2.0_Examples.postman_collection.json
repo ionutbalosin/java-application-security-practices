@@ -386,7 +386,7 @@
 						{
 							"key": "upload",
 							"type": "file",
-							"src": "/Users/ionut.balosin/Desktop/pizza-menu-list.json"
+							"src": []
 						}
 					]
 				},
@@ -440,6 +440,49 @@
 					"path": [
 						"pizza",
 						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get pizza order",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orders\": [\n    {\n      \"name\": \"Margherita Pizza\",\n      \"quantity\": 1\n    },\n    {\n      \"name\": \"Pepperoni Pizza\",\n      \"quantity\": 2\n    },\n    {\n      \"name\": \"Pizza Quattro Pizza\",\n      \"quantity\": 3\n    }\n  ],\n  \"customer\": {\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@customer.com\",\n    \"phoneNumber\": \"+4366488888888\",\n    \"specialRequest\": \"I would like extra cheese and a thinner crust. I'm quite hungry, so please deliver it as soon as possible. I usually give extra tips.\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/pizza/orders/{orderId}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"pizza",
+						"orders",
+						"{orderId}"
 					]
 				}
 			},
@@ -519,6 +562,38 @@
 					"path": [
 						"pizza",
 						"delivery",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "options pizza order",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "OPTIONS",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"orders\": [\n    {\n      \"name\": \"Margherita Pizza\",\n      \"quantity\": 1\n    },\n    {\n      \"name\": \"Pepperoni Pizza\",\n      \"quantity\": 2\n    },\n    {\n      \"name\": \"Pizza Quattro Pizza\",\n      \"quantity\": 3\n    }\n  ],\n  \"customer\": {\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@customer.com\",\n    \"phoneNumber\": \"+4366488888888\",\n    \"specialRequest\": \"I would like extra cheese and a thinner crust. I'm quite hungry, so please deliver it as soon as possible. I usually give extra tips.\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/pizza/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"pizza",
 						"orders"
 					]
 				}

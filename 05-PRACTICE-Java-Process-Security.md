@@ -13,6 +13,16 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 > 👨‍💼 Conducted By Trainer
 
+### 🕵️‍♂️ Secure Resource Access via UUIDs
+
+The application uses `UUIDs` as unique identifiers for resources, allowing them to be securely exposed externally for querying and identification.
+
+To demonstrate this, use `Postman` to initiate a pizza order request with the endpoint `POST /pizza/orders`.
+
+Then, use the endpoint `GET /pizza/orders/{orderId}` to fetch the real-time status of the order.
+
+Please note that the `orderId` is represented as a `UUID`.
+
 ### 🕵️‍♂️ Input Data Validation and Sanitization
 
 The application source code includes several validation and sanitization techniques, such as:

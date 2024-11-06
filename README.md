@@ -93,11 +93,11 @@ actor User
 User->>IdP: Authenticate and fetch JWT (authorization code flow)
 User->>Pizza Order Service: Submit order with JWT as HTTP Bearer token
 Pizza Order Service->>IdP: Introspect JWT to verify validity
-Pizza Order Service->>Pizza Order Service: Check for endpoint roles
+Pizza Order Service->>Pizza Order Service: Check user roles/permissions
 Pizza Order Service->>Pizza Cooking Service: Submit cooking order with JWT as HTTP Bearer token
 Pizza Cooking Service->>IdP: Fetch JWKS keys (if missing or expired) for local JWT validation
 Pizza Cooking Service->>Pizza Cooking Service: Validate JWT signature using JWKS
-Pizza Cooking Service->>Pizza Cooking Service: Check for endpoint roles
+Pizza Cooking Service->>Pizza Cooking Service: Check user roles/permissions
 
 Note right of Pizza Cooking Service: Pizza is cooked ...
 
@@ -105,8 +105,12 @@ Pizza Cooking Service->>IdP: Fetch JWT (client credentials flow)
 Pizza Cooking Service->>Pizza Delivery Service: Submit delivery order with JWT as HTTP Bearer token
 Pizza Delivery Service->>IdP: Fetch JWKS keys (if missing or expired) for local JWT validation
 Pizza Delivery Service->>Pizza Delivery Service: Validate JWT signature using JWKS
-Pizza Delivery Service->>Pizza Delivery Service: Check for endpoint roles
+Pizza Delivery Service->>Pizza Delivery Service: Check user roles/permissions
 Pizza Delivery Service->>Pizza Delivery Service: Confirm order delivered
+Pizza Delivery Service->>Pizza Order Service: Send order status update
+Pizza Order Service->>IdP: Introspect JWT to verify validity
+Pizza Order Service->>Pizza Order Service: Check user roles/permissions
+Pizza Order Service->>Pizza Order Service: Update order status
 ```
 
 ## Technology Stack
