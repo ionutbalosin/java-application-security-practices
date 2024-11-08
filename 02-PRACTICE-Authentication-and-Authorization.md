@@ -49,6 +49,8 @@ Options may include, but are not limited to:
 - `JSON Web Key Set`
 - etc.
 
+**Note:** Other flows may be suitable too, so don't limit your choice to only the options listed above.
+
 ---
 
 ### 🏋️ Hands-On Demo
