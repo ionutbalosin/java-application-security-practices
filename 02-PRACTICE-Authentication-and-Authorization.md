@@ -75,12 +75,12 @@ Options may include, but are not limited to:
 
 3. Once everything has been started and properly initialized, open a browser and navigate to [http://localhost:9090](http://localhost:9090) to access the **Keycloak UI** (using the credentials `admin:admin`) and review the configuration.
 
-4. As the next and final step, open `Postman`, import the [Postman collection](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
+4. As the next and final step, open `Postman`, import the [Postman collections](postman) and trigger the following IdP endpoints and OAuth 2.0 flows:
     - OpenID Connect configuration
     - `Client Credentials Flow`
     - `Password Flow`
-    - `Implicit Flow`
-    - `Authorization Code Flow with PKCE`
+    - `Implicit Flow` (using the credentials `demo_user:Test1234!`)
+    - `Authorization Code Flow with PKCE` (using the credentials `demo_user:Test1234!`)
 
 **Notes:**
 - Depending on the flow, not all types of tokens (e.g., identity, access, and refresh tokens) are returned.

@@ -81,7 +81,7 @@ Module                                                  | Description           
 
 ### Software Architecture Diagram
 
-This software architecture diagram illustrates the microservices as components within the system and highlights key security aspects, including OAuth 2.0 flows (e.g., JWT introspection, JWKS) and endpoint roles checks.
+This software architecture diagram illustrates the microservices as components within the system and highlights key security aspects, including OAuth 2.0 flows (e.g., Token introspection, JWKS) and endpoint roles checks.
 
 <img src="assets/diagrams/software-architecture-diagram.svg">
 
@@ -216,7 +216,7 @@ Open a browser and navigate to http://localhost:48080/WebGoat/login to access th
 
 ### Local Tests with Postman
 
-1. Open `Postman` and import the [Postman collection](postman).
+1. Open `Postman` and import the [Postman collections](postman).
 2. To simulate a basic test scenario, follow these steps in the given sequence:
   - a) Fetch the JWT token using either:
     - The **Password Flow**:
@@ -248,7 +248,7 @@ To check for potential dependency vulnerabilities, execute the following command
 ./mvnw clean compile org.owasp:dependency-check-maven:check
 ```
 
-**Note:** The first run of this command might take a significant amount of time (e.g., a couple of minutes) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
+**Note:** The first run of this command might take a significant amount of time (e.g., from a couple of minutes to even tens of minutes, depending on the internet connection) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
 
 ### SpotBugs with FindSecBugs Plugin
 

