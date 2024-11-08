@@ -49,7 +49,7 @@ Open a terminal and execute the following command to check for any known depende
 ./mvnw clean compile org.owasp:dependency-check-maven:check
 ```
 
-**Note:** The first run of this command might take a significant amount of time (e.g., a couple of minutes) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST.
+**Note:** The first run of this command might take a significant amount of time (e.g., from a couple of minutes to even tens of minutes, depending on the internet connection) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST.
 
 The detailed report containing all libraries and their vulnerabilities, including links to the sources where they were reported, can also be found in `<project_module>/target/dependency-check-report.html`.
 

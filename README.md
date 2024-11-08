@@ -248,7 +248,7 @@ To check for potential dependency vulnerabilities, execute the following command
 ./mvnw clean compile org.owasp:dependency-check-maven:check
 ```
 
-**Note:** The first run of this command might take a significant amount of time (e.g., a couple of minutes) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
+**Note:** The first run of this command might take a significant amount of time (e.g., from a couple of minutes to even tens of minutes, depending on the internet connection) to initially download the [NVD Data Feeds](https://nvd.nist.gov/vuln/data-feeds) hosted by NIST. 
 
 ### SpotBugs with FindSecBugs Plugin
 
