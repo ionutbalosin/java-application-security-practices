@@ -15,7 +15,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ### 📖 Informational: Software Architecture Diagram
 
-This software architecture diagram for the `Pizza` distributed application highlights key security aspects, including OAuth 2.0 flows (e.g., JWT introspection, JWKS) and endpoint roles checks.
+This software architecture diagram for the `Pizza` distributed application highlights key security aspects, including OAuth 2.0 flows (e.g., Token introspection, JWKS) and endpoint roles checks.
 
 <img src="assets/diagrams/software-architecture-diagram.svg">
 
@@ -31,7 +31,7 @@ This software architecture diagram for the `Pizza` distributed application highl
     ./bootstrap-pizza-application.sh
     ```
 
-2. Next, open `Postman` and import the [Postman collection](postman).
+2. Next, open `Postman` and import the [Postman collections](postman).
 
 3. From the provided `Postman` collections, choose one of the following OAuth 2.0 flows to obtain a proper JWT token:
     - `Password Flow`
