@@ -1,0 +1,84 @@
+{
+  "pizza_menu": [
+    {
+      "name": "Margherita",
+      "price": {
+        "amount": 8.5,
+        "currency": "EUR"
+      },
+      "description": "Classic tomato sauce, mozzarella, and fresh basil."
+    },
+    {
+      "name": "Pepperoni",
+      "price": {
+        "amount": 10,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, and spicy pepperoni slices."
+    },
+    {
+      "name": "Quattro Stagioni",
+      "price": {
+        "amount": 11.5,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, mushrooms, ham, artichokes, and olives."
+    },
+    {
+      "name": "Vegetariana",
+      "price": {
+        "amount": 9.5,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, grilled vegetables, and olives."
+    },
+    {
+      "name": "Hawaiian",
+      "price": {
+        "amount": 10.5,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, ham, and pineapple."
+    },
+    {
+      "name": "Diavola",
+      "price": {
+        "amount": 11,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, spicy salami, chili peppers, and olives."
+    },
+    {
+      "name": "Capricciosa",
+      "price": {
+        "amount": 12,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, ham, mushrooms, olives, and artichokes."
+    },
+    {
+      "name": "Quattro Formaggi",
+      "price": {
+        "amount": 12.5,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, gorgonzola, parmesan, and ricotta."
+    },
+    {
+      "name": "Frutti di Mare",
+      "price": {
+        "amount": 13.5,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, shrimp, mussels, squid, and garlic."
+    },
+    {
+      "name": "Boscaiola",
+      "price": {
+        "amount": 11,
+        "currency": "EUR"
+      },
+      "description": "Tomato sauce, mozzarella, mushrooms, sausage, and truffle oil."
+    }
+  ]
+}
