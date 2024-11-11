@@ -81,7 +81,11 @@ Options may include, but are not limited to:
     - `Password Flow`
     - `Implicit Flow` (using the credentials `demo_user:Test1234!`)
     - `Authorization Code Flow with PKCE` (using the credentials `demo_user:Test1234!`)
+    - `Token Introspection`
+    - `User Info`
+
 
 **Notes:**
+- Before requesting `Token Introspection` and `User Info`, ensure that the `{{token}}` variable is set in the environment variables.
 - Depending on the flow, not all types of tokens (e.g., identity, access, and refresh tokens) are returned.
 - To understand the structure of a JWT token, copy and paste it into [jwt.io](https://jwt.io) and examine its structure (e.g., header, payload, signature) and the specific claims like `exp`, `iat`, `iss`, `sub`, `typ`, `azp`, `roles`, `client_id`, etc.
