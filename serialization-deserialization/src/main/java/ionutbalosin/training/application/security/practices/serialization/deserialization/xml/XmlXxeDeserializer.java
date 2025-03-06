@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
@@ -73,8 +74,13 @@ public class XmlXxeDeserializer {
   private static XMLReader createXmlReaderWithXseProtection()
       throws ParserConfigurationException, SAXException {
     final SAXParserFactory factory = SAXParserFactory.newInstance();
-    // The safest way to prevent XXE is always to disable DTDs (External Entities) completely.
-    factory.setFeature("http://javax.xml.XMLConstants/feature/secure-processing", true);
+    // Disable DTDs and external entities for XXE protection
+    factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+    factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
     return factory.newSAXParser().getXMLReader();
   }
 
