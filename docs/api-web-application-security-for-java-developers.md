@@ -62,7 +62,7 @@ Therefore, the service receiving the API request (i.e., the callee) should perfo
 
 To summarize, the steps are as follows:
 
-[![API and Microservices Security.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/api_and_microservices_security.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/api_and_microservices_security.svg?raw=true)
+[![API and Microservices Security.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/api_and_microservices_security.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/api_and_microservices_security.svg?raw=true)
 
 ## Client Credentials
 
@@ -131,7 +131,7 @@ Calling the IdP on each request introduces higher latency, as it requires a call
 
 Below is a sequence diagram illustrating the main steps:
 
-[![Token Introspection.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/token_introspection.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/token_introspection.svg?raw=true)
+[![Token Introspection.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/token_introspection.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/token_introspection.svg?raw=true)
 
 In this code snapshot, you can see an example of a token introspection configuration implemented with Spring:
 
@@ -349,7 +349,7 @@ Content Security Policy (CSP) is an HTTP response header set by the server (or j
 
 **Note:** By default (i.e., if no CSP is defined) the browser allows resources to be loaded from any source, which can pose significant security risks.
 
-[![CSP.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/csp_headers.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/csp_headers.svg?raw=true)
+[![CSP.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/csp_headers.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/csp_headers.svg?raw=true)
 
 Most modern browsers comply with CSP directives, enhancing security by restricting the sources from which content can be loaded.
 However, CSP can be intentionally or unintentionally disabled in the browser by an attacker or the user, such as through browser extensions or incorrect configuration.
@@ -420,7 +420,7 @@ Cross-Origin Resource Sharing (CORS) is a mechanism controlled by HTTP response 
 
 **Note:** By default (i.e., if no CORS is defined), web browsers enforce the same-origin policy, which prevents web pages from making requests to a different origin.
 
-[![CORS.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers.svg?raw=true)
+[![CORS.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers.svg?raw=true)
 
 To allow cross-origin requests (i.e., when a browser makes a request from `ionutbalosin.com` to `external-domain.com`, which is a different domain), the server at `external-domain.com` needs to include the appropriate CORS HTTP headers in its response, explicitly permitting access from `ionutbalosin.com`.
 
@@ -443,7 +443,7 @@ The CORS headers are summarized in the table below:
 
 **Use Case:** A common scenario where CORS must be configured is when a frontend application (served from `ionutbalosin.com`) needs to communicate with backend APIs hosted in the cloud (served from `cloud-provider.com`). In this case, CORS must be enabled on the backend APIs to allow cross-origin requests.
 
-[![CORS User Case.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_use_case.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_use_case.svg?raw=true)
+[![CORS User Case.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_use_case.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_use_case.svg?raw=true)
 
 The code snapshot below shows how CSP can be set in the headers by a Java application:
 
@@ -477,11 +477,11 @@ Browsers perform a CORS preflight request for HTTP methods that may cause side e
 
 The CORS preflight request checks whether the server understands and permits the CORS protocol for the requested methods and headers.
 
-[![CORS Preflight Request.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight.svg?raw=true)
+[![CORS Preflight Request.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight.svg?raw=true)
 
 The high-level CORS preflight request sequence diagram looks like this:
 
-[![CORS Preflight Request.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight_sequence_diagram.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight_sequence_diagram.svg?raw=true)
+[![CORS Preflight Request.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight_sequence_diagram.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/cors_headers_preflight_sequence_diagram.svg?raw=true)
 
 When dealing with RESTful APIs over HTTP, you need to explicitly define the `OPTIONS` endpoint that will handle the CORS preflight request, in addition to the actual endpoint:
 
@@ -534,7 +534,7 @@ HTTP security headers play a crucial role in securing web applications by provid
 
 HTTP Strict Transport Security (HSTS) is an HTTP response header set by the server to inform web browsers that they should only interact with the server using HTTPS connections, thereby preventing attacks like Man-in-the-Middle.
 
-[![HTTP Strict Transport Security.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/strict_transport_security_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/strict_transport_security_header.svg?raw=true)
+[![HTTP Strict Transport Security.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/strict_transport_security_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/strict_transport_security_header.svg?raw=true)
 
 The HSTS format looks like:
 
@@ -575,7 +575,7 @@ X-XSS-Protection is an HTTP response header set by the server to instruct web br
 
 **Note:** X-XSS-Protection is deprecated, but it does not hurt if it is set. It is mostly useful for legacy browsers that do not support CSP, offering an additional layer of protection against XSS attacks. For modern browsers, it is better to implement strong CSP policies instead.
 
-[![X-XSS-Protection.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_xss_protection_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_xss_protection_header.svg?raw=true)
+[![X-XSS-Protection.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_xss_protection_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_xss_protection_header.svg?raw=true)
 
 An example of an X-XSS-Protection header configuration is:
 
@@ -605,7 +605,7 @@ X-Frame-Options is an HTTP response header set by the server to instruct web bro
 
 Rendering a page in a `<frame>`, `<iframe>`, `<embed>`, or `<object>` can lead to clickjacking, where attackers overlay a transparent frame to trick users into unintended interactions, resulting in unauthorized actions.
 
-[![X-Frame-Options.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_frame_options_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_frame_options_header.svg?raw=true)
+[![X-Frame-Options.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_frame_options_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_frame_options_header.svg?raw=true)
 
 An example of an X-Frame-Options header configuration is by a Java application:
 
@@ -633,7 +633,7 @@ X-Content-Type-Options is an HTTP response header set by the server to prevent b
 
 For example, with `nosniff`, if a file is served with `Content-Type: text/html`, the browser will not try to interpret it as a script or any other content type, enhancing security.
 
-[![X-Content-Type-Options.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_content_type_options_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_content_type_options_header.svg?raw=true)
+[![X-Content-Type-Options.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_content_type_options_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/x_content_type_options_header.svg?raw=true)
 
 An example of an X-Content-Type-Options header configuration is:
 
@@ -659,7 +659,7 @@ Source: [IntrospectionSecurityConfiguration.java](https://github.com/ionutbalosi
 
 Referrer-Policy is an HTTP response header set by the server to control how much referrer information (sent via the Referer header) browsers should include with requests.
 
-[![Referrer-Policy.svg?raw=true](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/referrer_policy_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/referrer_policy_header.svg?raw=true)
+[![Referrer-Policy.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/referrer_policy_header.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/referrer_policy_header.svg?raw=true)
 
 An example of a Referrer-Policy header configuration is:
 

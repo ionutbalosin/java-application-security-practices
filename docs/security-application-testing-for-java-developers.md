@@ -29,7 +29,7 @@ Depending on the criticality of these systems (e.g., non-critical, critical, or 
 
 The diagram below illustrates where these tools can be integrated within the deployment pipeline.
 
-[![Security Testing.svg](images/security_testing.svg)](images/security_testing.svg)
+[![Security Testing.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/security_testing.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/security_testing.svg?raw=true)
 
 In this article, I will explain each of them and provide an example of how to integrate them into your application.
 

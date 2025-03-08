@@ -508,7 +508,7 @@ While Java deserialization attacks are not the most common security threats, the
 
 An example of a classical Java deserialization attack is when an attacker creates a malicious class (e.g., `MaliciousClazz`) containing a harmful `readObject()` method. 
 
-[![Remote Code Execution with Java Deserialization.svg](images/remote_code_execution.svg)](images/remote_code_execution.svg)
+[![Remote Code Execution with Java Deserialization.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/remote_code_execution.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/remote_code_execution.svg?raw=true)
 
 When the `MaliciousClazz` is deserialized, the `readObject()` method is executed, causing harmful actions on the attacker's machine.
 
@@ -833,7 +833,7 @@ The decryption key should only be accessible in the specific environment (e.g., 
 All sensitive and encrypted properties should be decrypted during deployment using the decryption keys available in the environment, as highlighted in the diagram below. For example, if using an AWS account, Amazon Key Management Service (KMS) can be used to store and manage both the encryption and decryption keys.
 The implementation details at the infrastructure level, including generating, storing, and rotating the keys, as well as encrypting and decrypting the secrets, are beyond the scope of this article.
 
-[![Secure Configuration and Secrets Management.svg](images/secure_configuration_and_secrets_management.svg)](images/secure_configuration_and_secrets_management.svg)
+[![Secure Configuration and Secrets Management.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/secure_configuration_and_secrets_management.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/secure_configuration_and_secrets_management.svg?raw=true)
 
 In closing, avoid storing secrets in plain text as unencrypted values next to the code.
 
