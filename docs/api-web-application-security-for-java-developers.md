@@ -24,8 +24,8 @@
 
 📚 This article is part of a series of security-related articles for Java developers. 
 I highly recommend checking out the others for a more comprehensive understanding:
-- **Core Application Security for Java Developers**: Covers internal Java application security measures after receiving external requests, focusing on input validation, secret configuration, logging, and deserialization vulnerabilities.
-- **Security Application Testing for Java Developers**: Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
+- [Core Application Security for Java Developers](https://ionutbalosin.com/2025/03/core-application-security-for-java-developers): Covers internal Java application security measures after receiving external requests, focusing on input validation, secret configuration, logging, and deserialization vulnerabilities.
+- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers): Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
 
 ## Authentication and Authorization
 

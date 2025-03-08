@@ -24,8 +24,8 @@
 
 📚 It is part of a series of security-related articles for Java developers. 
 I highly recommend checking out the others for a more comprehensive understanding:
-- **API Web Application Security for Java Developers**: Covers key security aspects to secure Java process APIs and how the Java process can enhance the security of web or single-page applications communicating with a Java backend.
-- **Security Application Testing for Java Developers**: Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
+- [API Web Application Security for Java Developers](https://ionutbalosin.com/2025/03/api-web-application-security-for-java-developers): Covers key security aspects to secure Java process APIs and how the Java process can enhance the security of web or single-page applications communicating with a Java backend.
+- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers): Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
 
 ## Securing Resource Access via UUIDs
 
