@@ -28,10 +28,12 @@ import java.io.*;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 
 /**
- * This class handles the decryption of an encrypted file using AES-256 encryption. It loads a saved
- * secret key, decrypts the file, and stores the decrypted content.
+ * This class handles the decryption of an encrypted file using AES-256 encryption with GCM mode. It
+ * loads a saved secret key and initialization vector (IV), decrypts the file, and stores the
+ * decrypted content.
  */
 public class FileDecryption {
 
@@ -42,13 +44,16 @@ public class FileDecryption {
       CURRENT_DIR + "/serialization-deserialization/target/decrypted_file.txt";
   private static final String SECRET_KEY_FILENAME =
       CURRENT_DIR + "/serialization-deserialization/target/secret.key";
+  private static final String IV_FILENAME =
+      CURRENT_DIR + "/serialization-deserialization/target/iv.key";
 
   public static void main(String[] args) throws Exception {
-    // Load the secret key from the file for decryption
+    // Load the secret key and IV from the files for decryption
     final SecretKey secretKey = loadKey();
+    final byte[] iv = loadIv();
 
-    // Decrypt the encrypted file using the loaded secret key
-    decryptFile(ENCRYPTED_FILENAME, DECRYPTED_FILENAME, secretKey);
+    // Decrypt the encrypted file using the loaded secret key and IV
+    decryptFile(ENCRYPTED_FILENAME, DECRYPTED_FILENAME, secretKey, iv);
     System.out.printf("File successfully decrypted to [%s]%n", DECRYPTED_FILENAME);
   }
 
@@ -59,10 +64,17 @@ public class FileDecryption {
     }
   }
 
+  private static byte[] loadIv() throws Exception {
+    try (FileInputStream ivIn = new FileInputStream(IV_FILENAME)) {
+      return ivIn.readAllBytes();
+    }
+  }
+
   private static void decryptFile(
-      String encryptedFilePath, String decryptedFilePath, SecretKey secretKey) throws Exception {
-    final Cipher cipher = Cipher.getInstance("AES");
-    cipher.init(Cipher.DECRYPT_MODE, secretKey);
+      String encryptedFilePath, String decryptedFilePath, SecretKey secretKey, byte[] iv)
+      throws Exception {
+    final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+    cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
 
     try (final FileInputStream fileInputStream = new FileInputStream(encryptedFilePath);
         final FileOutputStream fileOutputStream = new FileOutputStream(decryptedFilePath);
@@ -71,7 +83,6 @@ public class FileDecryption {
 
       final byte[] buffer = new byte[1024];
       int bytesRead;
-
       while ((bytesRead = cipherInputStream.read(buffer)) != -1) {
         fileOutputStream.write(buffer, 0, bytesRead);
       }

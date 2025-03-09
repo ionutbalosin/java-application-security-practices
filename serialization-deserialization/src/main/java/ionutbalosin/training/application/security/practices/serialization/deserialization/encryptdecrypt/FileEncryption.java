@@ -25,15 +25,18 @@
 package ionutbalosin.training.application.security.practices.serialization.deserialization.encryptdecrypt;
 
 import java.io.*;
+import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 
 /**
- * This class provides functionality for encrypting a file using AES encryption. It generates a
- * secret key, encrypts a file, and stores the encrypted file and key. The secret key is saved to a
- * separate file for later decryption.
+ * This class provides functionality for encrypting a file using AES encryption with GCM mode. It
+ * generates a secret key and an initialization vector (IV), encrypts a file, and stores the
+ * encrypted file, secret key, and IV. The secret key and IV are saved to separate files for later
+ * decryption.
  */
 public class FileEncryption {
 
@@ -44,17 +47,21 @@ public class FileEncryption {
       CURRENT_DIR + "/serialization-deserialization/target/encrypted_file.txt";
   private static final String SECRET_KEY_FILENAME =
       CURRENT_DIR + "/serialization-deserialization/target/secret.key";
+  private static final String IV_FILENAME =
+      CURRENT_DIR + "/serialization-deserialization/target/iv.key";
 
   public static void main(String[] args) throws Exception {
-    // Generate a secret key for encryption
+    // Generate a secret key and IV for encryption
     final SecretKey secretKey = generateKey();
+    final byte[] iv = generateIv();
 
     // Encrypt the file using the generated secret key
-    encryptFile(INITIAL_FILENAME, ENCRYPTED_FILENAME, secretKey);
+    encryptFile(INITIAL_FILENAME, ENCRYPTED_FILENAME, secretKey, iv);
     System.out.printf("File successfully encrypted to [%s]%n", ENCRYPTED_FILENAME);
 
-    // Save the secret key to a file for later decryption
+    // Save the secret key and IV to files for later decryption
     saveKey(secretKey);
+    saveIv(iv);
     System.out.printf("Encryption key successfully saved to [%s]%n", SECRET_KEY_FILENAME);
   }
 
@@ -62,6 +69,12 @@ public class FileEncryption {
     try (final ObjectOutputStream keyOut =
         new ObjectOutputStream(new FileOutputStream(SECRET_KEY_FILENAME))) {
       keyOut.writeObject(secretKey);
+    }
+  }
+
+  private static void saveIv(byte[] iv) throws Exception {
+    try (FileOutputStream ivOut = new FileOutputStream(IV_FILENAME)) {
+      ivOut.write(iv);
     }
   }
 
@@ -74,10 +87,23 @@ public class FileEncryption {
     return keyGenerator.generateKey();
   }
 
-  private static void encryptFile(String filePath, String encryptedFilePath, SecretKey secretKey)
-      throws Exception {
-    final Cipher cipher = Cipher.getInstance("AES");
-    cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+  private static byte[] generateIv() throws Exception {
+    // Note: IV (Initialization Vector) is used in encryption algorithms, particularly in modes that
+    // provide authenticated encryption like AES/GCM, to ensure uniqueness and security of the
+    // encryption process. The IV adds randomness to the encryption process, ensuring that the same
+    // plaintext encrypted multiple times with the same key will produce different ciphertexts.
+    final byte[] iv = new byte[12];
+    final SecureRandom random = new SecureRandom();
+    random.nextBytes(iv);
+    return iv;
+  }
+
+  private static void encryptFile(
+      String filePath, String encryptedFilePath, SecretKey secretKey, byte[] iv) throws Exception {
+    // Using AES/GCM/NoPadding is in line with OWASP recommendations for the authenticated
+    // encryption.
+    final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
 
     try (final FileInputStream fileInputStream = new FileInputStream(filePath);
         final FileOutputStream fileOutputStream = new FileOutputStream(encryptedFilePath);

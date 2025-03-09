@@ -14,13 +14,16 @@
   - [XML External Entity (XXE)](#xml-external-Entity-xxe)
   - [YAML Nested Anchors and Aliases](#yaml-nested-anchors-and-aliases)
   - [Zip Bomb](#zip-bomb)
+- [Symmetric and Asymmetric Encryption](#symmetric-and-asymmetric-encryption)
+  - [Symmetric Encryption](#symmetric-encryption)
+  - [Asymmetric Encryption](#asymmetric-encryption)
 - [Secure Configuration and Secrets Management](#secure-configuration-and-secrets-management)
 - [Keeping JDK Versions and Libraries Up to Date](#keeping-jdk-versions-and-libraries-up-to-date)
 - [References](#references)
 
 ---
 
-🔒 This article is tailored for Java developers to understand the core mechanisms used to secure the Java process. It covers security measures that can be implemented internally after the service receives a request from an external client, focusing on areas such as securing resource access, input validation, secure configuration of secrets, logging, and deserialization vulnerabilities.
+🔒 This article is tailored for Java developers to understand the core mechanisms used to secure the Java process. It covers security measures that can be implemented internally after the service receives a request from an external client, focusing on areas such as securing resource access, input validation, symmetric and asymmetric encryption, secure configuration of secrets, logging, and deserialization vulnerabilities.
 
 📚 It is part of a series of security-related articles for Java developers. 
 I highly recommend checking out the others for a more comprehensive understanding:
@@ -787,7 +790,121 @@ The Java code snapshot below shows how these limits could be implemented:
 
 Source: [ZipBombDeserializer.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/zip/ZipBombDeserializer.java)
 
+## Symmetric and Asymmetric Encryption
+
+Symmetric and asymmetric encryption are essential techniques for securing sensitive data.
+
+I will not go into many details about symmetric and asymmetric encryption but will focus mainly on the most important considerations to guide us when developing an application.
+
+### Symmetric Encryption
+
+Symmetric encryption is faster than asymmetric encryption and uses a single key for both encryption and decryption. 
+Key management is crucial in symmetric encryption and requires secure practices to prevent key leaks. 
+Services like Amazon Key Management Service (KMS), Azure Key Vault, Google Secret Manager, and HashiCorp Vault can help manage this effectively.
+
+#### When to Use It
+
+- **Encrypting Files**: Symmetric encryption is ideal for encrypting individual files or collections of files, ensuring that the data within these files remains confidential.
+- **Encrypting Databases**: Large databases containing sensitive information can be encrypted using symmetric encryption to protect the data from unauthorized access.
+- **Encrypting Disk Partitions**: Entire disk partitions can be encrypted to secure all data stored on the disk, making it unreadable without the correct encryption key.
+
+#### What Algorithms to Use and What to Avoid
+
+There are multiple symmetric algorithms, such as DES (Data Encryption Standard), 3DES (Triple DES), and AES (Advanced Encryption Standard). However, not all are considered secure and recommended anymore.
+- **OWASP recommends AES** with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
+- **Do not use symmetric algorithms like DES and 3DES**, which are vulnerable to security attacks and should be avoided.
+
+Below is an example of encrypting and decrypting a file using AES `256-bit` encryption with GCM mode:
+
+```java
+  private static SecretKey generateKey() throws Exception {
+    // Note: AES-256 offers a very high level of security. As of today, there are no practical
+    // attacks that can break AES-256 encryption within a reasonable time frame, even using
+    // supercomputers.
+    final KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+    keyGenerator.init(256);
+    return keyGenerator.generateKey();
+  }
+
+  private static byte[] generateIv() throws Exception {
+    // Note: IV (Initialization Vector) is used in encryption algorithms, particularly in modes that
+    // provide authenticated encryption like AES/GCM, to ensure uniqueness and security of the
+    // encryption process. The IV adds randomness to the encryption process, ensuring that the same
+    // plaintext encrypted multiple times with the same key will produce different ciphertexts.
+    final byte[] iv = new byte[12];
+    final SecureRandom random = new SecureRandom();
+    random.nextBytes(iv);
+    return iv;
+  }
+
+  private static void encryptFile(
+      String filePath, String encryptedFilePath, SecretKey secretKey, byte[] iv) throws Exception {
+    // Using AES/GCM/NoPadding is in line with OWASP recommendations for the authenticated
+    // encryption.
+    final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+    cipher.init(Cipher.ENCRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+
+    try (final FileInputStream fileInputStream = new FileInputStream(filePath);
+        final FileOutputStream fileOutputStream = new FileOutputStream(encryptedFilePath);
+        final CipherOutputStream cipherOutputStream =
+            new CipherOutputStream(fileOutputStream, cipher)) {
+
+      final byte[] buffer = new byte[1024];
+      int bytesRead;
+
+      while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+        cipherOutputStream.write(buffer, 0, bytesRead);
+      }
+    }
+  }
+
+  private static void decryptFile(
+      String encryptedFilePath, String decryptedFilePath, SecretKey secretKey, byte[] iv)
+      throws Exception {
+    final Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+    cipher.init(Cipher.DECRYPT_MODE, secretKey, new GCMParameterSpec(128, iv));
+
+    try (final FileInputStream fileInputStream = new FileInputStream(encryptedFilePath);
+        final FileOutputStream fileOutputStream = new FileOutputStream(decryptedFilePath);
+        final CipherInputStream cipherInputStream =
+            new CipherInputStream(fileInputStream, cipher)) {
+
+      final byte[] buffer = new byte[1024];
+      int bytesRead;
+      while ((bytesRead = cipherInputStream.read(buffer)) != -1) {
+        fileOutputStream.write(buffer, 0, bytesRead);
+      }
+    }
+  }
+```
+
+Sources:
+- [FileEncryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/FileEncryption.java)
+- [FileDecryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/FileDecryption.java)
+
+### Asymmetric Encryption
+
+Asymmetric encryption uses a pair of keys: a public key and a private key. 
+The public key can be shared publicly over the internet or other channels, but the private key must be kept secret.
+
+#### When to Use It
+
+- **Key Exchange**: Asymmetric encryption is often used to securely exchange keys for symmetric encryption. For example, during the TLS/SSL handshake, asymmetric encryption is used to exchange a symmetric key securely.
+- **Digital Signatures**: Asymmetric encryption is used to create and verify digital signatures, ensuring the authenticity and integrity of messages.
+- **Secure Communication**: Applications such as secure email with Pretty Good Privacy (PGP) use asymmetric encryption to ensure that only the intended recipient can decrypt the message.
+- **Digital Certificates**: Asymmetric encryption is used in digital certificates to verify the identity of entities.
+
+#### What Algorithms to Use and What to Avoid
+
+There are multiple asymmetric algorithms, such as Rivest-Shamir-Adleman (RSA), Curve25519, and ElGamal. However, there are a few considerations for each:
+- **OWASP recommends RSA** with `2048-bit` keys or higher, as it offers a high degree of security. It is probably the most widely used algorithm, but it is computationally expensive.
+- **Curve25519** is an elliptic curve cryptography (ECC) algorithm that is much faster and more efficient in terms of computational resources compared to RSA, even with shorter key lengths. This makes it very useful in resource-constrained environments such as IoT or blockchain systems.
+- **ElGamal** is faster than RSA but less secure. Its security depends significantly on key sizes, and it is generally recommended to use it with `2048-bit` keys or higher.
+
+In summary, Java applications should use recommended, non-deprecated, and robust encryption algorithms to maintain data integrity and confidentiality. Continuous monitoring and updating of encryption algorithms are essential, as what is secure today may become vulnerable in the future.
+
 ## Secure Configuration and Secrets Management
+
 All application secrets (e.g., sensitive configuration values such as API keys, database credentials, etc.) should never be stored unencrypted with the application code (i.e., in plain text). 
 Instead, the application should define them as key-value properties, and their values must be resolved and replaced during the deployment pipeline for the specific target environment.
 
@@ -856,4 +973,5 @@ Ensure that your development environment and dependencies are always up to date 
 - [Preventing YAML parsing vulnerabilities with snakeyaml in Java](https://snyk.io/blog/java-yaml-parser-with-snakeyaml)
 - [A better zip bomb](https://www.bamsoftware.com/hacks/zipbomb)
 - [42 zip](https://unforgettable.dk/)
+- [Cryptographic Storage Cheat Sheet](https://owasp.deteact.com/cheat/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
 
