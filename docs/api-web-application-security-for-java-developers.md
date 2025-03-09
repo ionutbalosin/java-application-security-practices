@@ -24,8 +24,8 @@
 
 📚 This article is part of a series of security-related articles for Java developers. 
 I highly recommend checking out the others for a more comprehensive understanding:
-- [Core Application Security for Java Developers](https://ionutbalosin.com/2025/03/core-application-security-for-java-developers): Covers internal Java application security measures after receiving external requests, focusing on input validation, secret configuration, logging, and deserialization vulnerabilities.
-- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers): Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
+- [Core Application Security for Java Developers](https://ionutbalosin.com/2025/03/core-application-security-for-java-developers): Covers internal Java application security measures after receiving external requests, focusing on securing resource access, input validation, encryption, hashing, secrets management, logging, and deserialization vulnerabilities.
+- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers): Covers the main security testing tools that can be integrated to assess flaws in Java applications both statically and at runtime, including Software Composition Analysis (SCA), Static Application Security Testing (SAST), Dynamic Application Security Testing (DAST), and Penetration Testing (PenTest).
 
 ## Authentication and Authorization
 

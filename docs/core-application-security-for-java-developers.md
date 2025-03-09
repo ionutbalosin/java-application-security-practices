@@ -24,12 +24,12 @@
 
 ---
 
-🔒 This article is tailored for Java developers to understand the core mechanisms used to secure the Java process. It covers security measures that can be implemented internally after the service receives a request from an external client, focusing on areas such as securing resource access, input validation, symmetric and asymmetric encryption, secure configuration of secrets, logging, and deserialization vulnerabilities.
+🔒 This article is tailored for Java developers to understand the core mechanisms used to secure the Java process. It covers security measures that can be implemented internally after the service receives a request from an external client, focusing on areas such as securing resource access, input validation, symmetric and asymmetric encryption, hashing, secure configuration of secrets, logging, and deserialization vulnerabilities.
 
 📚 It is part of a series of security-related articles for Java developers. 
 I highly recommend checking out the others for a more comprehensive understanding:
-- [API Web Application Security for Java Developers](https://ionutbalosin.com/2025/03/api-web-application-security-for-java-developers): Covers key security aspects to secure Java process APIs and how the Java process can enhance the security of web or single-page applications communicating with a Java backend.
-- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers): Covers the main testing security tools that can be integrated to assess both statically and at runtime the flaws of the Java application.
+- [API Web Application Security for Java Developers](https://ionutbalosin.com/2025/03/api-web-application-security-for-java-developers): Covers key security aspects to secure the Java application surface and APIs (e.g., authentication and authorization), and how Java applications can enhance the security of web or single-page applications (e.g., Content Security Policy, HTTP security headers).
+- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers): Covers the main security testing tools that can be integrated to assess flaws in Java applications both statically and at runtime, including Software Composition Analysis (SCA), Static Application Security Testing (SAST), Dynamic Application Security Testing (DAST), and Penetration Testing (PenTest).
 
 ## Securing Resource Access via UUIDs
 

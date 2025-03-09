@@ -16,8 +16,8 @@
 
 📚 It is part of a series of security-related articles for Java developers.
 I highly recommend checking out the others for a more comprehensive understanding:
-- [API Web Application Security for Java Developers](https://ionutbalosin.com/2025/03/api-web-application-security-for-java-developers): Covers key security aspects to secure Java process APIs and how the Java process can enhance the security of web or single-page applications communicating with a Java backend.
-- [Core Application Security for Java Developers](https://ionutbalosin.com/2025/03/core-application-security-for-java-developers): Covers internal Java application security measures after receiving external requests, focusing on input validation, secret configuration, logging, and deserialization vulnerabilities.
+- [API Web Application Security for Java Developers](https://ionutbalosin.com/2025/03/api-web-application-security-for-java-developers): Covers key security aspects to secure the Java application surface and APIs (e.g., authentication and authorization), and how Java applications can enhance the security of web or single-page applications (e.g., Content Security Policy, HTTP security headers).
+- [Core Application Security for Java Developers](https://ionutbalosin.com/2025/03/core-application-security-for-java-developers): Covers internal Java application security measures after receiving external requests, focusing on securing resource access, input validation, encryption, hashing, secrets management, logging, and deserialization vulnerabilities.
 
 ## Introduction
 
