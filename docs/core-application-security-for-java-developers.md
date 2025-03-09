@@ -974,4 +974,5 @@ Ensure that your development environment and dependencies are always up to date 
 - [A better zip bomb](https://www.bamsoftware.com/hacks/zipbomb)
 - [42 zip](https://unforgettable.dk/)
 - [Cryptographic Storage Cheat Sheet](https://owasp.deteact.com/cheat/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
+- [Securing symmetric encryption algorithms in Java](https://snyk.io/blog/symmetric-encryption-algorithms-java)
 
