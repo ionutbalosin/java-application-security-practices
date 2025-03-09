@@ -17,6 +17,7 @@
 - [Symmetric and Asymmetric Encryption](#symmetric-and-asymmetric-encryption)
   - [Symmetric Encryption](#symmetric-encryption)
   - [Asymmetric Encryption](#asymmetric-encryption)
+- [Hashing](#hashing)
 - [Secure Configuration and Secrets Management](#secure-configuration-and-secrets-management)
 - [Keeping JDK Versions and Libraries Up to Date](#keeping-jdk-versions-and-libraries-up-to-date)
 - [References](#references)
@@ -808,12 +809,12 @@ Services like Amazon Key Management Service (KMS), Azure Key Vault, Google Secre
 - **Encrypting Databases**: Large databases containing sensitive information can be encrypted using symmetric encryption to protect the data from unauthorized access.
 - **Encrypting Disk Partitions**: Entire disk partitions can be encrypted to secure all data stored on the disk, making it unreadable without the correct encryption key.
 
-#### What Algorithms to Use and What to Avoid
+#### What Algorithms to Use
+- **OWASP recommends AES (Advanced Encryption Standard)** with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
 
-There are multiple symmetric algorithms, such as DES (Data Encryption Standard), 3DES (Triple DES), and AES (Advanced Encryption Standard). However, not all are considered secure and recommended anymore.
-- **OWASP recommends AES** with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
-- **Do not use symmetric algorithms like DES and 3DES**, which are vulnerable to security attacks and should be avoided.
-
+#### What Algorithms to Avoid
+- **DES (Data Encryption Standard)** and **3DES (Triple DES)** are vulnerable to security attacks and should be avoided.
+ 
 Below is an example of encrypting and decrypting a file using AES `256-bit` encryption with GCM mode:
 
 ```java
@@ -894,7 +895,7 @@ The public key can be shared publicly over the internet or other channels, but t
 - **Secure Communication**: Applications such as secure email with Pretty Good Privacy (PGP) use asymmetric encryption to ensure that only the intended recipient can decrypt the message.
 - **Digital Certificates**: Asymmetric encryption is used in digital certificates to verify the identity of entities.
 
-#### What Algorithms to Use and What to Avoid
+#### What Algorithms to Use
 
 There are multiple asymmetric algorithms, such as Rivest-Shamir-Adleman (RSA), Curve25519, and ElGamal. However, there are a few considerations for each:
 - **OWASP recommends RSA** with `2048-bit` keys or higher, as it offers a high degree of security. It is probably the most widely used algorithm, but it is computationally expensive.
@@ -902,6 +903,53 @@ There are multiple asymmetric algorithms, such as Rivest-Shamir-Adleman (RSA), C
 - **ElGamal** is faster than RSA but less secure. Its security depends significantly on key sizes, and it is generally recommended to use it with `2048-bit` keys or higher.
 
 In summary, Java applications should use recommended, non-deprecated, and robust encryption algorithms to maintain data integrity and confidentiality. Continuous monitoring and updating of encryption algorithms are essential, as what is secure today may become vulnerable in the future.
+
+## Hashing
+
+A hash function is a mathematical function that takes an input and produces a fixed-size string of characters, typically a combination of letters and numbers. The output, known as the hash value or hash code, is unique to the input and is designed to be one-way, meaning it is computationally infeasible to reverse-engineer the original input from the hash value.
+
+### When to Use It
+- **Password Storage**: Hash functions are recommended for securely storing passwords. Instead of storing passwords in plaintext, they are hashed and the hash values are stored. During authentication, the provided password is hashed and compared to the stored hash.
+- **Data Integrity**: Hash functions can be used to verify the integrity of data by comparing hash values before and after transmission or storage.
+
+### What Hash Functions to Use
+- **Argon2**: Currently considered the most secure hashing algorithm, with variants `Argon2d`, `Argon2i`, and `Argon2id`. **OWASP recommends Argon2id for password storage**.
+- **Scrypt**: **A strong alternative to Argon2, recommended by OWASP** with specific parameters for CPU/memory cost, block size, and parallelism.
+- **bcrypt**: Another widely used hashing algorithm, recommended with a work factor of at least `10`.
+- **PBKDF2**: Recommended for `FIPS-140` compliance, with specific iteration counts for different hashing algorithms (e.g., `PBKDF2-HMAC-SHA256` with `600,000` iterations; `PBKDF2-HMAC-SHA512` with `210,000` iterations).
+
+### What Hash Functions to Avoid
+- **SHA1**: Deprecated due to vulnerabilities and susceptibility to collision attacks.
+- **MD5**: Deprecated and considered insecure due to its vulnerability to collision attacks.
+
+### Best Practices for Hashing
+- **Salting**: Add a unique, randomly generated salt to each password before hashing to enhance security and prevent rainbow table attacks.
+- **Iteration Count**: Use a high number of iterations to make the hashing process more resource-intensive and resistant to brute-force attacks.
+
+Below is an example of hashing using Argon2 with a salt and an iteration count:
+
+```java
+  private static byte[] hashPassword(
+      String password, byte[] salt, int iterations, int memory, int parallelism, int hashLength) {
+    final Argon2Parameters.Builder builder =
+        new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
+            .withSalt(salt)
+            .withIterations(iterations)
+            .withMemoryAsKB(memory)
+            .withParallelism(parallelism);
+
+    final Argon2BytesGenerator generator = new Argon2BytesGenerator();
+    generator.init(builder.build());
+
+    final byte[] hash = new byte[hashLength];
+    generator.generateBytes(password.toCharArray(), hash);
+
+    return hash;
+  }
+```
+
+Sources:
+- [Argon2Hashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/Argon2Hashing.java)
 
 ## Secure Configuration and Secrets Management
 

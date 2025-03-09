@@ -28,6 +28,7 @@
         <spotbugs.annotations.version>4.9.2</spotbugs.annotations.version>
         <findsecbugs.version>1.13.0</findsecbugs.version>
         <snakeyaml.version>1.25</snakeyaml.version>
+        <bouncycastle.version>1.80</bouncycastle.version>
     </properties>
 
     <parent>
@@ -219,6 +220,11 @@
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>${snakeyaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
