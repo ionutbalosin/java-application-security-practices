@@ -984,14 +984,16 @@ Following the [config as code](https://en.wikipedia.org/wiki/Infrastructure_as_c
 ENV=dev
 INTROSPECTION_URL=http://idp.dev:9090/realms/master/protocol/openid-connect/token/introspect
 INTROSPECTION_CLIENT_ID=dev-client-id
-INTROSPECTION_CLIENT_SECRET=BQICAHhdAZtTNcAIHM7Rz12717mWM7CpWd0IGxheREGppvO+JQE90js4DpvX9ShGenTdzIXEAAAAfDB6BgkqhkiG8w0BBwagbTBrAgEAMGYGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM/tFcSKO4zzgV3991AgEQgDlP6x29dR+L/5TpbE00PX7Onbv1z1a2YznFZMxeN4qRYRTHJyNIOpqv0fZXjn9Y1sD0mYTshwKNHpg=
+# encoded (Base64) and encrypted (AES-256) client secret
+INTROSPECTION_CLIENT_SECRET=BQICAHhdAZtTNcAIHM7Rz12717mWM7CpWd0IGxheREGppvO+JQE90==
 DATABASE_USERNAME=dev-db-user
-DATABASE_PASSWORD=BQICAHg2cxBsFur/NflLQ09GZpLdFqJB34koyAuTfD+zEObj8AFAE8b9eET9ew/6ja9KcbrtAAAAojCBnwYJKoZIhvcNAQcGoAGRMIGOAgEAMIGIBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDLIaoEhRurPUUt53JQIBEIBb5uF/8i/P46fIDLnc0RrhXElD7EzuYF58P3K+xKEP8O2PKSWuGENA83fEtQSovk84TcybEcpPRuJhoTQxW5v8RT2BLGdDHVag7NQ9zX/wt+g+iBIDUidOtEpUFg==
+# encoded (Base64) and encrypted (AES-256) client secret
+DATABASE_PASSWORD=M7CAHg2cxBsFur/NflLQ09GZpLdFqJB34koyAuTfD+zEObj8AFAE8b9eET9ew/6ja==
 ```
 
 Similar properties files will be created for other environments such as `SIT`, `UAT`, and `PROD`, usually by DevOps or developers.
 
-As illustrated in the example, the crucial thing is that all the secrets (e.g., `INTROSPECTION_CLIENT_SECRET`, `DATABASE_PASSWORD`) are encrypted. 
+As illustrated in the example, the crucial thing is that all the secrets (e.g., `INTROSPECTION_CLIENT_SECRET`, `DATABASE_PASSWORD`) are encoded and encrypted. 
 Therefore, even if they are seen by unauthorized users, their real values cannot be decoded without the decryption key. 
 The decryption key should only be accessible in the specific environment (e.g., `DEV`, `SIT`, `UAT`, and `PROD`) and not available to unauthorized individuals.
 
@@ -1023,4 +1025,3 @@ Ensure that your development environment and dependencies are always up to date 
 - [42 zip](https://unforgettable.dk/)
 - [Cryptographic Storage Cheat Sheet](https://owasp.deteact.com/cheat/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
 - [Securing symmetric encryption algorithms in Java](https://snyk.io/blog/symmetric-encryption-algorithms-java)
-
