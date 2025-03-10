@@ -33,7 +33,7 @@ I highly recommend checking out the others for a more comprehensive understandin
 
 ## Securing Resource Access via UUIDs
 
-Exposing internal resources to external clients via a [Universally Unique Identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier) makes it hard to guess or predict them. In contrast, sequential or simple IDs (e.g., `1`, `2`, `3`, etc.,) expose resources to enumeration attacks and increase the likelihood that an attacker could guess and randomly access unwanted resources.
+Exposing internal resources to external clients via a Universally Unique Identifier (UUID) makes it hard to guess or predict them. In contrast, sequential or simple IDs (e.g., `1`, `2`, `3`, etc.,) expose resources to enumeration attacks and increase the likelihood that an attacker could guess and randomly access unwanted resources.
 
 This is particularly important when exposing resources via RESTful APIs over HTTP to external clients.
 
@@ -218,7 +218,7 @@ Below are the most important sanitizations techniques.
 **Encoding Data**: Encode data to ensure it is safe for further processing and storage.
 
 A few examples:
-- HTML Encoding prevents [Cross-site scripting (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting) by encoding special characters like `<`, `>`, `&`, etc.
+- HTML Encoding prevents Cross-site scripting (XSS) by encoding special characters like `<`, `>`, `&`, etc.
 - URL Encoding handles special characters in URLs (e.g., spaces, slashes).
 - Base64 Encoding converts binary data into a text format using a base 64 representation, allowing binary data (like images or PDF files) to be safely transmitted in text-based formats (e.g., JSON, XML).
 
@@ -234,7 +234,7 @@ In this Java code snapshot, the user input is HTML encoded:
   }
 ```
 
-**Escaping Special Characters**: Ensure special characters are properly escaped to prevent injection attacks (e.g., [SQL injection](https://en.wikipedia.org/wiki/SQL_injection), XSS).
+**Escaping Special Characters**: Ensure special characters are properly escaped to prevent injection attacks (e.g., SQL injection, XSS).
 
 Example:
 - SQL Escaping prevents SQL injection by escaping special characters like single quotes. However, parameterized queries (i.e., prepared statements) are more secure, as they separate query logic from user input.
@@ -259,9 +259,9 @@ Below are the most important factors to consider when dealing with files that ar
 
 **Input Type Validation:** Validate file types and contents before processing to ensure they meet expected formats and predefined rules.
 
-**File Size Limits:** Enforce limits on input file sizes to prevent [Denial-of-service attack](https://en.wikipedia.org/wiki/Denial-of-service_attack) and resource exhaustion.
+**File Size Limits:** Enforce limits on input file sizes to prevent denial-of-service attack and resource exhaustion.
 
-**Sanitize File Names:** Avoid directly using untrusted file names. Sanitize the input to protect against [path traversal attacks](https://owasp.org/www-community/attacks/Path_Traversal) (e.g., `/var/www/reports/../../../etc/passwd`).
+**Sanitize File Names:** Avoid directly using untrusted file names. Sanitize the input to protect against path traversal attacks (e.g., `/var/www/reports/../../../etc/passwd`).
 
 **Scan for Malware:** Integrate malware scanning solutions for files that may be malicious (e.g., user uploads) to detect and mitigate potential threats.
 Note that the integration with a malware SaaS is out of scope for this article.
@@ -402,8 +402,8 @@ The [Apache Tika](https://tika.apache.org) library is used to detect if the uplo
 
 ## Security Logging Best Practices
 
-**Avoid Logging Sensitive Data:** Never log [Personally Identifiable Information (PII)](https://www.investopedia.com/terms/p/personally-identifiable-information-pii.asp) or Payment Information (PI).
-If necessary, mask or encrypt it to comply with regulations (e.g., [General Data Protection Regulation](https://gdpr-info.eu/)). 
+**Avoid Logging Sensitive Data:** Never log Personally Identifiable Information (PII) or Payment Information (PI).
+If necessary, mask or encrypt it to comply with regulations (e.g., General Data Protection Regulation - GDPR). 
 
 A few examples of logs that contain sensitive PI/PII data and should therefore be avoided:
 
@@ -432,7 +432,7 @@ A few examples of logs containing security contextual information are:
   06:01:40.947 [http-nio-8080-exec-1] [RemoteHost=172.29.0.4, RemotePort=56226, UserId=c5c9f9af-d95c-4816-b9ad-d21c4da76463, RequestMethod=POST, UserAgent=Java/21.0.5, RequestURI=/pizza/delivery/orders] INFO Pizza order 'f39fba32-ce86-4021-a236-e21b4ffdbfc5' has been successfully delivered.
 ```
 
-The best way to automatically incorporate these additional security parameters is to use the logger's [Mapped Diagnostic Context (MDC)](https://logback.qos.ch/manual/mdc.html) in an HTTP request handler interceptor. This ensures that all application requests pass through it and that the parameters are automatically available to the logger.
+The best way to automatically incorporate these additional security parameters is to use the logger's Mapped Diagnostic Context (MDC) in an HTTP request handler interceptor. This ensures that all application requests pass through it and that the parameters are automatically available to the logger.
 
 The code snapshot below is an example of how such an HTTP request handler interceptor could be configured to set the MDC values.
 
@@ -810,7 +810,7 @@ Services like Amazon Key Management Service (KMS), Azure Key Vault, Google Secre
 - **Encrypting Disk Partitions**: Entire disk partitions can be encrypted to secure all data stored on the disk, making it unreadable without the correct encryption key.
 
 #### What Algorithms to Use
-- **OWASP recommends AES (Advanced Encryption Standard)** with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
+- **OWASP recommends AES (Advanced Encryption Standard)** with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. Using AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
 
 #### What Algorithms to Avoid
 - **DES (Data Encryption Standard)** and **3DES (Triple DES)** are vulnerable to security attacks and should be avoided.
@@ -913,14 +913,13 @@ A hash function is a mathematical function that takes an input and produces a fi
 - **Data Integrity**: Hash functions can be used to verify the integrity of data by comparing hash values before and after transmission or storage.
 
 ### What Hash Functions to Use
-- **Argon2**: Currently considered the most secure hashing algorithm, with variants `Argon2d`, `Argon2i`, and `Argon2id`. **OWASP recommends Argon2id for password storage**.
-- **Scrypt**: **A strong alternative to Argon2, recommended by OWASP** with specific parameters for CPU/memory cost, block size, and parallelism.
-- **bcrypt**: Another widely used hashing algorithm, recommended with a work factor of at least `10`.
-- **PBKDF2**: Recommended for `FIPS-140` compliance, with specific iteration counts for different hashing algorithms (e.g., `PBKDF2-HMAC-SHA256` with `600,000` iterations; `PBKDF2-HMAC-SHA512` with `210,000` iterations).
+- **Argon2** is considered the most secure hashing algorithm, with variants `Argon2d`, `Argon2i`, and `Argon2id`. **OWASP recommends Argon2id for password storage**.
+- **Scrypt** is **a strong alternative to Argon2, recommended by OWASP** with specific parameters for CPU/memory cost, block size, and parallelism.
+- **bcrypt** is another widely used hashing algorithm, recommended with a work factor of at least `10`.
+- **PBKDF2** is recommended for `FIPS-140` compliance, with specific iteration counts for different hashing algorithms (e.g., `PBKDF2-HMAC-SHA256` with `600,000` iterations; `PBKDF2-HMAC-SHA512` with `210,000` iterations).
 
 ### What Hash Functions to Avoid
-- **SHA1**: Deprecated due to vulnerabilities and susceptibility to collision attacks.
-- **MD5**: Deprecated and considered insecure due to its vulnerability to collision attacks.
+- **SHA1** and **MD5** are deprecated and considered insecure due to vulnerabilities and susceptibility to collision attacks.
 
 ### Best Practices for Hashing
 - **Salting**: Add a unique, randomly generated salt to each password before hashing to enhance security and prevent rainbow table attacks.
@@ -951,12 +950,14 @@ Below is an example of hashing using Argon2 with a salt and an iteration count:
 Sources:
 - [Argon2Hashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/Argon2Hashing.java)
 
+In summary, Java applications should use recommended, non-deprecated, and robust hashing functions to maintain data integrity. Continuous monitoring and updating of hashing functions are essential, as what is secure today may become vulnerable in the future.
+
 ## Secure Configuration and Secrets Management
 
-All application secrets (e.g., sensitive configuration values such as API keys, database credentials, etc.) should never be stored unencrypted with the application code (i.e., in plain text). 
-Instead, the application should define them as key-value properties, and their values must be resolved and replaced during the deployment pipeline for the specific target environment.
+All application secrets (e.g., sensitive configuration values such as API keys, database credentials, etc.) should never be stored unencrypted (or unencoded) within the application code (i.e., in plain text). 
+Instead, the application should define them as key-value properties, and their encrypted (and encoded) values must be resolved and replaced during the deployment pipeline for the specific target environment.
 
-Storing any secret unencrypted (or in plain text) together with the source code makes the application vulnerable, increases the risk of attacks, and is generally not acceptable.
+> Storing secrets unencrypted or in plain text within the source code is a critical security risk and must be strictly avoided. Use secrets management services and environment variables to securely handle sensitive information.
 
 Example of application configuration properties:
 
@@ -984,10 +985,10 @@ Following the [config as code](https://en.wikipedia.org/wiki/Infrastructure_as_c
 ENV=dev
 INTROSPECTION_URL=http://idp.dev:9090/realms/master/protocol/openid-connect/token/introspect
 INTROSPECTION_CLIENT_ID=dev-client-id
-# encoded (Base64) and encrypted (AES-256) client secret
+# Encoded (Base64) and encrypted (AES-256) client secret
 INTROSPECTION_CLIENT_SECRET=BQICAHhdAZtTNcAIHM7Rz12717mWM7CpWd0IGxheREGppvO+JQE90==
 DATABASE_USERNAME=dev-db-user
-# encoded (Base64) and encrypted (AES-256) client secret
+# Encoded (Base64) and encrypted (AES-256) database password
 DATABASE_PASSWORD=M7CAHg2cxBsFur/NflLQ09GZpLdFqJB34koyAuTfD+zEObj8AFAE8b9eET9ew/6ja==
 ```
 
@@ -1002,15 +1003,13 @@ The implementation details at the infrastructure level, including generating, st
 
 [![Secure Configuration and Secrets Management.svg](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/secure_configuration_and_secrets_management.svg?raw=true)](https://github.com/ionutbalosin/java-application-security-practices/blob/main/docs/images/secure_configuration_and_secrets_management.svg?raw=true)
 
-In closing, avoid storing secrets in plain text as unencrypted values next to the code.
+In summary, never store secrets in plain text or unencrypted form alongside the source code.
 
 ## Keeping JDK Versions and Libraries Up to Date
 
-Regularly updating your JDK and all library dependencies is crucial for maintaining security. New versions often include important security patches and enhancements that protect against vulnerabilities.
+Regularly updating your JDK and dependencies is essential for security. New versions often include critical security patches and enhancements that protect against vulnerabilities. Despite its simplicity, this practice is frequently overlooked by developers.
 
-Unless there are specific cases where this cannot be achieved (especially with legacy systems that use libraries for which patches are no longer available - unfortunately, there are many such systems), this should never be neglected. Sometimes, just bumping up the minor version of these libraries is very cheap and easy to do.
-
-Ensure that your development environment and dependencies are always up to date to minimize security risks. While this may sound simple, it is often overlooked by software developers.
+Neglecting dependency updates should be avoided, except in rare cases (e.g., legacy applications with unsupported libraries). In most cases, upgrading to a newer minor version is straightforward and requires minimal effort.
 
 ## References
 
@@ -1025,3 +1024,11 @@ Ensure that your development environment and dependencies are always up to date 
 - [42 zip](https://unforgettable.dk/)
 - [Cryptographic Storage Cheat Sheet](https://owasp.deteact.com/cheat/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
 - [Securing symmetric encryption algorithms in Java](https://snyk.io/blog/symmetric-encryption-algorithms-java)
+- [Cross-site scripting (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting)
+- [SQL injection](https://en.wikipedia.org/wiki/SQL_injection)
+- [Denial-of-service attack](https://en.wikipedia.org/wiki/Denial-of-service_attack)
+- [Path traversal attacks](https://owasp.org/www-community/attacks/Path_Traversal)
+- [Universally Unique Identifier (UUID)](https://en.wikipedia.org/wiki/Universally_unique_identifier)
+- [Personally Identifiable Information (PII)](https://www.investopedia.com/terms/p/personally-identifiable-information-pii.asp)
+- [General Data Protection Regulation](https://gdpr-info.eu)
+- [Mapped Diagnostic Context (MDC)](https://logback.qos.ch/manual/mdc.html)

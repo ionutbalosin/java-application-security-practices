@@ -29,6 +29,12 @@ import java.util.Base64;
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
 import org.bouncycastle.crypto.params.Argon2Parameters;
 
+/**
+ * This class, Argon2Hashing, demonstrates how to generate a secure hash using the Argon2 algorithm.
+ * It includes methods to generate a random salt and to hash a password with specified parameters
+ * such as iterations, memory cost, parallelism, and hash length. The main method prints the
+ * generated salt and hash in base64 encoding.
+ */
 public class Argon2Hashing {
 
   private static final String PASSWORD = "My-Supper-Secret-Password";
@@ -42,8 +48,10 @@ public class Argon2Hashing {
     final byte[] salt = generateSalt(SALT_LENGTH);
     final byte[] hash = hashPassword(PASSWORD, salt, ITERATIONS, MEMORY, PARALLELISM, HASH_LENGTH);
 
-    System.out.printf("Generated salt [%s]%n", Base64.getEncoder().encodeToString(salt));
-    System.out.printf("Generated hash [%s]%n", Base64.getEncoder().encodeToString(hash));
+    System.out.printf(
+        "Generated base64 encoded salt [%s]%n", Base64.getEncoder().encodeToString(salt));
+    System.out.printf(
+        "Generated base64 encoded hash [%s]%n", Base64.getEncoder().encodeToString(hash));
   }
 
   private static byte[] generateSalt(int length) {
