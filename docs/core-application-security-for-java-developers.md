@@ -810,11 +810,11 @@ Services like Amazon Key Management Service (KMS), Azure Key Vault, Google Secre
 - **Encrypting Disk Partitions**: Entire disk partitions can be encrypted to secure all data stored on the disk, making it unreadable without the correct encryption key.
 
 #### What Algorithms to Use
-- **OWASP recommends AES (Advanced Encryption Standard)** with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. Using AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
+- **AES (Advanced Encryption Standard)**: OWASP recommends AES with at least `128-bit` keys, preferably `256-bit`, due to its enhanced security. Furthermore, using AES with modes like **GCM (Galois/Counter Mode)** or **CCM (Counter with CBC-MAC)** is better than using AES without any mode, as these modes provide extended confidentiality, integrity, and authenticity in a single, efficient operation. Using AES without any mode like GCM or CCM will provide confidentiality but not integrity or authenticity.
 
 #### What Algorithms to Avoid
-- **DES (Data Encryption Standard)** and **3DES (Triple DES)** are vulnerable to security attacks and should be avoided.
- 
+- **DES (Data Encryption Standard)** and **3DES (Triple DES)**: Vulnerable to security attacks and should be avoided.
+
 Below is an example of encrypting and decrypting a file using AES `256-bit` encryption with GCM mode:
 
 ```java
@@ -898,10 +898,10 @@ The public key can be shared publicly over the internet or other channels, but t
 #### What Algorithms to Use
 
 There are multiple asymmetric algorithms, such as Rivest-Shamir-Adleman (RSA), Curve25519, and ElGamal. However, there are a few considerations for each:
-- **OWASP recommends RSA** with `2048-bit` keys or higher, as it offers a high degree of security. It is probably the most widely used algorithm, but it is computationally expensive.
-- **Curve25519** is an elliptic curve cryptography (ECC) algorithm that is much faster and more efficient in terms of computational resources compared to RSA, even with shorter key lengths. This makes it very useful in resource-constrained environments such as IoT or blockchain systems.
-- **ElGamal** is faster than RSA but less secure. Its security depends significantly on key sizes, and it is generally recommended to use it with `2048-bit` keys or higher.
-- **DSA (Digital Signature Algorithm)** is primarily used for digital signatures, ensuring message authenticity and integrity. While not deprecated, it is less favored in modern cryptographic practices.
+- **RSA**: OWASP recommends RSA with `2048-bit` keys or higher, as it offers a high degree of security. It is probably the most widely used algorithm, but it is computationally expensive.
+- **Curve25519**: An elliptic curve cryptography (ECC) algorithm that is much faster and more efficient in terms of computational resources compared to RSA, even with shorter key lengths. This makes it very useful in resource-constrained environments such as IoT or blockchain systems.
+- **ElGamal**: Faster than RSA but less secure. Its security depends significantly on key sizes, and it is generally recommended to use it with `2048-bit` keys or higher.
+- **DSA (Digital Signature Algorithm)**: Primarily used for digital signatures, ensuring message authenticity and integrity. While not deprecated, it is less favored in modern cryptographic practices.
 
 Below is an example of encrypting and decrypting a text message using RSA `2048-bit` key:
 
@@ -944,14 +944,14 @@ A hash function is a mathematical function that takes an input and produces a fi
 - **Data Integrity**: Hash functions can be used to verify the integrity of data by comparing hash values before and after transmission or storage.
 
 ### What Hash Functions to Use
-- **Argon2** is considered the most secure hashing algorithm, with variants `Argon2d`, `Argon2i`, and `Argon2id`. **OWASP recommends Argon2id for password storage**.
-- **Scrypt** is **a strong alternative to Argon2, recommended by OWASP** with specific parameters for CPU/memory cost, block size, and parallelism.
-- **bcrypt** is another widely used hashing algorithm, recommended with a work factor of at least `10`.
-- **PBKDF2** is recommended for `FIPS-140` compliance, with specific iteration counts for different hashing algorithms (e.g., `PBKDF2-HMAC-SHA256` with `600,000` iterations; `PBKDF2-HMAC-SHA512` with `210,000` iterations).
-- **SHA-256 is recommended by OWASP for message integrity** checks, such as verifying file integrity, ensuring data authenticity in digital signatures, and detecting unauthorized modifications in transmitted data.
+- **Argon2**: Considered the most secure hashing algorithm, with variants `Argon2d`, `Argon2i`, and `Argon2id`. **OWASP recommends Argon2id for password storage**.
+- **Scrypt**: A strong alternative to Argon2, recommended by OWASP with specific parameters for CPU/memory cost, block size, and parallelism.
+- **bcrypt**: Another widely used hashing algorithm, recommended with a work factor of at least `10`.
+- **PBKDF2**: Recommended for `FIPS-140` compliance, with specific iteration counts for different hashing algorithms (e.g., `PBKDF2-HMAC-SHA256` with `600,000` iterations; `PBKDF2-HMAC-SHA512` with `210,000` iterations).
+- **SHA-256**: Recommended by OWASP for message integrity checks, such as verifying file integrity, ensuring data authenticity in digital signatures, and detecting unauthorized modifications in transmitted data.
 
 ### What Hash Functions to Avoid
-- **SHA1** and **MD5** are deprecated and considered insecure due to vulnerabilities and susceptibility to collision attacks.
+- **SHA1** and **MD5**: Deprecated and considered insecure due to vulnerabilities and susceptibility to collision attacks.
 
 ### Best Practices for Hashing
 - **Salting**: Add a unique, randomly generated salt to each password before hashing to enhance security and prevent rainbow table attacks.
