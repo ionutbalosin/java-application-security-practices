@@ -22,7 +22,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.serialization.deserialization.encryptdecrypt;
+package ionutbalosin.training.application.security.practices.serialization.deserialization.encryptdecrypt.symetric;
 
 import java.io.*;
 import javax.crypto.Cipher;
@@ -39,13 +39,13 @@ public class FileDecryption {
 
   private static final String CURRENT_DIR = System.getProperty("user.dir", ".");
   private static final String ENCRYPTED_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/encrypted_file.txt";
+      CURRENT_DIR + "/serialization-deserialization/target/encrypted_file_aes.txt";
   private static final String DECRYPTED_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/decrypted_file.txt";
+      CURRENT_DIR + "/serialization-deserialization/target/decrypted_file_aes.txt";
   private static final String SECRET_KEY_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/secret.key";
+      CURRENT_DIR + "/serialization-deserialization/target/secret_aes.key";
   private static final String IV_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/iv.key";
+      CURRENT_DIR + "/serialization-deserialization/target/iv_aes.key";
 
   public static void main(String[] args) throws Exception {
     // Load the secret key and IV from the files for decryption

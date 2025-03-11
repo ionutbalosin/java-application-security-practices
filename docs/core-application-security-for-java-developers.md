@@ -880,8 +880,8 @@ Below is an example of encrypting and decrypting a file using AES `256-bit` encr
 ```
 
 Sources:
-- [FileEncryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/FileEncryption.java)
-- [FileDecryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/FileDecryption.java)
+- [FileEncryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/symetric/FileEncryption.java)
+- [FileDecryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/symetric/FileDecryption.java)
 
 ### Asymmetric Encryption
 
@@ -901,6 +901,37 @@ There are multiple asymmetric algorithms, such as Rivest-Shamir-Adleman (RSA), C
 - **OWASP recommends RSA** with `2048-bit` keys or higher, as it offers a high degree of security. It is probably the most widely used algorithm, but it is computationally expensive.
 - **Curve25519** is an elliptic curve cryptography (ECC) algorithm that is much faster and more efficient in terms of computational resources compared to RSA, even with shorter key lengths. This makes it very useful in resource-constrained environments such as IoT or blockchain systems.
 - **ElGamal** is faster than RSA but less secure. Its security depends significantly on key sizes, and it is generally recommended to use it with `2048-bit` keys or higher.
+- **DSA (Digital Signature Algorithm)** is primarily used for digital signatures, ensuring message authenticity and integrity. While not deprecated, it is less favored in modern cryptographic practices.
+
+Below is an example of encrypting and decrypting a text message using RSA `2048-bit` key:
+
+```java
+  private static KeyPair generateKeyPair() throws Exception {
+    // Generate RSA key pair with 2048-bit key size
+    final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+    keyPairGenerator.initialize(2048);
+    return keyPairGenerator.generateKeyPair();
+  }
+  
+  private static byte[] encryptMessage(byte[] message, PublicKey publicKey) throws Exception {
+    // Note: RSA can only encrypt data smaller than the key size minus padding overhead.
+    // For a 2048-bit key and PKCS1 padding, this is generally less than 254 bytes.
+    final Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+    cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+    return cipher.doFinal(message);
+  }
+
+  private static byte[] decryptMessage(byte[] encryptedMessage, PrivateKey privateKey)
+        throws Exception {
+    final Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+    cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+    return cipher.doFinal(encryptedMessage);
+  }  
+```
+
+Source: [MessageEncryptDecrypt.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/asymetric/MessageEncryptDecrypt.java)
 
 In summary, Java applications should use recommended, non-deprecated, and robust encryption algorithms to maintain data integrity and confidentiality. Continuous monitoring and updating of encryption algorithms are essential, as what is secure today may become vulnerable in the future.
 
