@@ -948,6 +948,7 @@ A hash function is a mathematical function that takes an input and produces a fi
 - **Scrypt** is **a strong alternative to Argon2, recommended by OWASP** with specific parameters for CPU/memory cost, block size, and parallelism.
 - **bcrypt** is another widely used hashing algorithm, recommended with a work factor of at least `10`.
 - **PBKDF2** is recommended for `FIPS-140` compliance, with specific iteration counts for different hashing algorithms (e.g., `PBKDF2-HMAC-SHA256` with `600,000` iterations; `PBKDF2-HMAC-SHA512` with `210,000` iterations).
+- **SHA-256 is recommended by OWASP for message integrity** checks, such as verifying file integrity, ensuring data authenticity in digital signatures, and detecting unauthorized modifications in transmitted data.
 
 ### What Hash Functions to Avoid
 - **SHA1** and **MD5** are deprecated and considered insecure due to vulnerabilities and susceptibility to collision attacks.
@@ -956,7 +957,7 @@ A hash function is a mathematical function that takes an input and produces a fi
 - **Salting**: Add a unique, randomly generated salt to each password before hashing to enhance security and prevent rainbow table attacks.
 - **Iteration Count**: Use a high number of iterations to make the hashing process more resource-intensive and resistant to brute-force attacks.
 
-Below is an example of hashing using Argon2 with a salt and an iteration count:
+Below is an example of hashing a password using Argon2 with a salt and an iteration count:
 
 ```java
   private static byte[] hashPassword(
@@ -978,8 +979,18 @@ Below is an example of hashing using Argon2 with a salt and an iteration count:
   }
 ```
 
+Below is an example of hashing data using SHA-256:
+
+```java
+  public static byte[] hashData(byte[] data) throws NoSuchAlgorithmException {
+    final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    return digest.digest(data);
+}
+```
+
 Sources:
-- [Argon2Hashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/Argon2Hashing.java)
+- [PasswordHashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/PasswordHashing.java)
+- [MessageHashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/MessageHashing.java)
 
 In summary, Java applications should use recommended, non-deprecated, and robust hashing functions to maintain data integrity. Continuous monitoring and updating of hashing functions are essential, as what is secure today may become vulnerable in the future.
 

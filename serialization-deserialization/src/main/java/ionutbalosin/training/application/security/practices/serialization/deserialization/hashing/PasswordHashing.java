@@ -35,9 +35,9 @@ import org.bouncycastle.crypto.params.Argon2Parameters;
  * such as iterations, memory cost, parallelism, and hash length. The main method prints the
  * generated salt and hash in base64 encoding.
  */
-public class Argon2Hashing {
+public class PasswordHashing {
 
-  private static final String PASSWORD = "My-Supper-Secret-Password";
+  private static final String PASSWORD = "My-Super-Secret-Password";
   private static final int SALT_LENGTH = 16; // Length of the salt in bytes
   private static final int ITERATIONS = 3; // Number of iterations
   private static final int MEMORY = 65536; // Memory cost (in KB)
