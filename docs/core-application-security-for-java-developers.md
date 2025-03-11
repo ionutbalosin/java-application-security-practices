@@ -1055,8 +1055,8 @@ Neglecting dependency updates should be avoided, except in rare cases (e.g., leg
 
 ## References
 
-- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code 💻
-- [Application Security for Java Developers](https://ionutbalosin.com/training/application-security-for-java-developers-course) - Course 🎓
+- [Application Security for Java Developers Course](https://ionutbalosin.com/training/application-security-for-java-developers-course) – Level up your Java security skills! 🎓 🚀
+- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code
 - [Serialization and deserialization in Java: explaining the Java deserialize vulnerability](https://snyk.io/blog/serialization-and-deserialization-in-java/)
 - [Explaining Java Deserialization Vulnerabilities (Part 1)](https://foojay.io/today/explaining-java-deserialization-vulnerabilities-part-1/)
 - [Explaining Java Deserialization Vulnerabilities (Part 2)](https://foojay.io/today/explaining-java-deserialization-vulnerabilities-part-2/)

@@ -118,5 +118,5 @@ Of course, you can use other similar tools besides those I have presented here, 
 
 ## References
 
-- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code 💻
-- [Application Security for Java Developers](https://ionutbalosin.com/training/application-security-for-java-developers-course) - Course 🎓
+- [Application Security for Java Developers Course](https://ionutbalosin.com/training/application-security-for-java-developers-course) – Level up your Java security skills! 🎓 🚀
+- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code

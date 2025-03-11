@@ -692,8 +692,8 @@ In closing, all of these security HTTP headers help mitigate surface attacks on 
 
 ## References
 
-- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code 💻
-- [Application Security for Java Developers](https://ionutbalosin.com/training/application-security-for-java-developers-course) - Course 🎓
+- [Application Security for Java Developers Course](https://ionutbalosin.com/training/application-security-for-java-developers-course) – Level up your Java security skills! 🎓 🚀
+- [Java Application Security Practices](https://github.com/ionutbalosin/java-application-security-practices) - GitHub source code
 - [JSON Web Token (JWT)](https://datatracker.ietf.org/doc/html/rfc7519)
 - [Cross-site scripting (XSS)](https://en.wikipedia.org/wiki/Cross-site_scripting)
 - [Content Security Policy (CSP)](https://content-security-policy.com)
