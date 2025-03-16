@@ -20,6 +20,7 @@ For more resources and insights, feel free to visit my [website](https://ionutba
 ## Content
 
 - [Security Concepts](#security-concepts)
+- [Publications](#publications)
 - [Project Modules](#project-modules)
 - [Architectural Diagrams](#architectural-diagrams)
   - [Software Architecture Diagram](#software-architecture-diagram)
@@ -62,6 +63,13 @@ Among the **security concepts** demonstrated in this project:
   - Software Composition Analysis (SCA)
   - Static Application Security Testing (SAST)
   - Dynamic Application Security Testing (DAST)
+
+## Publications
+
+Current publications that further describe the concepts presented in this repository can be found at:
+- [Core Application Security for Java Developers](https://ionutbalosin.com/2025/03/core-application-security-for-java-developers)
+- [API Web Application Security for Java Developers](https://ionutbalosin.com/2025/03/api-web-application-security-for-java-developers)
+- [Security Application Testing for Java Developers](https://ionutbalosin.com/2025/03/security-application-testing-for-java-developers)
 
 ## Project Modules
 
