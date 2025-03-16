@@ -54,6 +54,13 @@ public class PasswordHashing {
         "Generated base64 encoded hash [%s]%n", Base64.getEncoder().encodeToString(hash));
   }
 
+  /**
+   * Generates a random salt of the specified length.
+   *
+   * <p>The salt is used in hashing functions to ensure that even if two users have the same
+   * password, their hashes will be unique. This helps protect against precomputed attacks such as
+   * rainbow table attacks.
+   */
   private static byte[] generateSalt(int length) {
     final SecureRandom random = new SecureRandom();
     final byte[] salt = new byte[length];
@@ -65,9 +72,9 @@ public class PasswordHashing {
       String password, byte[] salt, int iterations, int memory, int parallelism, int hashLength) {
     final Argon2Parameters.Builder builder =
         new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
-            .withSalt(salt)
-            .withIterations(iterations)
-            .withMemoryAsKB(memory)
+            .withSalt(salt) // Salt ensures unique hashes for identical passwords
+            .withIterations(iterations) // Iterations increase computational cost for added security
+            .withMemoryAsKB(memory) // Memory cost helps resist GPU-based attacks
             .withParallelism(parallelism);
 
     final Argon2BytesGenerator generator = new Argon2BytesGenerator();
