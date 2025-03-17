@@ -880,8 +880,8 @@ Below is an example of encrypting and decrypting a file using AES `256-bit` encr
 ```
 
 Sources:
-- [FileEncryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/symetric/FileEncryption.java)
-- [FileDecryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/symetric/FileDecryption.java)
+- [FileEncryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/encryption-decryption/src/main/java/ionutbalosin/training/application/security/practices/encryption/decryption/symetric/FileEncryption.java)
+- [FileDecryption.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/encryption-decryption/src/main/java/ionutbalosin/training/application/security/practices/encryption/decryption/symetric/FileDecryption.java)
 
 ### Asymmetric Encryption
 
@@ -931,7 +931,7 @@ Below is an example of encrypting and decrypting a text message using RSA `2048-
   }  
 ```
 
-Source: [MessageEncryptDecrypt.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/encryptdecrypt/asymetric/MessageEncryptDecrypt.java)
+Source: [MessageEncryptDecrypt.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/encryption-decryption/src/main/java/ionutbalosin/training/application/security/practices/encryption/decryption/asymetric/MessageEncryptDecrypt.java)
 
 In summary, Java applications should use recommended, non-deprecated, and robust encryption algorithms to maintain data integrity and confidentiality. Continuous monitoring and updating of encryption algorithms are essential, as what is secure today may become vulnerable in the future.
 
@@ -989,8 +989,8 @@ Below is an example of hashing data using SHA-256:
 ```
 
 Sources:
-- [PasswordHashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/PasswordHashing.java)
-- [MessageHashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/serialization-deserialization/src/main/java/ionutbalosin/training/application/security/practices/serialization/deserialization/hashing/MessageHashing.java)
+- [PasswordHashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/encryption-decryption/src/main/java/ionutbalosin/training/application/security/practices/encryption/decryption/hashing/PasswordHashing.java)
+- [MessageHashing.java](https://github.com/ionutbalosin/java-application-security-practices/blob/main/encryption-decryption/src/main/java/ionutbalosin/training/application/security/practices/encryption/decryption/hashing/MessageHashing.java)
 
 In summary, Java applications should use recommended, non-deprecated, and robust hashing functions to maintain data integrity. Continuous monitoring and updating of hashing functions are essential, as what is secure today may become vulnerable in the future.
 

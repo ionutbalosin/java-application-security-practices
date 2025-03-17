@@ -50,6 +50,7 @@
         <module>security-token-introspection</module>
         <module>security-token-jwks</module>
         <module>serialization-deserialization</module>
+        <module>encryption-decryption</module>
     </modules>
 
     <build>

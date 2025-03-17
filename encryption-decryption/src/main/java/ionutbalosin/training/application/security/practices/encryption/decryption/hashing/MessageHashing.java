@@ -22,42 +22,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.serialization.deserialization.hashing;
+package ionutbalosin.training.application.security.practices.encryption.decryption.hashing;
 
-import java.util.Arrays;
-import javax.crypto.KeyGenerator;
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
-/** Demonstrates HMAC-SHA256 for data integrity and authenticity using a secure key. */
-public class HmacMessageAuthenticator {
+/**
+ * This class demonstrates how to use SHA-256 to verify data integrity by comparing hash values.
+ *
+ * <p>Note: SHA-256 ensures data integrity but does not provide authenticity (unlike HMAC), meaning
+ * an attacker can still modify data and recompute the hash.
+ */
+public class MessageHashing {
 
   public static void main(String[] args) throws Exception {
-    final SecretKey secretKey = generateHmacKey();
     final String originalData = "This is the original data.";
-
-    // Generate HMAC for the original data
-    final byte[] originalHmac = generateHMAC(originalData.getBytes(), secretKey);
+    byte[] originalHash = hashData(originalData.getBytes());
 
     // Simulate data transmission or storage (assume data might be modified)
     final String receivedData = "This is the original data.";
-    final byte[] receivedHmac = generateHMAC(receivedData.getBytes(), secretKey);
+    byte[] receivedHash = hashData(receivedData.getBytes());
 
-    // Verify data authenticity
-    final boolean isAuthentic = Arrays.equals(originalHmac, receivedHmac);
-    System.out.printf("Is data authentic: %s%n", isAuthentic);
+    // Verify data integrity by comparing hashes
+    boolean isDataIntact = MessageDigest.isEqual(originalHash, receivedHash);
+    System.out.printf("Is data intact: [%s]%n", isDataIntact);
   }
 
-  // Generates a secure random key for HMAC-SHA256.
-  public static SecretKey generateHmacKey() throws Exception {
-    final KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-    return keyGen.generateKey();
-  }
-
-  // Computes the HMAC-SHA256 of the given data using a secure secret key.
-  public static byte[] generateHMAC(byte[] data, SecretKey key) throws Exception {
-    final Mac mac = Mac.getInstance("HmacSHA256");
-    mac.init(key);
-    return mac.doFinal(data);
+  // Computes the SHA-256 hash of the given data.
+  public static byte[] hashData(byte[] data) throws NoSuchAlgorithmException {
+    final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    return digest.digest(data);
   }
 }

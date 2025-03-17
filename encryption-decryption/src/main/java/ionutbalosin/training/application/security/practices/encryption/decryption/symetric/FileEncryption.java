@@ -22,7 +22,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.serialization.deserialization.encryptdecrypt.symetric;
+package ionutbalosin.training.application.security.practices.encryption.decryption.symetric;
 
 import java.io.*;
 import java.security.SecureRandom;
@@ -42,13 +42,13 @@ public class FileEncryption {
 
   private static final String CURRENT_DIR = System.getProperty("user.dir", ".");
   private static final String INITIAL_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/src/main/resources/confidential_file.txt";
+      CURRENT_DIR + "/encryption-decryption/src/main/resources/confidential_file.txt";
   private static final String ENCRYPTED_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/encrypted_file_aes.txt";
+      CURRENT_DIR + "/encryption-decryption/target/encrypted_file_aes.txt";
   private static final String SECRET_KEY_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/secret_aes.key";
+      CURRENT_DIR + "/encryption-decryption/target/secret_aes.key";
   private static final String IV_FILENAME =
-      CURRENT_DIR + "/serialization-deserialization/target/iv_aes.key";
+      CURRENT_DIR + "/encryption-decryption/target/iv_aes.key";
 
   public static void main(String[] args) throws Exception {
     // Generate a secret key and IV for encryption

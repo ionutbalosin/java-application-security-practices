@@ -22,7 +22,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.serialization.deserialization.encryptdecrypt.asymetric;
+package ionutbalosin.training.application.security.practices.encryption.decryption.asymetric;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

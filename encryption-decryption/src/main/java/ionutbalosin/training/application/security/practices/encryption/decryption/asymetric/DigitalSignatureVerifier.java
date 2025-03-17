@@ -22,7 +22,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.serialization.deserialization.encryptdecrypt.asymetric;
+package ionutbalosin.training.application.security.practices.encryption.decryption.asymetric;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -57,7 +57,7 @@ public class DigitalSignatureVerifier {
 
     // Verify the digital signature using the public key
     final boolean isVerified = verifySignature(SECRET_MESSAGE, digitalSignature, publicKey);
-    System.out.printf("Signature verified: [%s]%n", isVerified);
+    System.out.printf("Is signature verified: [%s]%n", isVerified);
   }
 
   // Method to generate an RSA key pair

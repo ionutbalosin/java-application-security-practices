@@ -22,7 +22,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package ionutbalosin.training.application.security.practices.serialization.deserialization.hashing;
+package ionutbalosin.training.application.security.practices.encryption.decryption.hashing;
 
 import java.security.SecureRandom;
 import java.util.Base64;
