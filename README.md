@@ -51,6 +51,10 @@ Among the **security concepts** demonstrated in this project:
   - Token introspection
   - JSON Web Key Set (JWKS)
   - Roles-based access control
+- Symmetric and Asymmetric Encryption
+  - Symmetric Encryption
+  - Asymmetric Encryption
+- Hashing
 - Java Process Security
   - Input data validation and sanitization
   - Handling input files from external sources
