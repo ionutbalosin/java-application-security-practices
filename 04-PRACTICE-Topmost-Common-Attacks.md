@@ -1,6 +1,6 @@
 # Application Security for Java Developers
 
-Copyright (C) 2024 Ionut Balosin
+Copyright (C) 2025 Ionut Balosin
 
 This project is licensed under the Apache License, Version 2.0.
 Please see the [LICENSE](license/LICENSE) file for full license.
