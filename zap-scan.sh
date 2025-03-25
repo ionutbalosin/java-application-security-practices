@@ -78,3 +78,4 @@ fi
 
 echo ""
 echo "🎉 Congratulations! Everything was successful."
+echo "Please check the '$(pwd)/zap/reports' folder 📂 for the HTML report."
