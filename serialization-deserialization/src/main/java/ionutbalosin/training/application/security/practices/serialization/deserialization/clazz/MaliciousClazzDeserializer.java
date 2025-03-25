@@ -79,7 +79,7 @@ public class MaliciousClazzDeserializer {
   private static void serialize(String filename) {
     System.out.printf("%n*** Serialization ***%n");
     try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-      MaliciousClazz maliciousClazz = new MaliciousClazz();
+      final MaliciousClazz maliciousClazz = new MaliciousClazz();
       oos.writeObject(maliciousClazz);
       System.out.printf("Successfully serialized to [%s]%n", filename);
     } catch (IOException e) {

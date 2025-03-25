@@ -131,10 +131,10 @@ public class UploadFileValidator {
   private void validatePathTraversal(String filename) {
     try {
       final File file = new File(CURRENT_DIR, filename);
-      final String canonicalPath = file.getCanonicalPath();
-      final String baseCanonicalPath = new File(CURRENT_DIR).getCanonicalPath();
+      final String fileCanonicalPath = file.getCanonicalPath();
+      final String currentDirCanonicalPath = new File(CURRENT_DIR).getCanonicalPath();
 
-      if (!canonicalPath.startsWith(baseCanonicalPath)) {
+      if (!fileCanonicalPath.startsWith(currentDirCanonicalPath)) {
         throw new SecurityException(
             format(
                 "Path traversal detected for filename: %s. Access to the file is not allowed.",

@@ -9,7 +9,7 @@ Please see the [LICENSE](license/LICENSE) file for full license.
 
 ## Best Practices to Mitigate Java Process Security Attacks
 
-> ⏰ 80 minutes
+> ⏰ 120 minutes
 
 > 👨‍💼 Conducted By Trainer
 
@@ -57,6 +57,7 @@ The application source code includes several mitigation strategies for handling 
 - Protection against file path traversal attacks
 
 These mechanisms are implemented in:
+- [application.properties](pizza-order-service/src/main/resources/application.properties)
 - [UploadFileValidator.java](pizza-order-service/src/main/java/ionutbalosin/training/application/security/practices/pizza/order/service/validator/UploadFileValidator.java)
 
 To demonstrate this, use `Postman` to initiate a file upload request with the endpoint `POST /pizza/upload/menu`. 
