@@ -301,12 +301,12 @@ Please see the [LICENSE](license/LICENSE) file for full license.
  * Application Security for Java Developers
  *
  * Copyright (C) 2025 Ionut Balosin
- * Website: www.ionutbalosin.com
+ * Website:      www.ionutbalosin.com
  * Social Media:
- *   LinkedIn: ionutbalosin
- *   Bluesky: @ionutbalosin.bsky.social
- *   X: @ionutbalosin
- *   Mastodon: ionutbalosin@mastodon.social
+ *   LinkedIn:   ionutbalosin
+ *   Bluesky:    @ionutbalosin.bsky.social
+ *   X:          @ionutbalosin
+ *   Mastodon:   ionutbalosin@mastodon.social
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
