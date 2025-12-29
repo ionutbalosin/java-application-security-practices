@@ -150,7 +150,7 @@ Please ensure you have properly downloaded, installed, and configured the follow
 
 Tool                         | Link                                                                                              |
 ---------------------------- |---------------------------------------------------------------------------------------------------|
-JDK 21                       | [Download](https://projects.eclipse.org/projects/adoptium.temurin/downloads) _(i.e., latest LTS)_ |
+JDK 25 (i.e., latest LTS)    | [Download](https://projects.eclipse.org/projects/adoptium.temurin/downloads) _(i.e., latest LTS)_ |
 Docker                       | [Download](https://docs.docker.com/engine/install/)                                               |
 Postman                      | [Download](https://www.postman.com/)                                                              |
 `curl` command line          | [Download](https://everything.curl.dev/install/index.html)                                        |

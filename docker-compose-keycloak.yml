@@ -1,7 +1,7 @@
 services:
   keycloak:
     container_name: keycloak.local
-    image: quay.io/keycloak/keycloak:25.0.5
+    image: quay.io/keycloak/keycloak:26.4
     command: ["start-dev", "--import-realm"]
     ports:
       - 9090:9090

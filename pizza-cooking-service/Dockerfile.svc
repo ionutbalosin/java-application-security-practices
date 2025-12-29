@@ -1,4 +1,4 @@
-FROM azul/zulu-openjdk:21
+FROM azul/zulu-openjdk:25
 
 ARG JAR_FILE=/target/pizza-cooking-service-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} pizza-cooking-service.jar
